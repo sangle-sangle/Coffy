@@ -9,9 +9,8 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/',
-      name: 'Home',
-      component: loadView('Home')
+      path: '',
+      component: loadComponent('Main', 'Main'),
     },
     {
       path: '/about',
@@ -23,6 +22,14 @@ export default new Router({
     {
       path : '/code',
       component : loadComponent('code','codemain'),
+    },
+    {
+      path: '/login',
+      component: loadComponent('Login', 'LoginForm'),
+    },
+    {
+      path: '/signup',
+      component: loadComponent('Login', 'SignupForm'),
     },
     {
       path: '*',
