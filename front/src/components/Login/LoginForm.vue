@@ -7,9 +7,9 @@
       <div class="login-form">
         <div class="email-form">
           <label for="email"></label>
-          <input id="email" v-model="username" type="text" placeholder="ID">
-          <div class="log-message" v-if="!(isEmailValid || isUsernameValid)">
-            (이름 또는 이메일 양식으로 입력하세요.)
+          <input id="email" v-model="userName" type="text" placeholder="ID">
+          <div class="log-message">
+            (Username 또는 E-mail)
           </div>
         </div>
         <div class="password-form">
@@ -24,7 +24,7 @@
       <div class="social-login-box">
         <div class="social-message">Github 계정만 있어도 이용 가능합니다.</div>
         <div class="social-btn-group">
-          <button class="github" @click="githubLogin">
+          <button class="github" @click="socialLogin">
             <i class="fab fa-github"></i>
             <p>Github 로그인</p>
           </button>
@@ -44,26 +44,23 @@
 
 <script>
 import { mapState } from 'vuex';
-import { validateUserName } from '@/utils/validation/userNameValidation.js'
-import { validateEmail } from '@/utils/validation/emailValidation.js'
+import { githubLogin } from '@/api/user.js'
 
 export default {
   data() {
     return {
-      username: '',
+      userName: '',
       password: ''
     }
   },
   computed: {
     ...mapState({
       mode: state => state.common.mode
-    }),
-    isEmailValid() {
-      return validateEmail(this.username)
-    },
-    isUsernameValid() {
-      return validateUserName(this.username)
-    }
+    })
+  },
+  mounted() {
+    this.$store.commit('toggleMode', 0);
+    this.changeColor(this.mode);
   },
   methods: {
     async submitForm() {
@@ -76,7 +73,7 @@ export default {
       }
       try {
         await this.$store.dispatch('LOGIN', {
-          username: this.username,
+          userName: this.userName,
           password: this.password
         })
         this.initForm()
@@ -93,11 +90,11 @@ export default {
         alert(errorMessage)
       }
     },
-    githubLogin() {
-      
+    socialLogin() {
+      githubLogin()
     },
     initForm() {
-      this.username = ''
+      this.userName = ''
       this.password = ''
     },
     goFindAccount() {

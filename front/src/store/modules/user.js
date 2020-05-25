@@ -5,8 +5,7 @@ const state = {
   adminAuth: 0,
   token: sessionStorage.getItem('token'),
   isLogin: sessionStorage.getItem('token') === null ? false : true,
-  isLoginError: false,
-  agreeToS: false
+  isLoginError: false
 };
 
 const mutations = {
@@ -25,9 +24,6 @@ const mutations = {
   },
   loginError(state) {
     state.isLoginError = true
-  },
-  changeToS(state, check) {
-    state.agreeToS = check
   }
 }
 

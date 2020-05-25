@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import store from '@/store/index.js'
+import store from '@/store/index.js'
 import { loadView, loadComponent } from '@/utils/loadPage.js'
 
 Vue.use(Router)
@@ -10,6 +10,7 @@ export default new Router({
   routes: [
     {
       path: '',
+      name: 'Main',
       component: loadComponent('Main', 'Main'),
     },
     {
@@ -25,8 +26,8 @@ export default new Router({
     },
     {
       path: '/login',
-      name: 'LoginPage',
       component: loadView('LoginPage'),
+      beforeEnter: checkNoLoginUser,
       children: [
         { path: '', name: 'Login', component: loadComponent('Login', 'LoginForm') },
         { path: 'findaccount', name: 'FindPassword', component: loadComponent('Login', 'FindPassword') }
@@ -35,6 +36,14 @@ export default new Router({
     {
       path: '/signup',
       component: loadComponent('Login', 'SignupForm'),
+      beforeEnter: checkNoLoginUser,
+    },
+    {
+      path: '/clan',
+      component: loadView('ClanPage'),
+      children: [
+        { path: '', name: 'ClanMain', component: loadComponent('Clan', 'ClanMain') }
+      ]
     },
     {
       path: '*',
@@ -43,3 +52,7 @@ export default new Router({
     }
   ]
 })
+
+function checkNoLoginUser(to, from, next) {  // 로그인이 안 된 경우에 로그인창, 회원가입창 접근 가능
+  store.state.user.isLogin ? next('/') : next()
+}

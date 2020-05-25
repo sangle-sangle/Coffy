@@ -9,10 +9,10 @@
       </div>
       <form class="signup-form" @submit.prevent="submitForm">
         <div class="username-form">
-          <label for="username">이름<i class="fas fa-star"></i></label>
-          <input type="text" id="username" v-model="username">
-          <div class="log-message" v-if="!isUserNameValid && clickSignupBtn">
-            한글로만 작성해주세요.
+          <label for="username">Username<i class="fas fa-star"></i></label>
+          <input type="text" id="username" v-model="userName">
+          <div class="log-message" v-if="!userName.length && clickSignupBtn">
+            1자 이상 작성해주세요.
           </div>
         </div>
         <div class="email-form">
@@ -50,17 +50,8 @@
             <div class="auth-btn valid-github" @click="getGithubAuth" v-else>확인</div>
           </div>
           <div class="guideline">
-            github ID를 입력한 후 우측 '연동' 버튼을 눌러주세요.
+            github ID를 작성한 후 우측 '연동' 버튼을 눌러주세요.
           </div>
-        </div>
-        <div class="lang-form">
-          <label for="lang">주 사용 연어</label>
-          <select name="lang" id="lang" v-model="mainLang">
-            <option value="">주 사용 언어를 선택하세요.</option>
-            <option value="HTML">HTML</option>
-            <option value="CSS">CSS</option>
-            <option value="Javascript">Javascript</option>
-          </select>
         </div>
         <button class="signup-btn" type="submit">회원가입</button>
       </form>
@@ -70,7 +61,6 @@
 
 <script>
 import { mapState } from 'vuex';
-import { validateUserName } from '@/utils/validation/userNameValidation.js'
 import { validateEmail } from '@/utils/validation/emailValidation.js'
 import { validatePassword } from '@/utils/validation/passwordValidation.js'
 import { registerUser } from '@/api/user.js'
@@ -78,13 +68,12 @@ import { registerUser } from '@/api/user.js'
 export default {
   data() {
     return {
-      username: '',
+      userName: '',
       email: '',
       password: '',
       rePassword: '',
       githubid: '',
       checkGithubAuth: false,
-      mainLang: '',
       clickSignupBtn: false
     }
   },
@@ -92,9 +81,6 @@ export default {
     ...mapState({
       mode: state => state.common.mode
     }),
-    isUserNameValid() {
-      return validateUserName(this.username)
-    },
     isEmailValid() {
       return validateEmail(this.email)
     },
@@ -105,28 +91,33 @@ export default {
       return validatePassword(this.rePassword) && this.password === this.rePassword
     },
   },
+  mounted() {
+    this.$store.commit('toggleMode', 0);
+    this.changeColor(this.mode);
+  },
   methods: {
     async submitForm() { // 회원가입 로직 구현(try 부분에 구현)
       this.clickSignupBtn = true
-      if (this.isUserNameValid && this.isEmailValid && this.isPasswordValid && this.isRePasswordValid) {
+      if (this.userName.length && this.isEmailValid && this.isPasswordValid && this.isRePasswordValid) {
         try {
           // githubid는 github 연동이 된 경우(this.checkGithubAuth === true인 경우에만 등록)
           await registerUser({
-            username: this.username,
+            userName: this.userName,
             email: this.email,
             password: this.password,
-            githubid: this.checkGithubAuth ? this.githubid : '',
-            mainLang: this.mainLang
+            githubid: this.checkGithubAuth ? this.githubid : ''
           });
           alert('회원가입 성공!')
           // 회원가입 성공 후 자동으로 로그인
           await this.$store.dispatch('LOGIN', {
-            username: this.username,
+            userName: this.userName,
             password: this.password
           });
           this.initForm();
           this.$router.push('/');
         } catch (error) {
+          // (1) username 중복 체크
+          // (2) email 중복 체크
           console.log(error)
         }
       }
@@ -137,7 +128,7 @@ export default {
       // (3) 인증 거친 후 성공하면 checkGithubAuth 값을 false => true로 변경
     },
     initForm() {
-      this.username = '';
+      this.userName = '';
       this.email = '';
       this.password = '';
       this.rePassword = '';
@@ -150,15 +141,11 @@ export default {
           inputTag.style.backgroundColor = '#eee'
           inputTag.style.color = 'black'
         });
-        document.querySelector('select').style.backgroundColor = '#eee';
-        document.querySelector('select').style.color = 'black';
       } else {
         document.querySelectorAll('input').forEach(inputTag => {
           inputTag.style.backgroundColor = '#252830'
           inputTag.style.color = 'white'
         });
-        document.querySelector('select').style.backgroundColor = '#252830';
-        document.querySelector('select').style.color = 'white';
       }
     }
   },

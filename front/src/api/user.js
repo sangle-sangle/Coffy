@@ -16,8 +16,14 @@ function loginUser(userData) {
   return instance.post('accounts/login/', userData)
 }
 
+// github 로그인
+function githubLogin() {
+
+}
+
 export { 
   fetchMyInfo,
   registerUser,
-  loginUser
+  loginUser,
+  githubLogin
 }

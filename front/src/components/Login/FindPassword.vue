@@ -7,7 +7,7 @@
       <form class="find-account-form" @submit.prevent="submitForm">
         <div class="username-form">
           <label for="username"></label>
-          <input id="username" v-model="username" type="text" placeholder="이름">
+          <input id="username" v-model="userName" type="text" placeholder="Username">
         </div>
         <div class="email-form">
           <label for="email"></label>
@@ -23,16 +23,45 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   data() {
     return {
-      username: '',
+      userName: '',
       email: ''
     }
   },
+  computed: {
+    ...mapState({
+      mode: state => state.common.mode
+    })
+  },
+  mounted() {
+    this.$store.commit('toggleMode', 0);
+    this.changeColor(this.mode);
+  },
   methods: {
-    submitForm() {
+    submitForm() { // 비밀번호 찾기 로직 작성(userName과 email 주소가 일치할 때 해당 이메일로 임시 비밀번호 발급)
       
+    },
+    changeColor(mode) {
+      if (mode === 'white') {
+        document.querySelectorAll('input').forEach(inputTag => {
+          inputTag.style.backgroundColor = '#eee'
+          inputTag.style.color = 'black'
+        });
+      } else {
+        document.querySelectorAll('input').forEach(inputTag => {
+          inputTag.style.backgroundColor = '#252830'
+          inputTag.style.color = 'white'
+        });
+      }
+    }
+  },
+  watch: {
+    mode() {
+      this.changeColor(this.mode)
     }
   }
 }

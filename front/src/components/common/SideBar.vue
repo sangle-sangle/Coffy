@@ -17,6 +17,9 @@
       <li>
         <router-link to="/code">code</router-link>
       </li>
+      <li>
+        <router-link to="/clan">Clan</router-link>
+      </li>
     </ul>
   </div>
 </template>
