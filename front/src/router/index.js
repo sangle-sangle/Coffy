@@ -25,7 +25,12 @@ export default new Router({
     },
     {
       path: '/login',
-      component: loadComponent('Login', 'LoginForm'),
+      name: 'LoginPage',
+      component: loadView('LoginPage'),
+      children: [
+        { path: '', name: 'Login', component: loadComponent('Login', 'LoginForm') },
+        { path: 'findaccount', name: 'FindPassword', component: loadComponent('Login', 'FindPassword') }
+      ]
     },
     {
       path: '/signup',

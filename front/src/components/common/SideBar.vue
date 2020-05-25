@@ -70,7 +70,7 @@ export default {
 }
 
 .divider {
-  margin: 40px 0 15px;
+  margin: 10px 0 15px;
   border-top: 1px solid silver;
 }
 

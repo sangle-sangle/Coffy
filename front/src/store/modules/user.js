@@ -1,4 +1,5 @@
-import jwtDecode from 'jwt-decode';
+import { loginUser } from '@/api/user.js'
+import jwtDecode from 'jwt-decode'
 
 const state = {
   adminAuth: 0,
@@ -31,6 +32,15 @@ const mutations = {
 }
 
 const actions = {
+  async LOGIN({ commit }, userData) {
+    const result = await loginUser(userData)
+    if (result.data.token) {
+      commit('setToken', result.data.token)
+    } else {
+      commit('loginError')
+    }
+    return result
+  }
 };
 
 const getters = {

@@ -1,11 +1,15 @@
 <template>
   <div class="switch-wrapper">
-    <div class="mode-switch">
+    <div class="mode-color-switch">
+      <i class="fas fa-exchange-alt" @click="toggleMode"></i>
+      <span>{{ mode }}</span>
+    </div>
+    <!-- <div class="mode-switch">
       <input type="checkbox" @click="toggleMode" id="toggle-btn">
     </div>
     <div class="now-mode">
       {{ mode }}
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -30,7 +34,19 @@ export default {
   position: relative;
 }
 
-.mode-switch {
+.mode-color-switch {
+  text-align: center;
+}
+
+.mode-color-switch i {
+  padding-right: 10px;
+}
+
+.mode-color-switch i:hover {
+  cursor: pointer;
+}
+
+/* .mode-switch {
   position: absolute;
   top: 50%;
   left: 30%;
@@ -77,5 +93,5 @@ input[type="checkbox"]::before {
 
 input:checked[type="checkbox"]::before {
   left: 20px;
-}
+} */
 </style>
