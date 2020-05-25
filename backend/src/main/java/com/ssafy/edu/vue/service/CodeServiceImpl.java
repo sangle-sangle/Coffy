@@ -10,7 +10,7 @@ import com.ssafy.edu.vue.dao.CodeDaoImpl;
 import com.ssafy.edu.vue.dto.Code;
 
 @Service
-public class CodeService implements ICodeService {
+public class CodeServiceImpl implements ICodeService {
 
 	@Autowired
 	private CodeDaoImpl codedao;
