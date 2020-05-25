@@ -1,0 +1,100 @@
+<template>
+  <div class="provide-lang-wrapper">
+    <div class="provide-lang-intro">
+      <div>지원하는 프로그래밍 언어</div>
+      <small>HTML, CSS, Javascript 등 프론트엔드에서 자주 쓰는 언어들을 지원합니다.</small>
+    </div>
+    <div class="provide-lang-section">
+      <div class="lang-card" v-for="language in languages" :key="language">
+        <img :src="imgUrl(language)" :alt="`${language}`">
+        <p>{{ language }}</p>
+      </div>
+    </div>
+  </div>  
+</template>
+
+<script>
+export default {
+  name: 'ProvideLang',
+  data() {
+    return {
+      languages: ['HTML', 'CSS', 'Javascript', 'etc']
+    }
+  },
+  methods: {
+    imgUrl(lang) {
+      return require(`../../assets/images/mainpage/${lang.toLowerCase()}.png`)
+    }
+  }
+}
+</script>
+
+<style scoped>
+.provide-lang-intro {
+  text-align: center;
+}
+
+.provide-lang-intro > div {
+  display: inline-block;
+  font-size: 2rem;
+  font-family: 'Noto Sans KR';
+  font-weight: 600;
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid silver;
+}
+
+.provide-lang-intro > small {
+  display: block;
+  margin-bottom: 20px;
+}
+
+.provide-lang-section {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  width: 90%;
+}
+
+.lang-card {
+  margin: 0 20px;
+  padding: 15px 30px;
+  background-color: #3a3e49;
+  border-radius: 20px;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+.lang-card > img {
+  display: block;
+  margin: 0 auto;
+  width: 170px;
+}
+
+.lang-card > p {
+  margin-top: 12px;
+  font-size: 1.3rem;
+  font-family: 'Gothic A1';
+  font-weight: 600;
+  text-align: center;
+}
+
+@media (max-width: 1100px) {
+  .provide-lang-section {
+    display: grid;
+    row-gap: 40px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .provide-lang-section {
+    display: grid;
+    row-gap: 40px;
+    grid-template-columns: 1fr;
+  }
+
+  .lang-card > img {
+    width: 150px;
+  }
+}
+</style>
