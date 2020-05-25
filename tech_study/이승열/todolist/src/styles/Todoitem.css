@@ -1,0 +1,10 @@
+.todoitem {
+    background-color:rgb(217, 247, 193);
+    line-height : 30px;
+    height : 50px;
+    border : 1px black solid;
+}
+
+.select{
+    background-color:rgb(220, 241, 143);
+}

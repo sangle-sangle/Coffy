@@ -1,0 +1,14 @@
+.col3{
+    display:inline-block;
+    margin:2px;
+    width:23%;
+    min-height:500px;
+    background-color: rgb(250, 247, 214);
+}
+
+.title{ 
+    font-size: 2rem;
+    height: 50px;
+    text-align: center;
+    line-height : 50px;
+}
