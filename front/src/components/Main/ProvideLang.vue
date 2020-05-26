@@ -7,13 +7,15 @@
     <div class="provide-lang-section">
       <div class="lang-card" v-for="language in languages" :key="language">
         <img :src="imgUrl(language)" :alt="`${language}`">
-        <p>{{ language }}</p>
+        <p class="lang-card-text">{{ language }}</p>
       </div>
     </div>
   </div>  
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'ProvideLang',
   data() {
@@ -21,9 +23,40 @@ export default {
       languages: ['HTML', 'CSS', 'Javascript', 'etc']
     }
   },
+  computed: {
+    ...mapState({
+      mode: state => state.common.mode
+    })
+  },
+  mounted() {
+    this.$store.commit('toggleMode', 0);
+    this.changeColor(this.mode);
+  },
   methods: {
     imgUrl(lang) {
       return require(`../../assets/images/mainpage/${lang.toLowerCase()}.png`)
+    },
+    changeColor(mode) {
+      if (mode === 'white') {
+        document.querySelectorAll('.lang-card').forEach(card => {
+          card.style.backgroundColor = '#eee'
+        })
+        document.querySelectorAll('.lang-card-text').forEach(cardText => {
+          cardText.style.color = 'black'
+        })
+      } else {
+        document.querySelectorAll('.lang-card').forEach(card => {
+          card.style.backgroundColor = '#3a3e49'
+        })
+        document.querySelectorAll('.lang-card-text').forEach(cardText => {
+          cardText.style.color = 'white'
+        })
+      }
+    }
+  },
+  watch: {
+    mode() {
+      this.changeColor(this.mode);
     }
   }
 }

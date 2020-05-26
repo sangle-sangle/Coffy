@@ -1,11 +1,11 @@
-import jwtDecode from 'jwt-decode';
+import { loginUser } from '@/api/user.js'
+import jwtDecode from 'jwt-decode'
 
 const state = {
   adminAuth: 0,
   token: sessionStorage.getItem('token'),
   isLogin: sessionStorage.getItem('token') === null ? false : true,
-  isLoginError: false,
-  agreeToS: false
+  isLoginError: false
 };
 
 const mutations = {
@@ -24,13 +24,19 @@ const mutations = {
   },
   loginError(state) {
     state.isLoginError = true
-  },
-  changeToS(state, check) {
-    state.agreeToS = check
   }
 }
 
 const actions = {
+  async LOGIN({ commit }, userData) {
+    const result = await loginUser(userData)
+    if (result.data.token) {
+      commit('setToken', result.data.token)
+    } else {
+      commit('loginError')
+    }
+    return result
+  }
 };
 
 const getters = {

@@ -1,11 +1,11 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
+  <div class="profile-wrapper">
+    내가 작성한 코드 확인 페이지
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
 
 export default {
   computed: {
@@ -13,8 +13,14 @@ export default {
       mode: state => state.common.mode,
     })
   },
+  data() {
+		return {
+			
+		}
+  },
   mounted() {
     this.$store.commit('toggleMode', 0);
+    this.changeColor(this.mode)
   },
   methods: {
     changeColor(mode) {
@@ -32,3 +38,7 @@ export default {
   }
 }
 </script>
+
+<style>
+
+</style>
