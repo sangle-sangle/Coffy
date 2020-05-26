@@ -71,7 +71,7 @@ section {
 .scorllTopBtn {
   position: fixed;
   right: 20px;
-  bottom: 20px;
+  bottom: 14px;
   padding: 16px 18px;
   border-radius: 50%;
   background-color: darkgray;

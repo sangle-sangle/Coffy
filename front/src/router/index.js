@@ -16,13 +16,13 @@ export default new Router({
     {
       path: '/about',
       component: loadView('About'),
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
     },
     {
       path : '/code',
-      component : loadComponent('Code','CodeMain'),
+      component : loadView('CodePage'),
+      children: [
+        { path: '', name: 'CodeMain', component: loadComponent('Code', 'CodeMain') }
+      ]
     },
     {
       path: '/login',

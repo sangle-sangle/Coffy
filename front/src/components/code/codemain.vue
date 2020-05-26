@@ -1,6 +1,7 @@
 <template>
   <div class="ctr80">
     <div class="toggle">
+      <div @click="formchange">폼 변경</div>
       <input type="radio" id="theme1" value="0" v-model.number="theme">
       <label for="theme1">Main</label>
       <br>
@@ -12,64 +13,67 @@
         <label for="title">제목 </label>
         <input v-model="title" type="text" name="title" id="title">
       </div>
-      <button @click="submitCode">작성</button>
+      <button @click="submitcode">작성</button>
     </div>
     <div>
       <span>코드 설명</span>
       <textarea v-model="description" class="description" />
     </div>
-    <div id="inputbox" class="flex">
-      <div id="htmlcol" class="col">
-        <div class="coltitle"> 
-          <span>HTML</span>
+    <div id="codecreateform">
+      <div id="inputbox" class="flex">
+        <div id="htmlcol" class="col">
+          <div class="coltitle"> 
+            <span>HTML</span>
+          </div>
+          <i style="float:right;margin-right:2px;" class="fas fa-expand" @click="expand($event,0)"></i>
+          <codemirror 
+            :value="codedata.htmltext"
+            :options="htmloptions"
+            @input="updateCode('htmltext',$event)"
+          />
+          <!-- <codearea title="html" :theme="theme" v-model="codedata.htmltext" name="text"></codearea> -->
         </div>
-        <i style="float:right;margin-right:2px;" class="fas fa-expand" @click="expand($event,0)"></i>
-        <CodeMirror 
-          :value="codeData.htmlText"
-          :options="htmlOptions"
-          @input="updateCode('htmlText',$event)"
-        />
-        <!-- <CodeArea title="html" :theme="theme" v-model="codeData.htmlText" name="text"></CodeArea> -->
+        <div id="csscol" class="col border">
+          <div class="coltitle"> 
+            <span>CSS</span>
+          </div>
+          <i style="float:right;margin-right:2px;" class="fas fa-expand" @click="expand($event,1)"></i>
+          <codemirror 
+            :value="codedata.csstext"
+            :options="cssoptions"
+            @input="updateCode('csstext',$event)"
+          />
+          <!-- <codearea title="CSS" :theme="theme" v-model="codedata.csstext" name="text"></codearea> -->
+        </div>
+        <div :hidden="expandcheck[0] && expandcheck[1]" id="jscol" class="col">
+          <div class="coltitle"> 
+            <span>JS</span>
+          </div>
+          <i style="float:right;margin-right:2px;" class="fas fa-expand" @click="expand($event,2)"></i>
+          <codemirror 
+            :value="codedata.jstext"
+            :options="jsoptions"
+            @input="updateCode('jstext',$event)"
+          />
+          <!-- <codearea title="JS" :theme="theme" v-model="codedata.jstext" name="text"></codearea> -->
+        </div>
       </div>
-      <div id="csscol" class="col">
-        <div class="coltitle"> 
-          <span>CSS</span>
-        </div>
-        <i style="float:right;margin-right:2px;" class="fas fa-expand" @click="expand($event,1)"></i>
-        <CodeMirror 
-          :value="codeData.cssText"
-          :options="cssOptions"
-          @input="updateCode('cssText',$event)"
-        />
-        <CodeArea title="CSS" :theme="theme" v-model="codeData.cssText" name="text"></CodeArea>
-      </div>
-      <div :hidden="expandCheck[0] && expandCheck[1]" id="jscol" class="col">
-        <div class="coltitle"> 
-          <span>JS</span>
-        </div>
-        <i style="float:right;margin-right:2px;" class="fas fa-expand" @click="expand($event,2)"></i>
-        <CodeMirror 
-          :value="codeData.jsText"
-          :options="jsOptions"
-          @input="updateCode('jsText',$event)"
-        />
-        <!-- <CodeArea title="JS" :theme="theme" v-model="codeData.jsText" name="text"></CodeArea> -->
+      <div class="apply" @click="apply">적용하기 </div>
+      <div id="applyform" class="rowapply">
+        <div class='itembox'></div>
+        <div class='itembox' v-html="afterdata" ></div>
       </div>
     </div>
-    <div class="apply" @click="apply">적용하기 </div>
-    <div class="applyform">
-      <div class='itembox'></div>
-      <div class='itembox' v-html="afterData" ></div>
-    </div>
+    <!-- footer 적용 되면 지울거  -->
     <div style="height:500px;">
     </div>
   </div>
 </template>
 
 <script>
-import CodeArea from './CodeArea'
+import { mapState } from 'vuex'
 import { addCode } from '@/api/code.js'
-import { CodeMirror } from 'vue-codemirror'
+import { codemirror } from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/base16-dark.css'
 import 'codemirror/mode/javascript/javascript.js'
@@ -77,45 +81,43 @@ import 'codemirror/mode/css/css.js'
 import 'codemirror/mode/xml/xml.js'
 
 export default {
-  components : {
-    CodeArea,
-    CodeMirror
-  },
+  components : { codemirror},
   data() {
     return {
+      form : 0,
       title : '가운데 가운데',
       description : '센트럴 팍',
-      htmlOptions : {
+      htmloptions : {
         tabSize: 4,
         mode: 'xml',
-        theme: 'base16-light',
+        theme: 'default',
         lineNumbers: true,
         line: true,
       },
-      cssOptions : {
+      cssoptions : {
         tabSize: 4,
         mode: 'css',
-        theme: 'base16-light',
+        theme: 'default',
         lineNumbers: true,
         line: true,
       },
-      jsOptions: {
+      jsoptions: {
         tabSize: 4,
         mode: 'text/javascript',
-        theme: 'base16-light',
+        theme: 'default',
         lineNumbers: true,
         line: true,
       },
       theme: 0,
-      codeData : {
-        htmlText : `<div class="maindiv"> 
-    <div class="center-div">
-      <div class="text">
-        중앙정렬
-      </div>
+      codedata : {
+        htmltext : `<div class="maindiv"> 
+  <div class="center-div">
+    <div class="text">
+      중앙정렬
     </div>
-  </div>`,
-        cssText : `.maindiv {
+  </div>
+</div>`,
+        csstext : `.maindiv {
   width : 100%;
   height : 100%;
   display:flex;
@@ -133,46 +135,85 @@ export default {
   color : white;
   line-height : 100px;
 }`,
-        jsText : `console.log('asdf')
+        jstext : `console.log('asdf')
 let a = document.querySelector(.text)
 console.log(a)`    
       },
-      afterData : '',
-      expandCheck : [false,false,false]
+      afterdata : '',
+      expandcheck : [false,false,false]
     }
   },
+  computed: {
+    ...mapState({
+      mode: state => state.common.mode,
+    })
+  },
+  mounted(){
+    this.theme = this.$store.state.common.mode === 'dark' ? 1: 0;
+    this.$store.commit('toggleMode', 0);
+    this.changeColor(this.mode);
+  },
   watch:{
-    theme : function () {
+    theme() {
       if (this.theme) {
-        this.htmlOptions.theme="base16-dark"
-        this.jsOptions.theme="base16-dark"
-        this.cssOptions.theme="base16-dark"
+        this.htmloptions.theme="base16-dark"
+        this.jsoptions.theme="base16-dark"
+        this.cssoptions.theme="base16-dark"
       } else {
-        this.htmlOptions.theme="base16-light"
-        this.jsOptions.theme="base16-light"
-        this.cssOptions.theme="base16-light"
+        this.htmloptions.theme="default"
+        this.jsoptions.theme="default"
+        this.cssoptions.theme="default"
       }
+    },
+    mode() {
+      this.changeColor(this.mode)
     }
   },
   methods : {
-    async submitCode(){
+    async submitcode(){
       const data = {
         title : this.title,
         description : this.description,
-        html : this.codeData.htmlText,
-        css : this.codeData.cssText,
-        js : this.codeData.jsText
+        html : this.codedata.htmltext,
+        css : this.codedata.csstext,
+        js : this.codedata.jstext
       }
       console.log(data)
       const response = await addCode(data)
       console.log(response)
     },
     updateCode(type, value){
-      this.codeData[type] = value
+      this.codedata[type] = value
+    },
+    formchange(){
+      let input = document.querySelector('#inputbox')
+      let apply = document.querySelector('#applyform')
+      let box = document.querySelector('#codecreateform')
+      if (this.form) {
+        this.form = 0
+        for (let i=0;i<3;i++){
+          let node = input.childNodes[i]
+          node.childNodes[1].style.visibility = ''
+          node.className= 'col border'
+        }
+        input.className = "flex"
+        apply.className = "rowapply"
+        box.className = ""
+      } else {
+        this.form = 1
+        for (let i=0;i<3;i++){
+          let node = input.childNodes[i]
+          node.childNodes[1].style.visibility = 'hidden'
+          node.className= 'border'
+        }
+        input.className = "colinput"
+        apply.className = "colapply"
+        box.className = "flex"
+      }
     },
     expand(item,index) {
-      if (!this.expandCheck[index]){
-        this.expandCheck[index] = true
+      if (!this.expandcheck[index]){
+        this.expandcheck[index] = true
         for (let i=0;i<3;i++){
           let node = item.target.parentElement.parentElement.childNodes[i]
           if (i == index){
@@ -185,7 +226,7 @@ console.log(a)`
           }
         }
       } else {
-        this.expandCheck[index] = false
+        this.expandcheck[index] = false
         for (let i=0;i<3;i++){
           let node = item.target.parentElement.parentElement.childNodes[i]
           if (i == index){
@@ -200,15 +241,27 @@ console.log(a)`
       }
     },
     apply() {
-      this.afterData = this.codeData.htmlText + '<style>' + this.codeData.cssText + '</style>' + '\n<script>' + this.codeData.jsText + '<' + '/script>'
+      this.afterdata = this.codedata.htmltext + '<style>' + this.codedata.csstext + '</style>' + '\n<script>' + this.codedata.jstext + '<' + '/script>'
+    },
+    changeColor(mode) {
+      if (mode === 'white') { // 화이트 모드일 때
+        console.log('white')
+      } else { // 다크 모드일 때
+        console.log('dark')
+      }
     }
   }
 }
 </script>
 
 <style>
+
 .flex { 
-  display:flex;
+  display:flex
+}
+
+.colinput {
+  width : 60%;
 }
 
 .title {
@@ -221,11 +274,12 @@ console.log(a)`
 .coltitle {
   text-align:center;
 }
-
+.border {
+  border : 1px solid #eee;
+}
 .col {
   width : 33%;
   position: relative;
-  border: 1px solid #eee;
   -webkit-transition: width 1s;
   transition: width 1s;
 }
@@ -260,15 +314,19 @@ console.log(a)`
   margin-bottom : 2rem;
 }
 
-.applyform {
+.rowapply {
   display: flex;
   justify-content: space-evenly;
   text-align : center;
 }
 
+.colapply {
+  width : 40%;
+}
+
 .itembox{
-  width : 400px;
-  height: 400px;
+  min-width : 400px;
+  min-height: 400px;
   border:1px black solid;
 }
 
@@ -276,6 +334,5 @@ console.log(a)`
   display: flex;
   justify-content: flex-end;
   margin-bottom : 2rem;
-
 }
 </style>
