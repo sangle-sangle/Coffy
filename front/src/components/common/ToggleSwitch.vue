@@ -1,7 +1,7 @@
 <template>
   <div class="switch-wrapper">
-    <div class="mode-color-switch">
-      <i class="fas fa-exchange-alt" @click="toggleMode"></i>
+    <div class="mode-color-switch" @click="toggleMode">
+      <i class="fas fa-exchange-alt"></i>
       <span>{{ mode }}</span>
     </div>
   </div>
@@ -36,7 +36,8 @@ export default {
   padding-right: 10px;
 }
 
-.mode-color-switch i:hover {
+.mode-color-switch:hover {
   cursor: pointer;
+  font-weight: 600;
 }
 </style>

@@ -19,7 +19,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 20px 80px 20px 20px;
 }
 
 .left-footer > span {
