@@ -10,13 +10,22 @@
         </li>
       </ul>
     </div>
+    <div class="filter-items-wrapper">
+      <div>
+        <input type="text" id="search" placeholder="Search keyword" v-model="keyword">
+        <!-- <label for="search" @click="searchTemplate"><i class="fas fa-search"></i></label> -->
+      </div>
+      <div>
+
+      </div>
+    </div>
     <div class="dash-board-tab-contents">
       <div class="tab-content">
         <div v-if="currentTab == 0">
-          0
+          좋아연
         </div>
         <div v-if="currentTab == 1">
-          1
+          싫어연
         </div>
       </div>
     </div>
@@ -24,14 +33,48 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
+  components:{
+    
+  },
+  computed: {
+    ...mapState({
+      mode: state => state.common.mode,
+    })
+  },
   data() {
 		return {
-			currentTab: 0, // 기본 currentTab 값 지정
-			tabs: ['좋아요', '스크랩']
+			currentTab: 0, // 현재 탭 위치
+      tabs: ['좋아요', '스크랩'], // 탭 아이템 내용
+      keyword: '',
 		}
-	},
+  },
+  mounted() {
+    this.$store.commit('toggleMode', 0);
+    this.changeColor(this.mode)
+  },
+  methods: {
+    changeColor(mode) {
+      if (mode === 'white') { // 화이트 모드일 때
+        console.log('white')
+      } else { // 다크 모드일 때
+        console.log('dark')
+      }
+    }
+  },
+  watch: {
+    mode() {
+      this.changeColor(this.mode)
+    }
+  }
 }
+
+
+  
+  
+  
 </script>
 
 <style>
@@ -56,7 +99,7 @@ export default {
 
 .dash-board-tab-item {
   display: inline-block;
-  padding: 10 0 15;
+  padding: 0.5rem 0.3rem
 }
 
 .active {
