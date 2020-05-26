@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     async submitForm() {
-      if (!this.username) {
+      if (!this.userName) {
         alert('이름 또는 이메일을 작성하세요.')
         return
       } else if (!this.password) {
