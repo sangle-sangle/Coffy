@@ -2,7 +2,7 @@
   <div>
     <div class="ctr80">
       <div class="toggle">
-        <div @click="formchange">폼 변경</div>
+        <div @click="formChange">폼 변경</div>
         <input type="radio" id="theme1" value="0" v-model.number="theme">
         <label for="theme1">Main</label>
         <br>
@@ -14,7 +14,7 @@
           <label for="title">제목 </label>
           <input v-model="title" type="text" name="title" id="title">
         </div>
-        <button @click="submitcode">작성</button>
+        <button @click="submitCode">작성</button>
       </div>
       <div>
         <span>코드 설명</span>
@@ -27,41 +27,41 @@
               <span>HTML</span>
             </div>
             <i class="fas fa-expand expandicon" @click="expand($event,0)"></i>
-            <codemirror 
-              :value="codedata.htmltext"
-              :options="htmloptions"
-              @input="updateCode('htmltext',$event)"
+            <CodeMirror 
+              :value="codeData.htmlText"
+              :options="htmlOptions"
+              @input="updateCode('htmlText',$event)"
             />
-            <!-- <codearea title="html" :theme="theme" v-model="codedata.htmltext" name="text"></codearea> -->
+            <!-- <codearea title="html" :theme="theme" v-model="codeData.htmlText" name="text"></codearea> -->
           </div>
           <div id="csscol" class="col border">
             <div class="coltitle"> 
               <span>CSS</span>
             </div>
             <i class="fas fa-expand expandicon" @click="expand($event,1)"></i>
-            <codemirror 
-              :value="codedata.csstext"
-              :options="cssoptions"
-              @input="updateCode('csstext',$event)"
+            <CodeMirror 
+              :value="codeData.cssText"
+              :options="cssOptions"
+              @input="updateCode('cssText',$event)"
             />
           </div>
-          <div :hidden="expandcheck[0] && expandcheck[1]" id="jscol" class="col">
+          <div :hidden="expandCheck[0] && expandCheck[1]" id="jscol" class="col">
             <div class="coltitle"> 
               <span>JS</span>
             </div>
             <i class="fas fa-expand expandicon" @click="expand($event,2)"></i>
-            <codemirror 
-              :value="codedata.jstext"
-              :options="jsoptions"
-              @input="updateCode('jstext',$event)"
+            <CodeMirror 
+              :value="codeData.jsText"
+              :options="jsOptions"
+              @input="updateCode('jsText',$event)"
             />
-            <!-- <codearea title="JS" :theme="theme" v-model="codedata.jstext" name="text"></codearea> -->
+            <!-- <codearea title="JS" :theme="theme" v-model="codeData.jsText" name="text"></codearea> -->
           </div>
         </div>
         <div class="apply" @click="apply">적용하기 </div>
         <div id="applyform" class="rowapply">
           <div class='itembox'></div>
-          <applycode class='itembox' :code="afterdata" />
+          <ApplyCode class='itembox' :code="afterData" />
         </div>
       </div>
       <!-- footer 적용 되면 지울거  -->
@@ -73,9 +73,9 @@
 
 <script>
 import { mapState } from 'vuex'
-import applycode from './applycode.vue'
+import ApplyCode from '@/components/Code/ApplyCode.vue'
 import { addCode } from '@/api/code.js'
-import { codemirror } from 'vue-codemirror'
+import { codemirror as CodeMirror } from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/base16-dark.css'
 import 'codemirror/mode/javascript/javascript.js'
@@ -84,29 +84,29 @@ import 'codemirror/mode/xml/xml.js'
 
 export default {
   components : {
-    codemirror,
-    applycode,
+    CodeMirror,
+    ApplyCode,
   },
   data() {
     return {
       form : 0,
       title : '가운데 가운데',
       description : '센트럴 팍',
-      htmloptions : {
+      htmlOptions : {
         tabSize: 4,
         mode: 'xml',
         theme: 'default',
         lineNumbers: true,
         line: true,
       },
-      cssoptions : {
+      cssOptions : {
         tabSize: 4,
         mode: 'css',
         theme: 'default',
         lineNumbers: true,
         line: true,
       },
-      jsoptions: {
+      jsOptions: {
         tabSize: 4,
         mode: 'text/javascript',
         theme: 'default',
@@ -114,15 +114,15 @@ export default {
         line: true,
       },
       theme: 0,
-      codedata : {
-        htmltext : `<div class="maindiv"> 
+      codeData : {
+        htmlText : `<div class="maindiv"> 
   <div class="center-div">
     <div class="text">
       중앙정렬
     </div>
   </div>
 </div>`,
-        csstext : `.maindiv {
+        cssText : `.maindiv {
   width : 100%;
   height : 100%;
   display:flex;
@@ -140,12 +140,12 @@ export default {
   color : white;
   line-height : 100px;
 }`,
-        jstext : `console.log('asdf')
+        jsText : `console.log('asdf')
 let a = document.querySelector(.text)
 console.log(a)`    
       },
-      afterdata : '',
-      expandcheck : [false,false,false]
+      afterData : {},
+      expandCheck : [false,false,false]
     }
   },
   computed: {
@@ -167,39 +167,44 @@ console.log(a)`
         title.style.color = 'white'
         textarea.style.backgroundColor = '#252830'
         textarea.style.color = 'white'
-        this.htmloptions.theme="base16-dark"
-        this.jsoptions.theme="base16-dark"
-        this.cssoptions.theme="base16-dark"
+        this.htmlOptions.theme="base16-dark"
+        this.jsOptions.theme="base16-dark"
+        this.cssOptions.theme="base16-dark"
       } else {
         title.style.backgroundColor = '#eee'
         title.style.color = 'black'
         textarea.style.backgroundColor = '#eee'
         textarea.style.color = 'black'
-        this.htmloptions.theme="default"
-        this.jsoptions.theme="default"
-        this.cssoptions.theme="default"
+        this.htmlOptions.theme="default"
+        this.jsOptions.theme="default"
+        this.cssOptions.theme="default"
       }
     },
     mode() {
       this.changeColor(this.mode)
+    },
+    codeData:{
+      deep: true,
+      immediate: true,
+      handler: 'apply'
     }
   },
   methods : {
-    async submitcode(){
+    async submitCode(){
       const data = {
         title : this.title,
         description : this.description,
-        html : this.codedata.htmltext,
-        css : this.codedata.csstext,
-        js : this.codedata.jstext
+        html : this.codeData.htmlText,
+        css : this.codeData.cssText,
+        js : this.codeData.jsText
       }
       const response = await addCode(data)
       console.log(response)
     },
     updateCode(type, value){
-      this.codedata[type] = value
+      this.codeData[type] = value
     },
-    formchange(){
+    formChange(){
       let input = document.querySelector('#inputbox')
       let apply = document.querySelector('#applyform')
       let box = document.querySelector('#codecreateform')
@@ -226,8 +231,8 @@ console.log(a)`
       }
     },
     expand(item,index) {
-      if (!this.expandcheck[index]){
-        this.expandcheck[index] = true
+      if (!this.expandCheck[index]){
+        this.expandCheck[index] = true
         for (let i=0;i<3;i++){
           let node = item.target.parentElement.parentElement.childNodes[i]
           if (i == index){
@@ -240,7 +245,7 @@ console.log(a)`
           }
         }
       } else {
-        this.expandcheck[index] = false
+        this.expandCheck[index] = false
         for (let i=0;i<3;i++){
           let node = item.target.parentElement.parentElement.childNodes[i]
           if (i == index){
@@ -255,10 +260,10 @@ console.log(a)`
       }
     },
     apply() {
-      this.afterdata = {
-        htmltext : this.codedata.htmltext,
-        csstext : this.codedata.csstext,
-        jstext : this.codedata.jstext
+      this.afterData = {
+        htmlText : this.codeData.htmlText,
+        cssText : this.codeData.cssText,
+        jsText : this.codeData.jsText
       }
     },
     changeColor(mode) {
