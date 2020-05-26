@@ -11,7 +11,7 @@ export default {
     },
     computed :{
         vhtml() {
-         return this.code.htmltext + '<style>' + this.code.csstext + '</style>' + '\n<script>' + this.code.jstext + '<' + '/script>'
+         return this.code.htmlText + '<style>' + this.code.cssText + '</style>' + '\n<script>' + this.code.jsText + '<' + '/script>'
         }
     },
     // watch: {
