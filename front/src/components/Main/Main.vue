@@ -19,6 +19,9 @@ export default {
     PreviewIntro,
     BestTemplates,
     ProvideLang,
+  },
+  mounted() {
+    this.$store.commit('toggleMode', 0);
   }
 }
 </script>

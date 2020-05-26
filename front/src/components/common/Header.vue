@@ -11,15 +11,15 @@
         <input type="text" id="search" placeholder="Search keyword" v-model="keyword">
         <label for="search" @click="searchTemplate"><i class="fas fa-search"></i></label>
       </form>
-      <div v-if="!isLogin" class="signup-btn" @click="goPage('/signup')">
+      <div v-if="!isLogin && this.$route.path !== '/signup'" class="signup-btn" @click="goPage('/signup')">
         <span v-if="!mobileSize">Sign Up</span>
         <i v-else class="fas fa-user-plus"></i>
       </div>
-      <div class="login-btn" @click="goPage('/login')">
-        <span v-if="!mobileSize && !isLogin">Login</span>
-        <span v-else-if="!mobileSize && isLogin">Logout</span>
-        <i v-else-if="mobileSize && !isLogin" class="fas fa-sign-in-alt"></i>
-        <i v-else class="fas fa-sign-out-alt"></i>
+      <div v-if="this.$route.path !== '/login'" class="login-btn">
+        <span v-if="!mobileSize && !isLogin" @click="goPage('/login')">Login</span>
+        <span v-else-if="!mobileSize && isLogin" @click="logout">Logout</span>
+        <i v-else-if="mobileSize && !isLogin" class="fas fa-sign-in-alt" @click="goPage('/login')"></i>
+        <i v-else class="fas fa-sign-out-alt" @click="logout"></i>
       </div>
     </div>
     <div class="mobile-menu" v-show="showMobileMenus">
@@ -89,6 +89,14 @@ export default {
         alert(`추후 ${this.keyword} 키워드를 포함하는 템플릿 보여주는 검색 결과 페이지 구현 예정`)
       } else {
         alert('키워드를 입력해주세요.')
+      }
+    },
+    logout() {
+      if (confirm('로그아웃 하시겠습니까?')) {
+        this.$store.commit('logout')
+        if (this.$route.path !== '/') {
+          this.$router.push('/')
+        }
       }
     }
   },
