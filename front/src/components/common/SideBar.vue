@@ -21,7 +21,8 @@
         <router-link to="/clan">Clan</router-link>
       </li>
     </ul>
-    <ul class="menu-items login">
+    <hr class="divider" v-if="$store.state.user.isLogin">
+    <ul class="menu-items" v-if="$store.state.user.isLogin">
       <li>
         <router-link to="/mypage/dashboard">Dashboard</router-link>
       </li>

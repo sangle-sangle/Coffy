@@ -1,6 +1,6 @@
 <template>
-  <div>
-      {{text}}
+  <div style="height: 100vh; text-align: center;">
+    {{text}}
   </div>
 </template>
 
