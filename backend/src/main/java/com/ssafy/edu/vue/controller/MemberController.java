@@ -87,6 +87,7 @@ public class MemberController {
 	@RequestMapping(value = "/member", method = RequestMethod.POST)
 	public ResponseEntity<CheckSignUp> addMember(@RequestBody Member member) throws Exception {
 		logger.info("1-------------addMember-----------------------------" + new Date());
+		System.out.println(member);
 		int email = memberservice.checkEmail(member.getEmail());
 		int username = memberservice.checkUsername(member.getUsername());
 		CheckSignUp result = new CheckSignUp();
