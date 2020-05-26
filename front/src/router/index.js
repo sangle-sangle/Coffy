@@ -22,7 +22,7 @@ export default new Router({
     },
     {
       path : '/code',
-      component : loadComponent('code','codemain'),
+      component : loadComponent('Code','CodeMain'),
     },
     {
       path: '/login',
