@@ -15,10 +15,21 @@
         <router-link to="/about">About</router-link>
       </li>
       <li>
-        <router-link to="/code">code</router-link>
+        <router-link to="/code">Code</router-link>
       </li>
       <li>
         <router-link to="/clan">Clan</router-link>
+      </li>
+    </ul>
+    <ul class="menu-items login">
+      <li>
+        <router-link to="/mypage/dashboard">Dashboard</router-link>
+      </li>
+      <li>
+        <router-link to="/mypage/profile">Profile</router-link>
+      </li>
+      <li>
+        <router-link to="/account">Account</router-link>
       </li>
     </ul>
   </div>
