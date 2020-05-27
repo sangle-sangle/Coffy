@@ -9,8 +9,31 @@
 </template>
 
 <script>
-export default {
+import { mapState } from 'vuex'
 
+export default {
+  computed: {
+    ...mapState({
+      mode: state => state.common.mode,
+    })
+  },
+  mounted() {
+    setTimeout(() => this.changeColor(this.mode), 250);
+  },
+  methods: {
+    changeColor(mode) {
+      if (mode === 'white') {
+        document.querySelector('.footer-wrapper').style.backgroundColor = '#eee';
+      } else {
+        document.querySelector('.footer-wrapper').style.backgroundColor = '#000';
+      }
+    }
+  },
+  watch: {
+    mode() {
+      this.changeColor(this.mode)
+    }
+  }
 }
 </script>
 

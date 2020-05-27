@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div :class="this.$route.name === 'ClanForm' ? '' : 'clan-page-wrapper'">
     <router-view />
   </div>
 </template>
 
 <style scoped>
-div {
+.clan-page-wrapper {
   padding: 15px;
 }
 </style>

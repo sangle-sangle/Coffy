@@ -1,6 +1,6 @@
 <template>
   <div class="switch-wrapper">
-    <div class="mode-color-switch" @click="toggleMode">
+    <div class="mode-color-switch" @click="toggleColorMode">
       <i class="fas fa-exchange-alt"></i>
       <span>{{ mode }}</span>
     </div>
@@ -10,14 +10,20 @@
 <script>
 export default {
   name: 'ToggleSwitch',
-  props: {
-    mode: {
-      type: String
+  data() {
+    return {
+      mode: sessionStorage.getItem('mode')
     }
   },
   methods: {
-    toggleMode() {
-      this.$store.commit('toggleMode', 1);
+    toggleColorMode() {
+      if (sessionStorage.getItem('mode') === 'dark') {
+        sessionStorage.setItem('mode', 'white');
+      } else {
+        sessionStorage.setItem('mode', 'dark');
+      }
+      this.mode = sessionStorage.getItem('mode')
+      this.$store.commit('toggleMode');
     }
   }
 }
