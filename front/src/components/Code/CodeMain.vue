@@ -155,7 +155,7 @@ console.log(a)`
   },
   mounted(){
     this.theme = this.$store.state.common.mode === 'dark' ? 1: 0
-    this.$store.commit('toggleMode', 0);
+    // this.$store.commit('toggleMode');
     this.changeColor(this.mode);
   },
   watch:{

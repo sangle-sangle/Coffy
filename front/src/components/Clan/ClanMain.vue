@@ -66,7 +66,8 @@ export default {
     })
   },
   mounted() {
-    this.$store.commit('toggleMode', 0);
+    // this.$store.commit('toggleMode');
+    this.changeColor(this.mode);
   },
   methods: {
     searchClan() {
@@ -91,15 +92,15 @@ export default {
     },
     changeColor(mode) {
       if (mode === 'white') { // 화이트 모드일 때
+        document.querySelector('#search-clan').style.backgroundColor = '#eee';
         document.querySelectorAll('.clan-card').forEach(card => {
           card.style.borderColor = "#333"
         });
-        document.querySelector('#search-clan').style.backgroundColor = '#eee';
       } else { // 다크 모드일 때
+        document.querySelector('#search-clan').style.backgroundColor = '#252830';
         document.querySelectorAll('.clan-card').forEach(card => {
           card.style.borderColor = "silver"
         });
-        document.querySelector('#search-clan').style.backgroundColor = '#252830';
       }
     }
   },

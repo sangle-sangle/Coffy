@@ -40,6 +40,9 @@ export default {
       this.fab = scrollHegiht >= 180
     })
   },
+  updated() {
+    this.$store.commit('toggleMode')
+  },
   methods: {
     goTop() {
       window.scrollTo(0, 0);
@@ -62,10 +65,6 @@ nav {
 section {
   padding-left: 170px;
   width: 100%;
-}
-
-#page-view {
-  background-color: rgb(30, 30, 34);
 }
 
 .scorllTopBtn {

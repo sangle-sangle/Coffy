@@ -91,7 +91,7 @@ export default {
     })
   },
   mounted() {
-    this.$store.commit('toggleMode', 0);
+    // this.$store.commit('toggleMode');
     this.changeColor(this.mode)
     this.mobileSize = window.innerWidth <= 600;
     window.addEventListener('resize', () => this.mobileSize = window.innerWidth <= 600);

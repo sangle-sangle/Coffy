@@ -18,7 +18,7 @@ export default {
     })
   },
   mounted() {
-    this.changeColor(this.mode);
+    setTimeout(() => this.changeColor(this.mode), 250);
   },
   methods: {
     changeColor(mode) {

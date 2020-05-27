@@ -44,8 +44,8 @@ export default {
     }
   },
   mounted() {
-    this.$store.commit('toggleMode', 0);
-    // this.changeColor(this.mode);
+    // this.$store.commit('toggleMode');
+    this.changeColor(this.mode);
   },
   methods: {
     closeModal() {

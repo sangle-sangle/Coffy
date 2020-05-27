@@ -23,7 +23,7 @@ export default {
   },
   mounted() {
     this.toggleModal();
-    this.$store.commit('toggleMode', 0);
+    // this.$store.commit('toggleMode');
     this.changeColor(this.mode);
   },
   methods: {
