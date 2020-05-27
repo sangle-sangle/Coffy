@@ -42,7 +42,9 @@ export default new Router({
       path: '/clan',
       component: loadView('ClanPage'),
       children: [
-        { path: '', name: 'ClanMain', component: loadComponent('Clan', 'ClanMain') }
+        { path: '', name: 'ClanMain', component: loadComponent('Clan', 'ClanMain') },
+        { path: 'addform', name: 'ClanForm', component: loadComponent('Clan', 'ClanForm') },
+        { path: 'detail/:id', name: 'ClanDetail', component: loadComponent('Clan', 'ClanDetail'), props: true },
       ]
     },
     {
