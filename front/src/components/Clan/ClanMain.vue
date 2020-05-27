@@ -80,11 +80,11 @@ export default {
     goAddForm() {
       this.$router.push('/clan/addform');
     },
-    goClanDetail(clanid) {
-      this.$router.push(`/clan/detail/${clanid}`);
+    goClanDetail(clanId) {
+      this.$router.push(`/clan/detail/${clanId}`);
     },
-    showClanRegister(clanid) {
-      this.registerClanId = clanid;
+    showClanRegister(clanId) {
+      this.registerClanId = clanId;
       this.showClanRegisterModal = true;
     },
     closeModal() {

@@ -46,7 +46,7 @@ export default {
   },
   data() {
     return {
-      clanid: this.$route.path.split('/').reverse()[0],
+      clanId: this.$route.path.split('/').reverse()[0],
       clanInfo: {},
       showClanMaster: false,
       showClanRegisterModal: false
@@ -61,7 +61,7 @@ export default {
       // this.clanInfo = getClanData.data
 
       // 우선 지금은 임시로 asset에 json 파일로 만든 데이터 사용
-      this.clanInfo = clanList[this.clanid]
+      this.clanInfo = clanList[this.clanId]
     },
     toggleMasterSection() {
       this.showClanMaster = !this.showClanMaster
