@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssafy.member">
+
+	<!-- </select> -->
+
+	<select id="getMemberList" resultType="com.ssafy.edu.vue.dto.Member">
+		select id, email, username, githubid, clanid, point, auth, signupdate, img
+		from user m where delflag=0 order by memberid
+	</select>
+	
+	<select id="getMember" resultType="com.ssafy.edu.vue.dto.Member" parameterType="java.lang.Integer">
+		select id, email, username, githubid, clanid, point, auth, signupdate, img from user where id=#{memberid}
+	</select>
+	
+	<insert id="addMember" parameterType="com.ssafy.edu.vue.dto.Member">
+		insert into
+		user(email, password, username, githubid, signupdate)
+		values(#{email},hex(aes_encrypt(#{password}, 'key')),#{username},#{githubid},now())
+	</insert>
+	
+	<update id="updateMember"
+		parameterType="com.ssafy.edu.vue.dto.Member">
+		update user set
+		username=#{username},
+		githubid=#{githubid},
+		img=#{img}
+		where
+		id=#{memberid}
+	</update>
+	
+	<delete id="deleteMember" parameterType="java.lang.Integer">
+		update user set delflag=1 where id=#{memberid}
+	</delete>
+	
+	<select id="checkDelflag" resultType="java.lang.Integer" parameterType="java.lang.String">
+		select delflag from user where email=#{email}
+	</select>
+	
+	<select id="checkLogin" resultType="com.ssafy.edu.vue.dto.Member" parameterType="com.ssafy.edu.vue.dto.Member">
+		select id, email, username, githubid, clanid, point, auth, signupdate, img from user where email=#{email} and password=hex(aes_encrypt(#{password}, 'key'))
+	</select>
+	
+	<select id="checkEmail" resultType="java.lang.Integer" parameterType="java.lang.String">
+		select count(*) from user where email=#{email}
+	</select>
+	
+	<select id="checkUsername" resultType="java.lang.Integer" parameterType="java.lang.String">
+		select count(*) from user where username=#{username}
+	</select>
+	
+	<update id="updatePassword" parameterType="com.ssafy.edu.vue.dto.Member">
+		update user set
+		password=hex(aes_encrypt(#{password}, 'key'))
+		where
+		id=#{memberid}
+	</update>
+	
+	<update id="updateMemberAuth" parameterType="com.ssafy.edu.vue.dto.Member">
+		update user set
+		auth=#{auth}
+		where
+		id=#{memberid}
+	</update>
+	
+	<select id="checkUsers" resultType="java.lang.Integer">
+		select count(*) from user where delflag=0
+	</select>
+	
+</mapper>

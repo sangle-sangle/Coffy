@@ -11,6 +11,8 @@
 	<groupId>com.ssafy.edu</groupId>
 	<artifactId>sangle</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	
+	<packaging>war</packaging>
 	<name>sangle</name>
 	<description>Sangle project for Spring Boot</description>
 
@@ -78,6 +80,7 @@
 			<artifactId>jjwt</artifactId>
 			<version>0.9.1</version>
 		</dependency>
+		
 	</dependencies>
 
 	<build>
