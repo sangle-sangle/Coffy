@@ -9,5 +9,5 @@
 
 FROM tomcat:latest
 ADD target/*.war /usr/local/tomcat/webapps/
-EXPOSE 8197
+EXPOSE 8080
 CMD ["catalina.sh", "run"]
