@@ -96,7 +96,7 @@ section {
 
 @media (max-width: 900px) {
   nav {
-    display: none;
+    visibility: hidden;
   }
 
   section {
