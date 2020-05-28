@@ -65,15 +65,15 @@ export default {
   },
   methods: {
     baseSetting() {
-      let baseground = document.querySelector('#base-ground');
+      let baseGround = document.querySelector('#base-ground');
       for (let i in this.base) {
-        baseground.style[i] = this.base[i]
+        baseGround.style[i] = this.base[i]
       }
     },
     problemSetting() {
-      let userground = document.querySelector('#user-ground');
+      let userGround = document.querySelector('#user-ground');
       for (let i in this.problem) {
-        userground.style[i] = this.problem[i]
+        userGround.style[i] = this.problem[i]
       }
     },
     toggleModal() {
@@ -84,26 +84,26 @@ export default {
     answer() {
       let idx = 0;
       let result = true;
-      let userground = document.querySelector('#user-ground');
-      let baseground = document.querySelector('#base-ground');
+      let userGround = document.querySelector('#user-ground');
+      let baseGround = document.querySelector('#base-ground');
       for (let [key, value] of Object.entries(this.problem)) {
         if (!(key)) {
-          userground.style[this.answer[idx]] = value
-          if (baseground.style[this.answer[idx]] !== value){
+          userGround.style[this.answer[idx]] = value
+          if (baseGround.style[this.answer[idx]] !== value){
             result = false
           }
           idx ++
         }
         if (!(value)) {
-          userground.style[key] = this.answer[idx]
-          if (this.answer[idx] !== baseground.style[key]){
-            console.log(this.answer[idx],baseground.style[key])
+          userGround.style[key] = this.answer[idx]
+          if (this.answer[idx] !== baseGround.style[key]){
+            console.log(this.answer[idx],baseGround.style[key])
             result = false
           }
           idx ++
         }
         if (key && value) {
-          userground.style[key] = value
+          userGround.style[key] = value
         }
       }
       if (result) {
