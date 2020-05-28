@@ -21,7 +21,8 @@ export default new Router({
       path : '/code',
       component : loadView('CodePage'),
       children: [
-        { path: '', name: 'CodeMain', component: loadComponent('Code', 'CodeMain') }
+        { path: '', name: 'CodeMain', component: loadComponent('Code', 'CodeMain') },
+        { path: 'game', name: 'CodeGame', component: loadComponent('Code', 'CodeGame') }
       ]
     },
     {
@@ -42,7 +43,9 @@ export default new Router({
       path: '/clan',
       component: loadView('ClanPage'),
       children: [
-        { path: '', name: 'ClanMain', component: loadComponent('Clan', 'ClanMain') }
+        { path: '', name: 'ClanMain', component: loadComponent('Clan', 'ClanMain') },
+        { path: 'addform', name: 'ClanForm', component: loadComponent('Clan', 'ClanForm') },
+        { path: 'detail/:id', name: 'ClanDetail', component: loadComponent('Clan', 'ClanDetail'), props: true },
       ]
     },
     {

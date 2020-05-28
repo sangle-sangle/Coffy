@@ -1,8 +1,10 @@
 <template>
   <div class="sidebar-wrapper">
-    <div class="service-name" @click="goMain">☕Coffy</div>
+    <div class="service-name">
+      <router-link to="/">☕Coffy</router-link>
+    </div>
     <hr class="divider">
-    <ToggleSwitch :mode="this.mode"></ToggleSwitch>
+    <ToggleSwitch></ToggleSwitch>
     <hr class="divider">
     <div class="try-btn">
       ✏️try it!
@@ -37,23 +39,12 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import ToggleSwitch from '@/components/common/ToggleSwitch.vue';
 
 export default {
   name: 'SideBar',
   components: {
     ToggleSwitch
-  },
-  computed: {
-    ...mapState({
-      mode: state => state.common.mode
-    })
-  },
-  methods: {
-    goMain() {
-      this.$router.push('/')
-    }
   }
 }
 </script>
@@ -61,7 +52,7 @@ export default {
 <style scoped>
 .sidebar-wrapper {
   padding: 15px;
-  background-color:#2c303a;
+  /* background-color:#2c303a; */
   height: 100vh;
 }
 

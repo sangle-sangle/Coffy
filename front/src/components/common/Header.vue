@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="mobile-menu" v-show="showMobileMenus">
-      <ToggleSwitch :mode="this.mode"></ToggleSwitch>
+      <ToggleSwitch></ToggleSwitch>
       <hr class="divider">
       <div class="try-btn">
         ✏️try it!
@@ -36,7 +36,10 @@
           <router-link to="/about">About</router-link>
         </li>
         <li>
-          <router-link to="/code">code</router-link>
+          <router-link to="/code">Code</router-link>
+        </li>
+        <li>
+          <router-link to="/clan">Clan</router-link>
         </li>
       </ul>
     </div>
@@ -54,7 +57,6 @@ export default {
   },
   computed: {
     ...mapState({
-      mode: state => state.common.mode,
       isLogin: state => state.user.isLogin,
     })
   },
@@ -66,7 +68,7 @@ export default {
     }
   },
   mounted() {
-    this.mobileSize = window.innerWidth <= 900
+    this.mobileSize = window.innerWidth <= 900;
     window.addEventListener('resize', () => {
       if (window.innerWidth > 900) {
         this.showMobileMenus = false
@@ -75,34 +77,34 @@ export default {
         this.mobileSize = true
       }
     })
-    window.addEventListener('scroll', () => this.showMobileMenus = false)
+    window.addEventListener('scroll', () => this.showMobileMenus = false);
   },
   methods: {
     goPage(url) {
-      this.$router.push(url)
+      this.$router.push(url);
     },
     toggleMobileMenu() {
-      this.showMobileMenus = !this.showMobileMenus
+      this.showMobileMenus = !this.showMobileMenus;
     },
     searchTemplate() {
       if (this.keyword) {
-        alert(`추후 ${this.keyword} 키워드를 포함하는 템플릿 보여주는 검색 결과 페이지 구현 예정`)
+        alert(`추후 ${this.keyword} 키워드를 포함하는 템플릿 보여주는 검색 결과 페이지 구현 예정`);
       } else {
-        alert('키워드를 입력해주세요.')
+        alert('키워드를 입력해주세요.');
       }
     },
     logout() {
       if (confirm('로그아웃 하시겠습니까?')) {
-        this.$store.commit('logout')
+        this.$store.commit('logout');
         if (this.$route.path !== '/') {
-          this.$router.push('/')
+          this.$router.push('/');
         }
       }
     }
   },
   watch: {
     '$route'() {
-      this.showMobileMenus = false
+      this.showMobileMenus = false;
     }
   }
 }
@@ -115,7 +117,7 @@ export default {
   align-items: center;
   width: 100%;
   padding: 15px 0 15px 15px;
-  background-color: rgb(30, 30, 34);
+  /* background-color: rgb(30, 30, 34); */
   font-family: 'Gothic A1';
 }
 
@@ -136,7 +138,7 @@ export default {
   padding: 5px;
   border: transparent;
   border-radius: 10px;
-  background-color: rgb(37, 40, 48);
+  /* background-color: rgb(37, 40, 48); */
   color: #eee;
   margin-right: 8px;
 }
