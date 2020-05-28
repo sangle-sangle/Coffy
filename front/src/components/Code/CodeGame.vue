@@ -2,7 +2,7 @@
   <div>
     <div>
         <div>
-            <div class="css" v-for="(key,value) in defaultdata" :key="key">
+            <div class="css" v-for="(key,value) in problem" :key="key">
                 <div v-if="value"><span> {{value}} : </span></div>
                 <div v-else><input v-model="answer[0]" type="text"> : </div>
                 <div v-if="key"> {{key}}</div>
@@ -14,13 +14,13 @@
     </div>
     <i v-if="result" class="collecticon fab fa-angellist"></i>
     <div class="itembox">
-        <div id="background">
+        <div id="base-ground">
             <div class="park">
             </div>
             <div class="park">
             </div>
         </div>
-        <div id="userground">
+        <div id="user-ground">
             <div class="carbox">
                 <div class="car">
                 </div>
@@ -39,27 +39,27 @@ export default {
     name : 'codegame',
     data() {
         return {
-            problem : {'display':'flex','justify-content':'space-between'},
-            defaultdata : {'':'flex','justify-content':''},
+            base : {'display':'flex','justify-content':'space-between'},
+            problem : {'':'flex','justify-content':''},
             answer : [null,null],
             result : false
         }
     },
     mounted(){
-        this.problemsetting()
-        this.itemsetting()
+        this.baseSetting()
+        this.problemSetting()
     },
     methods : {
-        problemsetting() {
-            let background = document.querySelector('#background')
-            for (var i in this.problem){
-                background.style[i] = this.problem[i]
+        baseSetting() {
+            let baseground = document.querySelector('#base-ground')
+            for (var i in this.base){
+                baseground.style[i] = this.base[i]
             }
         },
-        itemsetting() {
-            let userground = document.querySelector('#userground')
-            for (var i in this.defaultdata){
-                userground.style[i] = this.defaultdata[i]
+        problemSetting() {
+            let userground = document.querySelector('#user-ground')
+            for (var i in this.problem){
+                userground.style[i] = this.problem[i]
             }  
         }
     },
@@ -67,19 +67,19 @@ export default {
         answer() {
             let idx = 0;
             let result = true;
-            let userground = document.querySelector('#userground')
-            let background = document.querySelector('#background')
-            for (let [key, value] of Object.entries(this.defaultdata)) {
+            let userground = document.querySelector('#user-ground')
+            let baseground = document.querySelector('#base-ground')
+            for (let [key, value] of Object.entries(this.problem)) {
                 if (!(key)) {
                     userground.style[this.answer[idx]] = value
-                    if (background.style[this.answer[idx]] !== value){
+                    if (baseground.style[this.answer[idx]] !== value){
                         result = false
                     }
                     idx ++
                 } if (!(value)) {
                     userground.style[key] = this.answer[idx]
-                    if (this.answer[idx] !== background.style[key]){
-                        console.log(this.answer[idx],background.style[key])
+                    if (this.answer[idx] !== baseground.style[key]){
+                        console.log(this.answer[idx],baseground.style[key])
                         result = false
                     }
                     idx ++
@@ -107,13 +107,13 @@ export default {
     height : 700px;
     background-color : #eee;
 }
-#background {
+#base-ground {
     width : 700px;
     height : 700px;
     position: relative;
 }
 
-#userground {
+#user-ground {
     width : 700px;
     height : 700px;
     position :relative;
