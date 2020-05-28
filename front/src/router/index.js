@@ -21,7 +21,8 @@ export default new Router({
       path : '/code',
       component : loadView('CodePage'),
       children: [
-        { path: '', name: 'CodeMain', component: loadComponent('Code', 'CodeMain') }
+        { path: '', name: 'CodeMain', component: loadComponent('Code', 'CodeMain') },
+        { path: 'game', name: 'CodeGame', component: loadComponent('Code', 'CodeGame') }
       ]
     },
     {
