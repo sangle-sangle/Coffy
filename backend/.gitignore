@@ -1,21 +1,21 @@
 HELP.md
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**
-!**/src/test/**
+!/src/main/
+!/src/test/
 
-### STS ###
+STS
 .apt_generated
 .factorypath
 .springBeans
 .sts4-cache
 
-### IntelliJ IDEA ###
+IntelliJ IDEA
 .idea
 *.iws
 *.iml
 *.ipr
 
-### NetBeans ###
+NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
@@ -23,5 +23,5 @@ HELP.md
 /.nb-gradle/
 build/
 
-### VS Code ###
+VS Code
 .vscode/
