@@ -81,14 +81,12 @@ export default {
   mounted() {
     this.changeColor(this.mode);
     window.onclick = function(event) {
-      var dropdowns = document.getElementsByClassName("filter-menu");
       if (event.target.matches('.dropdown-menu') | event.target.matches('.filter-sort-method') | event.target.matches('.filter-drop-button')){
         document.getElementsByClassName("dropdown-contents")[0].classList.toggle('active-dropdown')
       }
       else {
-        var dropdowns = document.getElementsByClassName("dropdown-contents");
-        if (dropdowns[0].classList.contains('active-dropdown')) {
-          dropdowns[0].classList.remove('active-dropdown');
+        if (document.getElementsByClassName("dropdown-contents")[0].classList.contains('active-dropdown')) {
+          document.getElementsByClassName("dropdown-contents")[0].classList.remove('active-dropdown');
         }
       }
     }
