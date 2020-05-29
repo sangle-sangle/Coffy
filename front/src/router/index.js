@@ -22,7 +22,12 @@ export default new Router({
       component : loadView('CodePage'),
       children: [
         { path: '', name: 'CodeMain', component: loadComponent('Code', 'CodeMain') },
-        { path: 'game', name: 'CodeGame', component: loadComponent('Code', 'CodeGame') }
+        { path: 'game', name: 'CodeGame', component: loadComponent('Code', 'CodeGame') },
+        { path: 'game/1', name: 'CodeGame1', component: loadComponent('CodeGame', 'Game01') },
+        { path: 'game/2', name: 'CodeGame2', component: loadComponent('CodeGame', 'Game02') },
+        { path: 'game/3', name: 'CodeGame3', component: loadComponent('CodeGame', 'Game03') },
+        { path: 'game/4', name: 'CodeGame4', component: loadComponent('CodeGame', 'Game04') },
+        { path: 'game/5', name: 'CodeGame5', component: loadComponent('CodeGame', 'Game05') },
       ]
     },
     {

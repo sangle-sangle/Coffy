@@ -6,7 +6,12 @@ const state = {
 
 const mutations = {
   toggleMode(state) {
-    state.mode = sessionStorage.getItem('mode');
+    if (sessionStorage.getItem('mode') === null) {
+      state.mode = 'dark';
+      sessionStorage.setItem('mode', 'dark');
+    } else {
+      state.mode = sessionStorage.getItem('mode');
+    }
     toggleMode(state.mode);
   }
 }

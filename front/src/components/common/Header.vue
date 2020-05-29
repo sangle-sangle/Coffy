@@ -23,7 +23,9 @@
       </div>
     </div>
     <div class="mobile-menu" v-show="showMobileMenus">
-      <ToggleSwitch></ToggleSwitch>
+      <div @click="toggleColorMode">
+        <ToggleSwitch :mode="changeMode"></ToggleSwitch>
+      </div>
       <hr class="divider">
       <div class="try-btn">
         ✏️try it!
@@ -57,6 +59,7 @@ export default {
   },
   computed: {
     ...mapState({
+      mode: state => state.common.mode,
       isLogin: state => state.user.isLogin,
     })
   },
@@ -65,6 +68,7 @@ export default {
       keyword: '',
       showMobileMenus: false,
       mobileSize: false,
+      changeMode: 'dark'
     }
   },
   mounted() {
@@ -100,11 +104,23 @@ export default {
           this.$router.push('/');
         }
       }
+    },
+    toggleColorMode() {
+      if (sessionStorage.getItem('mode') === 'dark') {
+        sessionStorage.setItem('mode', 'white');
+      } else {
+        sessionStorage.setItem('mode', 'dark');
+      }
+      this.mode = sessionStorage.getItem('mode')
+      this.$store.commit('toggleMode');
     }
   },
   watch: {
     '$route'() {
       this.showMobileMenus = false;
+    },
+    mode() {
+      this.changeMode = this.mode
     }
   }
 }
