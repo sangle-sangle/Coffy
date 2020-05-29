@@ -4,23 +4,12 @@ services:
     build: "./front"
     ports:
       - "80:80"
-  
-  back:
-    build: './backend'
-    expose:
-      - "8080"
-    ports:
-      - 8080:8080
-    environment: 
-      WAIT_HOSTS: mysql:3306
-    depends_on: 
-      - db
 
   db:
     restart: always
     image: mysql
     environment:
-      MYSQL_DATABASE: 'root'
+      MYSQL_DATABASE: sangle
       MYSQL_ROOT_HOST: '%'
       MYSQL_ROOT_PASSWORD: ssafy
     command:
@@ -29,3 +18,14 @@ services:
       --collation-server=utf8mb4_unicode_ci
     ports:
       - 3306:3306
+  
+  # back:
+  #   build: './backend'
+  #   expose:
+  #     - "8197"
+  #   ports:
+  #     - 8197:8197
+  #   environment: 
+  #     WAIT_HOSTS: mysql:3306
+  #   depends_on: 
+  #     - db
