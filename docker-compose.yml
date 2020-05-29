@@ -5,19 +5,19 @@ services:
     ports:
       - "80:80"
 
-  # db:
-  #   restart: always
-  #   image: mysql
-  #   environment:
-  #     MYSQL_DATABASE: sangle
-  #     MYSQL_ROOT_HOST: '%'
-  #     MYSQL_ROOT_PASSWORD: ssafy
-  #   command:
-  #     --default-authentication-plugin=mysql_native_password
-  #     --character-set-server=utf8mb4
-  #     --collation-server=utf8mb4_unicode_ci
-  #   ports:
-  #     - 3306:3306
+  db:
+    restart: always
+    image: mysql
+    environment:
+      MYSQL_DATABASE: sangle
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: ssafy
+    command:
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+    ports:
+      - 3306:3306
   
   back:
     build: './backend'
@@ -27,3 +27,4 @@ services:
       - 8197:8197
     environment: 
       WAIT_HOSTS: mysql:3306
+    depends_on: db
