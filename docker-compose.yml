@@ -27,3 +27,4 @@ services:
       - 8197:8197
     environment: 
       WAIT_HOSTS: mysql:3306
+    depends_on: db
