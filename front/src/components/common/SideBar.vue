@@ -22,11 +22,14 @@
         <router-link to="/code">Code</router-link>
       </li>
       <li>
-        <router-link to="/clan">Clan</router-link>
+        <router-link to="/game">Game</router-link>
+      </li>
+      <li>
+        <router-link :to="clanPageUrl">Clan</router-link>
       </li>
     </ul>
-    <hr class="divider" v-if="$store.state.user.isLogin">
-    <ul class="menu-items" v-if="$store.state.user.isLogin">
+    <hr class="divider" v-if="this.isLogin">
+    <ul class="menu-items" v-if="this.isLogin">
       <li>
         <router-link to="/mypage/dashboard">Dashboard</router-link>
       </li>
@@ -41,7 +44,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import ToggleSwitch from '@/components/common/ToggleSwitch.vue';
 
 export default {
@@ -56,8 +59,13 @@ export default {
   },
   computed: {
     ...mapState({
-      mode: state => state.common.mode
-    })
+      mode: state => state.common.mode,
+      isLogin: state => state.user.isLogin,
+    }),
+    ...mapGetters(['info']),
+    clanPageUrl() {
+      return this.info.clanid !== undefined && this.info.clanid >= 1 ? `/clan/detail/${this.info.clanid}` : '/clan'
+    }
   },
   methods: {
     toggleColorMode() {
@@ -66,7 +74,6 @@ export default {
       } else {
         sessionStorage.setItem('mode', 'dark');
       }
-      this.mode = sessionStorage.getItem('mode')
       this.$store.commit('toggleMode');
     }
   },

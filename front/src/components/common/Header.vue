@@ -41,7 +41,22 @@
           <router-link to="/code">Code</router-link>
         </li>
         <li>
-          <router-link to="/clan">Clan</router-link>
+          <router-link to="/game">Game</router-link>
+        </li>
+        <li>
+          <router-link :to="clanPageUrl">Clan</router-link>
+        </li>
+      </ul>
+      <hr class="divider" v-if="this.isLogin">
+      <ul class="menu-items" v-if="this.isLogin">
+        <li>
+          <router-link to="/mypage/dashboard">Dashboard</router-link>
+        </li>
+        <li>
+          <router-link to="/mypage/profile">Profile</router-link>
+        </li>
+        <li>
+          <router-link to="/account">Account</router-link>
         </li>
       </ul>
     </div>
@@ -49,7 +64,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import ToggleSwitch from '@/components/common/ToggleSwitch.vue';
 
 export default {
@@ -61,7 +76,11 @@ export default {
     ...mapState({
       mode: state => state.common.mode,
       isLogin: state => state.user.isLogin,
-    })
+    }),
+    ...mapGetters(['info']),
+    clanPageUrl() {
+      return this.info.clanid !== undefined && this.info.clanid >= 1 ? `/clan/detail/${this.info.clanid}` : '/clan'
+    }
   },
   data() {
     return {

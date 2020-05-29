@@ -18,6 +18,9 @@ function toggleMode(mode) {
     document.querySelectorAll('a').forEach(tag => {
       tag.style.color = '#eee'
     });
+    document.querySelectorAll('button').forEach(button => {
+      button.style.color = 'white'
+    });
     document.querySelector('#search').style.backgroundColor = '#252830';
     document.querySelector('.sidebar-wrapper').style.backgroundColor = '#2c303a';
     document.querySelector('.header-wrapper').style.backgroundColor = '#1E1E22';

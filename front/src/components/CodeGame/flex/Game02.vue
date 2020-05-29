@@ -6,16 +6,16 @@
         <div class="button-wrapper">
           <button @click="toggleModal">CLOSE</button>
         </div>
-        <img src="../../assets/images/codegame/03.jpg" alt="game-03">
+        <img src="../../../assets/images/codegame/flex/02.jpg" alt="game-02">
       </div>
     </Modal>
     <div>
       <div>
-        <div class="css" v-for="(key,value,index) in problem" :key="index">
+        <div class="css" v-for="(key,value) in problem" :key="key">
           <div v-if="value"><span> {{value}} : </span></div>
-          <div v-else><input v-model="answer[index]" type="text"> : </div>
+          <div v-else><input v-model="answer[0]" type="text"> : </div>
           <div v-if="key"> {{key}}</div>
-          <div v-else><input v-model="answer[index]" type="text"></div>
+          <div v-else><input v-model="answer[1]" type="text"></div>
         </div>
       </div>
     </div>
@@ -26,14 +26,10 @@
       <div id="base-ground">
         <div class="park"></div>
         <div class="park"></div>
-        <div class="park"></div>
       </div>
       <div id="user-ground">
         <div class="carbox">
           <div class="car red"></div>
-        </div>
-        <div class="carbox">
-          <div class="car green"></div>
         </div>
         <div class="carbox">
           <div class="car blue"></div>
@@ -52,9 +48,9 @@ export default {
   },
   data() {
     return {
-      base: {'display': 'flex', 'justify-content': 'center', 'align-items': 'center'},
-      problem: {'': 'flex', 'justify-content': '', 'align-items': ''},
-      answer: [null, null, null],
+      base: {'display': 'flex', 'flex-direction': 'column-reverse'},
+      problem: {'': 'flex', 'flex-direction': ''},
+      answer: [null, null],
       result: false,
       showModal: false
     }
@@ -165,10 +161,6 @@ export default {
 
 .car.red {
   background-color : red;
-}
-
-.car.green {
-  background-color : green;
 }
 
 .car.blue {

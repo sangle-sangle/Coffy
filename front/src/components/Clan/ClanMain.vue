@@ -24,7 +24,7 @@
         <div class="clan-header">
           <div v-if="!clan.private" class="clan-private open"><i class="fas fa-lock-open"></i>공개</div>
           <div v-else class="clan-private private"><i class="fas fa-lock"></i>비공개</div>
-          <div class="clan-master">Master: {{ clan.leaderid }}</div>
+          <div class="clan-master">Master: {{ clan.leader }}</div>
         </div>
         <div class="clan-name">
           {{ clan.name }}
@@ -66,7 +66,6 @@ export default {
     })
   },
   mounted() {
-    // this.$store.commit('toggleMode');
     this.changeColor(this.mode);
   },
   methods: {

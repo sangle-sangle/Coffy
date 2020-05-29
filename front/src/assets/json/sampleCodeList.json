@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "title": "왼쪽 정렬",
+    "description": "text-align: left;",
+    "html": "html1",
+    "css": "css1",
+    "javascript": "javascript1",
+    "writerid": 123456,
+    "created_at": "2020-05-29"
+  },
+  {
+    "id": 2,
+    "title": "가운데 정렬",
+    "description": "text-align: center;",
+    "html": "html2",
+    "css": "css2",
+    "javascript": "javascript2",
+    "writerid": 123457,
+    "created_at": "2020-05-29"
+  },
+  {
+    "id": 3,
+    "title": "오른쪽 정렬",
+    "description": "text-align: right;",
+    "html": "html3",
+    "css": "css3",
+    "javascript": "javascript3",
+    "writerid": 123458,
+    "created_at": "2020-05-20"
+  },
+  {
+    "id": 4,
+    "title": "modal",
+    "description": "modal component",
+    "html": "html4",
+    "css": "css4",
+    "javascript": "javascript4",
+    "writerid": 123459,
+    "created_at": "2020-02-05"
+  },
+  {
+    "id": 5,
+    "title": "menu tab",
+    "description": "ul태그와 float의 만남",
+    "html": "html5",
+    "css": "css5",
+    "javascript": "javascript5",
+    "writerid": 123460,
+    "created_at": "2020-03-30"
+  },
+  {
+    "id": 6,
+    "title": "loading bar",
+    "description": "로딩 화면",
+    "html": "html6",
+    "css": "css6",
+    "javascript": "javascript6",
+    "writerid": 123461,
+    "created_at": "2020-04-30"
+  }
+]
