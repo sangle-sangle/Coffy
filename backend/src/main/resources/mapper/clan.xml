@@ -5,31 +5,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="ssafy.clan">
 	<select id="getClans"
 		resultType="com.ssafy.edu.vue.dto.Clan">
-		select id, name, description, leaderId, locked, password, created_at
+		select id, name, description, leaderId, locked, password, created_at, clanmark
 		from clan
 		order by id	desc
 	</select>
 
 	<select id="getClan" parameterType="java.lang.Integer"
 		resultType="com.ssafy.edu.vue.dto.Clan">
-		select id, name, description, leaderId, locked, password, created_at
+		select id, name, description, leaderId, locked, password, created_at, clanmark
 		from clan
 		where id=#{id}
 	</select>
 
 	<insert id="addClan" parameterType="com.ssafy.edu.vue.dto.Clan">
-		insert into code(name, description, leaderId, locked, password, created_at)
-		values(#{name}, #{description}, #{leaderId}, #{locked}, #{password}, now())
+		insert into clan(name, description, leaderId, locked, password, created_at, clanmark)
+		values(#{name}, #{description}, #{leaderId}, #{locked}, #{password}, now(), #{clanmark})
 	</insert>
 	
 	<update id="updateClan"
 		parameterType="com.ssafy.edu.vue.dto.Clan">
-		update code set
+		update clan set
 		name=#{name},
 		description=#{description},
 		leaderId=#{leaderId},
 		locked=#{locked},
 		password=#{password}
+		clanmark=#{clanmark}
 		where id=#{id}
 	</update>
 

@@ -52,7 +52,7 @@ public class ClanController {
 		logger.info("1----------------addClan----------------" + new Date());
 		clanservice.addClan(clan);
 		BoolResult nr = new BoolResult();
-		nr.setName("updateClan");
+		nr.setName("addClan");
 		nr.setState("succ");
 		return new ResponseEntity<BoolResult>(nr, HttpStatus.OK);
 	}
@@ -67,7 +67,7 @@ public class ClanController {
 	}
 	
 	@ApiOperation(value = "clan 삭제", response = BoolResult.class)
-	@RequestMapping(value = "/code/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/clan/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<BoolResult> deleteCode(@PathVariable int id) throws Exception {
 		logger.info("1-------------deleteClan-----------------" + new Date());
 		clanservice.deleteClan(id);
