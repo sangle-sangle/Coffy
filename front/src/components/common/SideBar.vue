@@ -4,7 +4,9 @@
       <router-link to="/">☕Coffy</router-link>
     </div>
     <hr class="divider">
-    <ToggleSwitch></ToggleSwitch>
+    <div @click="toggleColorMode">
+      <ToggleSwitch :mode="changeMode"></ToggleSwitch>
+    </div>
     <hr class="divider">
     <div class="try-btn">
       ✏️try it!
@@ -39,12 +41,39 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import ToggleSwitch from '@/components/common/ToggleSwitch.vue';
 
 export default {
   name: 'SideBar',
   components: {
     ToggleSwitch
+  },
+  data() {
+    return {
+      changeMode: 'dark'
+    }
+  },
+  computed: {
+    ...mapState({
+      mode: state => state.common.mode
+    })
+  },
+  methods: {
+    toggleColorMode() {
+      if (sessionStorage.getItem('mode') === 'dark') {
+        sessionStorage.setItem('mode', 'white');
+      } else {
+        sessionStorage.setItem('mode', 'dark');
+      }
+      this.mode = sessionStorage.getItem('mode')
+      this.$store.commit('toggleMode');
+    }
+  },
+  watch: {
+    mode() {
+      this.changeMode = this.mode
+    }
   }
 }
 </script>
