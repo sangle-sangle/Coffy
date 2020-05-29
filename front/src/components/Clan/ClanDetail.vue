@@ -6,7 +6,8 @@
     <div class="clan-detail-header">
       <div class="clan-header-left">
         <div class="clan-mark">
-          <img src="../../assets/images/clan/clan_mark_no_image.png" alt="clan_no_mark">
+          <img src="../../assets/images/clan/clan_mark_no_image.png" alt="clan_no_mark" v-if="!clanInfo.clanmark">
+          <img :src="clanInfo.clanmark" alt="clan_no_mark" v-else>
         </div>
         <div class="clan-short-info">
           <div class="clan-name">{{ clanInfo.name }}</div>

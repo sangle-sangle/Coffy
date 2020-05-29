@@ -6,10 +6,10 @@
     </div>
     <div v-if="!registerStatus" class="message">
       <p class="register-message">'{{ this.clanInfo.name }}' 클랜({{ privateStatus }})에 가입하시겠습니까?</p>
-      <p v-if="this.clanInfo.private" class="waiting-message">(비공개 클랜은 신청 후 클랜장의 승인을 기다려야합니다.)</p>
+      <p v-if="this.clanInfo.locked" class="waiting-message">(비공개 클랜은 신청 후 클랜장의 승인을 기다려야합니다.)</p>
     </div>
     <div v-else class="message private-clan">
-      <p class="register-message" v-if="!this.clanInfo.private">{{ this.clanInfo.name }} 클랜에 가입되었습니다.</p>
+      <p class="register-message" v-if="!this.clanInfo.locked">{{ this.clanInfo.name }} 클랜에 가입되었습니다.</p>
       <p class="register-message" v-else>{{ this.clanInfo.name }} 클랜 가입 신청되었습니다.<br>클랜장의 승인을 기다려주세요.</p>
     </div>
     <div class="register-btn-wrapper">
@@ -40,7 +40,7 @@ export default {
       mode: state => state.common.mode,
     }),
     privateStatus() {
-      return this.clanInfo.private ? '비공개' : '공개'
+      return this.clanInfo.locked ? '비공개' : '공개'
     }
   },
   mounted() {

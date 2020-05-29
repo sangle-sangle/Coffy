@@ -21,14 +21,14 @@
         <div class="clan-private">
           <label class="form-title">클랜 공개 / 비공개 여부<i class="fas fa-star"></i></label>
           <div class="private-check-box">
-            <label for="open"><input type="radio" id="open" :value="0" v-model="clanInfo.private">공개</label>
-            <label for="private"><input type="radio" id="private" :value="1" v-model="clanInfo.private">비공개</label>
+            <label for="open"><input type="radio" id="open" :value="0" v-model="clanInfo.locked">공개</label>
+            <label for="private"><input type="radio" id="private" :value="1" v-model="clanInfo.locked">비공개</label>
           </div>
-          <input v-if="clanInfo.private" type="password" id="private-password" placeholder="클랜 비밀번호(6자 이상)" v-model="clanInfo.password">
-          <div class="alert-message" v-if="addClanBtnClick && clanInfo.private === null">
+          <input v-if="clanInfo.locked" type="password" id="private-password" placeholder="클랜 비밀번호(6자 이상)" v-model="clanInfo.password">
+          <div class="alert-message" v-if="addClanBtnClick && clanInfo.locked === null">
             공개 또는 비공개 선택해주세요.
           </div>
-          <div class="alert-message" v-else-if="addClanBtnClick && clanInfo.private === 1 && (clanInfo.password === null || clanInfo.password.length < 6)">
+          <div class="alert-message" v-else-if="addClanBtnClick && clanInfo.locked === 1 && (clanInfo.password === null || clanInfo.password.length < 6)">
             클랜 비밀번호를 6자 이상 입력해주세요.
           </div>
         </div>
@@ -93,7 +93,7 @@ export default {
     return {
       clanInfo: {
         name: '',
-        private: null,
+        locked: null,
         leader: '현재 로그인한 유저 닉네임',
         password: null,
         description: '',
@@ -136,11 +136,11 @@ export default {
       // 우선 지금은 임시로 asset에 json 파일로 만든 데이터 사용
       let clanData = clanList[this.editClanID - 1]
       this.clanInfo.name = clanData.name
-      this.clanInfo.private = clanData.private
+      this.clanInfo.locked = clanData.locked
       this.clanInfo.leader = clanData.leader
       this.clanInfo.password = clanData.password
       this.clanInfo.description = clanData.description
-      this.clanInfo.clanMarkUrl = clanData.clanmarkurl
+      this.clanInfo.clanMarkUrl = clanData.clanmark
       this.clanInfo.clanMarkDeleteHash = clanData.clanmarkdeletehash
       setTimeout(() => {
         if (this.clanInfo.clanMarkUrl) {
@@ -154,7 +154,7 @@ export default {
     },
     async postClan() {
       // 필수 입력 사항 작성했는지 확인
-      if (!this.clanInfo.name || this.clanInfo.private === null || (this.clanInfo.private === 1 && (this.clanInfo.password === null || this.clanInfo.password.length < 6))) {
+      if (!this.clanInfo.name || this.clanInfo.locked === null || (this.clanInfo.locked === 1 && (this.clanInfo.password === null || this.clanInfo.password.length < 6))) {
         this.addClanBtnClick = true
         return
       }

@@ -22,7 +22,7 @@
     <div class="clan-list">
       <div v-for="clan in clanList" :key="clan.id" class="clan-card">
         <div class="clan-header">
-          <div v-if="!clan.private" class="clan-private open"><i class="fas fa-lock-open"></i>공개</div>
+          <div v-if="!clan.locked" class="clan-private open"><i class="fas fa-lock-open"></i>공개</div>
           <div v-else class="clan-private private"><i class="fas fa-lock"></i>비공개</div>
           <div class="clan-master">Master: {{ clan.leader }}</div>
         </div>
