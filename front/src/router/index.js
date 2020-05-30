@@ -4,6 +4,7 @@ import store from '@/store/index.js'
 import { loadView, loadComponent } from '@/utils/loadPage.js'
 
 Vue.use(Router)
+
 export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
@@ -15,19 +16,27 @@ export default new Router({
     },
     {
       path: '/about',
-      component: loadView('About'),
+      component: loadView('AboutPage'),
     },
     {
       path : '/code',
       component : loadView('CodePage'),
       children: [
-        { path: '', name: 'CodeMain', component: loadComponent('Code', 'CodeMain') },
+        { path: '', name: 'CodeList', component: loadComponent('Code', 'CodeList') },
+        { path: 'form', name: 'CodeForm', component: loadComponent('Code', 'CodeMain') },
         { path: 'game', name: 'CodeGame', component: loadComponent('Code', 'CodeGame') },
-        { path: 'game/1', name: 'CodeGame1', component: loadComponent('CodeGame', 'Game01') },
-        { path: 'game/2', name: 'CodeGame2', component: loadComponent('CodeGame', 'Game02') },
-        { path: 'game/3', name: 'CodeGame3', component: loadComponent('CodeGame', 'Game03') },
-        { path: 'game/4', name: 'CodeGame4', component: loadComponent('CodeGame', 'Game04') },
-        { path: 'game/5', name: 'CodeGame5', component: loadComponent('CodeGame', 'Game05') },
+      ]
+    },
+    {
+      path: '/game',
+      component: loadView('GamePage'),
+      children: [
+        { path: '', name: 'GameList', component: loadComponent('CodeGame', 'GameList') },
+        { path: 'flex/1', name: 'Flex01', component: loadComponent('CodeGame', 'flex/Game01')},
+        { path: 'flex/2', name: 'Flex02', component: loadComponent('CodeGame', 'flex/Game02')},
+        { path: 'flex/3', name: 'Flex03', component: loadComponent('CodeGame', 'flex/Game03')},
+        { path: 'flex/4', name: 'Flex04', component: loadComponent('CodeGame', 'flex/Game04')},
+        { path: 'flex/5', name: 'Flex05', component: loadComponent('CodeGame', 'flex/Game05')},
       ]
     },
     {
@@ -48,9 +57,10 @@ export default new Router({
       path: '/clan',
       component: loadView('ClanPage'),
       children: [
-        { path: '', name: 'ClanMain', component: loadComponent('Clan', 'ClanMain') },
-        { path: 'addform', name: 'ClanForm', component: loadComponent('Clan', 'ClanForm') },
+        { path: '', name: 'ClanMain', component: loadComponent('Clan', 'ClanMain') }, // 백엔드와 user 관련 데이터 연동 후 beforeEnter: checkRegisteredClan 추가
+        { path: 'addform', name: 'ClanForm', component: loadComponent('Clan', 'ClanForm') }, // 백엔드와 user 관련 데이터 연동 후 beforeEnter: checkRegisteredClan 추가
         { path: 'detail/:id', name: 'ClanDetail', component: loadComponent('Clan', 'ClanDetail'), props: true },
+        { path: 'edit/:id', name: 'ClanEdit', component: loadComponent('Clan', 'ClanForm'), props: true },
       ]
     },
     {
@@ -76,4 +86,13 @@ function checkNoLoginUser(to, from, next) {  // 로그인이 안 된 경우에 �
 
 // function checkLoginUser(to, from, next) { // 로그인이 된 경우에 mypage 접근 가능
 //   !store.state.user.isLogin ? next('/') : next()
+// }
+
+// function checkRegisteredClan(to, from, next) { // 로그인한 유저 중 가입된 클랜이 없는 경우에만 클랜 리스트, 클랜 생성 페이지 접근 가능
+//   if (!store.state.user.isLogin) { // 비로그인 상태이면 로그인을 먼저 하라는 문구 표시 후 로그인 페이지로 이동
+//     alert('로그인을 먼저 해주세요.')
+//     next('/login')
+//     return
+//   }
+//   store.getters.info.clanid !== undefined && store.getters.info.clanid === 0 ? next() : next(`/clan/detail/${store.getters.info.clanid}`)
 // }

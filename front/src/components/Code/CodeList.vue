@@ -1,0 +1,236 @@
+<template>
+  <div class="code-list-wrapper">
+    <div class="code-list-header">
+      <div class="code-list-header-left">
+        <div class="code-list-title">
+          Code List
+        </div>
+        <div class="code-list-description">
+          ☕Coffy 사이트의 유저들이 만든 템플릿을 볼 수 있습니다.
+        </div>
+      </div>
+      <div class="code-list-header-right">
+        <div class="add-code-btn" @click="goAddCodePage"><i class="fas fa-plus"></i> 코드 작성</div>
+        <div class="go-game-btn" @click="goGamePage"><i class="fas fa-gamepad"></i> 코드 게임</div>
+      </div>
+    </div>
+    <div class="code-list">
+      <div v-for="code in codeList" :key="code.id" class="code-card">
+        <div class="code-title">{{ code.title }}</div>
+        <div class="code-preview">
+          코드 미리보기 영역
+        </div>
+        <div class="info-wrapper">
+          <div class="code-info">
+            <div class="writer-info">
+              <img src="https://user-images.githubusercontent.com/52685250/73902320-c72d6c00-48d8-11ea-82b4-eb9bfebfe9fb.png" alt="">
+              <span>{{ code.writerid }}</span>
+            </div>
+            <div class="code-like">
+              <div class="like-info"><i class="fas fa-heart"></i> 10</div>
+              <div class="scrap-info"><i class="fas fa-bookmark"></i> 5</div>
+            </div>
+          </div>
+          <div class="detail-btn">
+            <i class="fas fa-info"></i> 상세 정보
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapState } from 'vuex'
+import codeList from '@/assets/json/sampleCodeList.json';
+
+export default {
+  data() {
+    return {
+      codeList
+    }
+  },
+  computed: {
+    ...mapState({
+      mode: state => state.common.mode,
+    })
+  },
+  mounted() {
+    this.changeColor(this.mode);
+  },
+  methods: {
+    goAddCodePage() {
+      this.$router.push('/code/form')
+    },
+    goGamePage() {
+      this.$router.push('/game')
+    },
+    changeColor(mode) {
+      if (mode === 'white') { // 화이트 모드일 때
+        document.querySelectorAll('.code-card').forEach(card => {
+          card.style.borderColor = "#333"
+        });
+      } else { // 다크 모드일 때
+        document.querySelectorAll('.code-card').forEach(card => {
+          card.style.borderColor = "silver"
+        });
+      }
+    }
+  },
+  watch: {
+    mode() {
+      this.changeColor(this.mode)
+    }
+  }
+}
+</script>
+
+<style scoped>
+.code-list-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.code-list-title {
+  display: inline-block;
+  font-size: 2em;
+  font-family: 'Noto Sans KR';
+  font-weight: 600;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid silver;
+}
+
+.code-list-description {
+  font-size: 13.5px;
+}
+
+.code-list-header-right > div {
+  display: inline-block;
+}
+
+.add-code-btn,
+.go-game-btn {
+  font-size: 15px;
+  font-family: 'Gothic A1';
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: black;
+  text-align: center;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.add-code-btn {
+  background-color: #47cf73;
+  margin-right: 8px;
+}
+
+.go-game-btn {
+  background-color: #5793e2;
+}
+
+.add-code-btn:hover,
+.go-game-btn:hover {
+  cursor: pointer;
+}
+
+.code-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.code-card {
+  border: 1px solid silver;
+  border-radius: 20px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.code-card .code-title {
+  display: inline-block;
+  font-size: 18px;
+  font-weight: 600;
+  font-family: 'Gothic A1';
+  padding-bottom: 4px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid silver;
+}
+
+.info-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.writer-info {
+  margin: 8px 0;
+}
+
+.writer-info img {
+  vertical-align: middle;
+  width: 35px;
+  border-radius: 50%;
+}
+
+.code-like {
+  font-size: 13px;
+  color: white;
+}
+
+.code-like > .like-info {
+  margin-right: 6px;
+}
+
+.code-like > div[class$='-info'] {
+  display: inline-block;
+  background-color: #666;
+  padding: 3px 6px;
+  border-radius: 4px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.detail-btn {
+  font-size: 15px;
+  font-weight: 600;
+  font-family: 'Gothic A1';
+  background-color: #f7c389;
+  color: black;
+  padding: 4px 6px;
+  border-radius: 6px;
+}
+
+.detail-btn:hover {
+  cursor: pointer;
+}
+
+@media (min-width: 600px) and (max-width: 960px) {
+  .code-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .code-list-header {
+    display: block;
+  }
+
+  .code-list {
+    grid-template-columns: 1fr;
+  }
+
+  .code-list-header-right > div {
+    display: block;
+    margin: 16px 0;
+    padding: 10px;
+  }
+
+  .add-code-btn {
+    margin-right: 0;
+  }
+}
+</style>

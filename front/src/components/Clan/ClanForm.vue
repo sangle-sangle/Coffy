@@ -2,9 +2,9 @@
   <div class="clan-form-wrapper">
     <div class="clan-form-box">
       <div class="clan-form-title">
-        클랜 생성
+        클랜 {{ clanFormName }}
       </div>
-      <div class="clan-form-description">
+      <div class="clan-form-description" v-if="this.$route.name === 'ClanForm'">
         클랜을 생성해서 함께 코드를 공유할 수 있습니다.
       </div>
       <div class="essential-message">
@@ -13,98 +13,180 @@
       <div class="clan-form">
         <div class="clan-name">
           <label for="name" class="form-title">클랜명<i class="fas fa-star"></i></label>
-          <input type="text" id="name" v-model="name">
-          <div class="alert-message" v-if="addClanBtnClick && !name">
+          <input type="text" id="name" v-model="clanInfo.name">
+          <div class="alert-message" v-if="addClanBtnClick && !clanInfo.name">
             클랜명을 작성해주세요.
           </div>
         </div>
         <div class="clan-private">
           <label class="form-title">클랜 공개 / 비공개 여부<i class="fas fa-star"></i></label>
           <div class="private-check-box">
-            <label for="open"><input type="radio" id="open" :value="0" v-model="privateCheck">공개</label>
-            <label for="private"><input type="radio" id="private" :value="1" v-model="privateCheck">비공개</label>
+            <label for="open"><input type="radio" id="open" :value="0" v-model="clanInfo.locked">공개</label>
+            <label for="private"><input type="radio" id="private" :value="1" v-model="clanInfo.locked">비공개</label>
           </div>
-          <div class="alert-message" v-if="addClanBtnClick && !privateCheck">
+          <input v-if="clanInfo.locked" type="password" id="private-password" placeholder="클랜 비밀번호(6자 이상)" v-model="clanInfo.password">
+          <div class="alert-message" v-if="addClanBtnClick && clanInfo.locked === null">
             공개 또는 비공개 선택해주세요.
+          </div>
+          <div class="alert-message" v-else-if="addClanBtnClick && clanInfo.locked === 1 && (clanInfo.password === null || clanInfo.password.length < 6)">
+            클랜 비밀번호를 6자 이상 입력해주세요.
           </div>
         </div>
         <div class="clan-master">
           <label class="form-title">클랜장 닉네임(자동 입력)</label>
-          <input type="text" id="master-name" v-model="leaderName" readonly>
+          <input type="text" id="master-name" v-model="clanInfo.leader" readonly>
         </div>
         <div class="clan-description">
           <label for="description" class="form-title">클랜 설명</label>
-          <textarea name="description" id="description" v-model="description"></textarea>
+          <textarea name="description" id="description" v-model="clanInfo.description"></textarea>
         </div>
         <div class="clan-mark">
           <label for="mark-image" class="form-title">클랜 마크<small>(150[px]x150[px] 권장)</small></label>
           <div class="mark-input-box">
             <div class="img-center">
               <div class="mark-image-preview">
-                <div v-if="clanMark" class="preview-mark"></div>
-                <div v-else class="no-mark">
+                <div v-show="(editClanID && this.clanInfo.clanMarkUrl) || clanMark" class="preview-mark"></div>
+                <div v-show="noMarkImage" class="no-mark">
                   <img src="../../assets/images/clan/clan_mark_no_image.png" alt="no-mark">
                 </div>
               </div>
             </div>
             <div class="mark-file-route-mobile" v-if="clanMark && mobileSize">{{ fileName }}</div>
-            <div class="file-input">
+            <form class="file-input">
               <div class="mark-file-route" v-if="clanMark && !mobileSize">{{ fileName }}</div>
-              <label for="mark-image" v-if="!clanMark">업로드</label>
+              <label for="mark-image" v-if="noMarkImage">업로드</label>
               <input type="file" name="mark-image" id="mark-image" ref="file" accept="image/png, image/jpg, image/jpeg" @change="markImgFileUpload" hidden>
-              <div class="file-reset" @click="imageReset" v-if="clanMark">reset</div>
-            </div>
+              <div class="file-reset" @click="imageReset" v-if="clanMark || (editClanID > 0 && this.clanInfo.clanMarkUrl)">reset</div>
+            </form>
           </div>
-          <div class="no-img-alert" v-if="!clanMark">
+          <div class="no-img-alert" v-if="noMarkImage">
             클랜 마크를 넣지 않는 경우 기본 이미지(위 사진)로 등록됩니다.
           </div>
         </div>
       </div>
-      <div class="add-clan-btn" @click="addClan">
-        클랜 생성
+      <div class="add-clan-btn" @click="postClan">
+        클랜 {{ clanFormName }}
       </div>
     </div>
+    <Modal :showModal="completeModal">
+      <div class="modal-header">Complete!</div>
+      <div class="complete-message">클랜 {{ clanFormName }}이 완료되었습니다.</div>
+      <div class="back-btn" @click="closeModal">CLOSE</div>
+    </Modal>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import clanList from '@/assets/json/sampleClanList.json';
+import Modal from '@/components/common/Modal.vue'
+import axios from 'axios'
 // import { addClan } from '@/api/clan.js'
+// import { updateClan } from '@/api/clan.js'
+// import { fetchClanInfo } from '@/api/clan.js'
 
 export default {
+  components: {
+    Modal
+  },
   data() {
     return {
-      name: '',
-      privateCheck: null,
-      leaderName: '현재 로그인한 유저 닉네임',
-      password: null,
-      description: '',
-      clanMark: '',
+      clanInfo: {
+        name: '',
+        locked: null,
+        leader: '현재 로그인한 유저 닉네임',
+        password: null,
+        description: '',
+        clanMarkUrl: '',
+        clanMarkDeleteHash: ''
+      },
+      clanMark: null,
       fileName: '',
       mobileSize: false,
-      addClanBtnClick: false
+      addClanBtnClick: false,
+      editClanID: 0,
+      completeModal: false,
+      clanFormName: this.$route.name === 'ClanForm' ? '생성' : '정보 수정'
     }
   },
   computed: {
     ...mapState({
       mode: state => state.common.mode,
-    })
+    }),
+    noMarkImage() {
+      return (this.editClanID && !this.clanInfo.clanMarkUrl && !this.clanMark) || (!this.editClanID && !this.clanMark)
+    }
+  },
+  created() {
+    if (this.$route.name === 'ClanEdit') {
+      this.editClanID = Number(this.$route.path.split('/').reverse()[0])
+      this.getClanInfo()
+    }
   },
   mounted() {
-    // this.$store.commit('toggleMode');
     this.changeColor(this.mode)
     this.mobileSize = window.innerWidth <= 600;
     window.addEventListener('resize', () => this.mobileSize = window.innerWidth <= 600);
   },
   methods: {
-    async addClan() {
+    async getClanInfo() { // 해당 클랜 정보 받아오는 로직 작성
+      // let getClanData = await fetchClanInfo(this.clanid)
+      // this.clanInfo = getClanData.data
+
+      // 우선 지금은 임시로 asset에 json 파일로 만든 데이터 사용
+      let clanData = clanList[this.editClanID - 1]
+      this.clanInfo.name = clanData.name
+      this.clanInfo.locked = clanData.locked
+      this.clanInfo.leader = clanData.leader
+      this.clanInfo.password = clanData.password
+      this.clanInfo.description = clanData.description
+      this.clanInfo.clanMarkUrl = clanData.clanmark
+      this.clanInfo.clanMarkDeleteHash = clanData.clanmarkdeletehash
+      setTimeout(() => {
+        if (this.clanInfo.clanMarkUrl) {
+          let imgTag = document.createElement('img');
+          imgTag.setAttribute('class', 'clan-mark-image');
+          imgTag.setAttribute('src', this.clanInfo.clanMarkUrl);
+          imgTag.setAttribute('style', 'width: 150px; height: 150px; vertical-align: top; margin: 0 auto;');
+          document.querySelector('.preview-mark').appendChild(imgTag);
+        }
+      }, 0)
+    },
+    async postClan() {
       // 필수 입력 사항 작성했는지 확인
-      if (!this.name || !this.privateCheck) {
+      if (!this.clanInfo.name || this.clanInfo.locked === null || (this.clanInfo.locked === 1 && (this.clanInfo.password === null || this.clanInfo.password.length < 6))) {
         this.addClanBtnClick = true
         return
       }
-      // 클랜 생성 로직 await문으로 작성
-      // await addClan()
+      if (this.fileName.length) {
+        await this.getImgurMarkUrl()
+        return
+      }
+      // this.$route.name === 'ClanForm' ? addClan(this.clanInfo) : updateClan(this.clanInfo) // 백엔드와 연동 후 axios baseURL 정해지면 이 코드 주석 해제
+      this.completeModal = true
+    },
+    getImgurMarkUrl() {
+      let formData = new FormData()
+      formData.append('image', this.clanMark)
+      axios.post('https://api.imgur.com/3/image', formData, { headers: { Authorization: `Client-ID ${process.env.VUE_APP_IMGUR_CLIENT_ID}` } })
+        .then(response => {
+          let getImgData = response.data.data
+          this.clanInfo.clanMarkUrl = getImgData.link
+          this.clanInfo.clanMarkDeleteHash = getImgData.deletehash
+          // this.$route.name === 'ClanForm' ? addClan(this.clanInfo) : updateClan(this.clanInfo) // 백엔드와 연동 후 axios baseURL 정해지면 이 코드 주석 해제
+          this.completeModal = true
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    closeModal() {
+      this.completeModal = false
+      if (this.$route.name === 'ClanForm') {
+        this.$router.push('/clan')
+      } else {
+        this.$router.push(`/clan/detail/${this.editClanID}`)
+      }
     },
     markImgFileUpload() {
       this.clanMark = this.$refs.file.files[0];
@@ -117,7 +199,7 @@ export default {
         imgTag.setAttribute('class', 'clan-mark-image');
         imgTag.setAttribute('src', event.target.result);
         imgTag.setAttribute('style', 'width: 150px; height: 150px; vertical-align: top; margin: 0 auto;');
-        document.querySelector('.preview-mark').appendChild(imgTag)
+        document.querySelector('.preview-mark').appendChild(imgTag);
       }
       reader.readAsDataURL(this.clanMark);
     },
@@ -125,8 +207,9 @@ export default {
       let imgTag = document.querySelector('.clan-mark-image');
       document.querySelector('.preview-mark').removeChild(imgTag);
       this.$refs.file.value = '';
-      this.clanMark = '';
+      this.clanMark = null;
       this.fileName = '';
+      this.clanInfo.clanMarkUrl = '';
     },
     changeColor(mode) {
       if (mode === 'white') { // 화이트 모드일 때
@@ -201,6 +284,7 @@ label {
 }
 
 input[type="text"],
+input[type="password"],
 select,
 textarea {
   color: white;
@@ -305,6 +389,33 @@ textarea {
   padding: 8px;
   border-radius: 8px;
   color: black;
+}
+
+.modal-header {
+  display: inline-block;
+  font-size: 22px;
+  font-weight: 600;
+  font-family: 'Noto Sans KR';
+  padding-bottom: 6px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid silver;
+}
+
+.complete-message {
+  margin: 2px 0 16px;
+}
+
+.back-btn {
+  font-family: 'Gothic A1';
+  font-weight: 600;
+  color: black;
+  text-align: center;
+  background-color: #ffdd40;
+  padding: 6px;
+}
+
+.back-btn:hover {
+  cursor: pointer;
 }
 
 @media (max-width: 600px) {

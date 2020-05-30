@@ -6,7 +6,7 @@
         <div class="button-wrapper">
           <button @click="toggleModal">CLOSE</button>
         </div>
-        <img src="../../assets/images/codegame/04.jpg" alt="game-04">
+        <img src="../../../assets/images/codegame/flex/04.jpg" alt="game-04">
       </div>
     </Modal>
     <div>

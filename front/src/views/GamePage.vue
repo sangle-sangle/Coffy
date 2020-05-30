@@ -1,11 +1,11 @@
 <template>
-  <div class="code-page-wrapper">
+  <div class="game-page-wrapper">
     <router-view />
   </div>
 </template>
 
 <style scoped>
-.code-page-wrapper {
+.game-page-wrapper {
   padding: 15px;
 }
 </style>

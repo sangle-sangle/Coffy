@@ -1,21 +1,7 @@
 <template>
   <div class="about">
     <h1>This is an about page</h1>
-    <button>
-      <router-link to="/code/game/1">Game01</router-link>
-    </button>
-    <button>
-      <router-link to="/code/game/2">Game02</router-link>
-    </button>
-    <button>
-      <router-link to="/code/game/3">Game03</router-link>
-    </button>
-    <button>
-      <router-link to="/code/game/4">Game04</router-link>
-    </button>
-    <button>
-      <router-link to="/code/game/5">Game05</router-link>
-    </button>
+    <p>☕Coffy 서비스 설명서 같은거 적을 계획</p>
   </div>
 </template>
 
@@ -23,6 +9,7 @@
 import { mapState } from 'vuex'
 
 export default {
+  name: 'AboutPage',
   computed: {
     ...mapState({
       mode: state => state.common.mode,
@@ -48,3 +35,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.about {
+  padding: 15px;
+}
+</style>
