@@ -8,7 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<select id="getMemberList" parameterType="java.lang.Integer" resultType="com.ssafy.edu.vue.dto.Member">
 		select id, email, username, githubid, clanid, point, auth, signupdate, img
-		from user m where delflag=0 order by memberid
+		from user where delflag=0 order by id
 	</select>
 	
 	<select id="getMember" resultType="com.ssafy.edu.vue.dto.Member" parameterType="java.lang.Integer">
