@@ -32,7 +32,6 @@
               :options="htmlOptions"
               @input="updateCode('htmlText',$event)"
             />
-            <!-- <codearea title="html" :theme="theme" v-model="codeData.htmlText" name="text"></codearea> -->
           </div>
           <div id="csscol" class="col border">
             <div class="coltitle"> 
@@ -49,22 +48,19 @@
             <div class="coltitle"> 
               <span>JS</span>
             </div>
-            <i class="fas fa-expand expandicon" @click="expand($event,2)"></i>
+            <i class="fas fa-expand expandicon" @click="expand($event, 2)"></i>
             <CodeMirror 
               :value="codeData.jsText"
               :options="jsOptions"
               @input="updateCode('jsText',$event)"
             />
-            <!-- <codearea title="JS" :theme="theme" v-model="codeData.jsText" name="text"></codearea> -->
           </div>
         </div>
         <div id="applyform" class="rowapply">
-          <div class='itembox'></div>
           <ApplyCode class='itembox' :code="afterData" />
         </div>
       </div>
-      <!-- footer 적용 되면 지울거  -->
-      <div style="height:500px;">
+        <div style="height:500px;">
       </div>
     </div>
   </div>
@@ -89,8 +85,8 @@ export default {
   data() {
     return {
       form : 0,
-      title : '가운데 가운데',
-      description : '센트럴 팍',
+      title : '',
+      description : '',
       htmlOptions : {
         tabSize: 4,
         mode: 'xml',
@@ -331,6 +327,7 @@ export default {
   min-width : 400px;
   min-height: 400px;
   border:1px black solid;
+  width: 100%;
 }
 
 .toggle {
