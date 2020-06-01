@@ -9,7 +9,7 @@
           <label for="email"></label>
           <input id="email" v-model="userName" type="text" placeholder="ID">
           <div class="log-message">
-            (Username 또는 E-mail)
+            (E-mail로 작성해주세요.)
           </div>
         </div>
         <div class="password-form">
@@ -59,35 +59,32 @@ export default {
     })
   },
   mounted() {
-    // this.$store.commit('toggleMode');
     this.changeColor(this.mode);
   },
   methods: {
     async submitForm() {
       if (!this.userName) {
-        alert('이름 또는 이메일을 작성하세요.')
+        alert('ID를 작성하세요.')
         return
       } else if (!this.password) {
         alert('패스워드를 작성하세요.')
         return
       }
       try {
-        await this.$store.dispatch('LOGIN', {
-          userName: this.userName,
+        const response = await this.$store.dispatch('LOGIN', {
+          email: this.userName,
           password: this.password
         })
+        if (response.status === 204) {
+          alert('비밀번호를 다시 입력해주세요.')
+          return
+        }
         this.initForm()
         this.$router.push('/')
       } catch (error) {
-        let errorMessage = ''
-        if (error.status === 400) {
-          errorMessage = '아이디와 비밀번호를 다시 확인하세요.'
-        } else if(error.status === 500) {
-          errorMessage = '등록되지 않은 아이디입니다.'
-        } else {
-          errorMessage = '예기치 못한 오류가 발생했습니다. 관리자에게 문의해주세요.'
+        if(error.status === 500) {
+          alert('등록되지 않은 아이디입니다.')
         }
-        alert(errorMessage)
       }
     },
     socialLogin() {

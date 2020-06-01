@@ -30,8 +30,8 @@ const mutations = {
 const actions = {
   async LOGIN({ commit }, userData) {
     const result = await loginUser(userData)
-    if (result.data.token) {
-      commit('setToken', result.data.token)
+    if (result.headers['access-token']) {
+      commit('setToken', result.headers['access-token'])
     } else {
       commit('loginError')
     }

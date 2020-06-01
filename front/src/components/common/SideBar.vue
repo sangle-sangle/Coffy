@@ -67,6 +67,9 @@ export default {
       return this.info.clanid !== undefined && this.info.clanid >= 1 ? `/clan/detail/${this.info.clanid}` : '/clan'
     }
   },
+  mounted() {
+    this.changeMode = this.mode
+  },
   methods: {
     toggleColorMode() {
       if (sessionStorage.getItem('mode') === 'dark') {
