@@ -24,7 +24,7 @@
         <div class="clan-header">
           <div v-if="!clan.locked" class="clan-private open"><i class="fas fa-lock-open"></i>공개</div>
           <div v-else class="clan-private private"><i class="fas fa-lock"></i>비공개</div>
-          <div class="clan-master">Master: {{ clan.leader }}</div>
+          <div class="clan-master">Master: {{ clan.leaderId }}</div>
         </div>
         <div class="clan-name">
           {{ clan.name }}
@@ -43,9 +43,10 @@
 
 <script>
 import { mapState } from 'vuex'
-import clanList from '@/assets/json/sampleClanList.json'
 import ClanRegisterModal from '@/components/Clan/ClanRegisterModal.vue'
 import Modal from '@/components/common/Modal.vue';
+import { fetchAllClans } from '@/api/clan.js'
+// import { fetchMyInfo } from '@/api/user.js'
 
 export default {
   components: {
@@ -54,7 +55,7 @@ export default {
   },
   data() {
     return {
-      clanList,
+      clanList: [],
       keyword: '',
       showClanRegisterModal: false,
       registerClanId: null,
@@ -65,10 +66,17 @@ export default {
       mode: state => state.common.mode,
     })
   },
+  created() {
+    this.getAllClans();
+  },
   mounted() {
     this.changeColor(this.mode);
   },
   methods: {
+    async getAllClans() {
+      const clanData = await fetchAllClans()
+      this.clanList = clanData.data
+    },
     searchClan() {
       if (this.keyword) {
         alert(`추후 ${this.keyword}를 포함하는 클랜 리스트 보여줄 예정`)

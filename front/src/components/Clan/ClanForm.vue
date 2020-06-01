@@ -34,7 +34,7 @@
         </div>
         <div class="clan-master">
           <label class="form-title">클랜장 닉네임(자동 입력)</label>
-          <input type="text" id="master-name" v-model="clanInfo.leader" readonly>
+          <input type="text" id="master-name" v-model="clanInfo.leaderId" readonly>
         </div>
         <div class="clan-description">
           <label for="description" class="form-title">클랜 설명</label>
@@ -45,7 +45,7 @@
           <div class="mark-input-box">
             <div class="img-center">
               <div class="mark-image-preview">
-                <div v-show="(editClanID && this.clanInfo.clanMarkUrl) || clanMark" class="preview-mark"></div>
+                <div v-show="(editClanID && this.clanInfo.clanmark) || clanMark" class="preview-mark"></div>
                 <div v-show="noMarkImage" class="no-mark">
                   <img src="../../assets/images/clan/clan_mark_no_image.png" alt="no-mark">
                 </div>
@@ -56,7 +56,7 @@
               <div class="mark-file-route" v-if="clanMark && !mobileSize">{{ fileName }}</div>
               <label for="mark-image" v-if="noMarkImage">업로드</label>
               <input type="file" name="mark-image" id="mark-image" ref="file" accept="image/png, image/jpg, image/jpeg" @change="markImgFileUpload" hidden>
-              <div class="file-reset" @click="imageReset" v-if="clanMark || (editClanID > 0 && this.clanInfo.clanMarkUrl)">reset</div>
+              <div class="file-reset" @click="imageReset" v-if="clanMark || (editClanID > 0 && this.clanInfo.clanmark)">reset</div>
             </form>
           </div>
           <div class="no-img-alert" v-if="noMarkImage">
@@ -77,13 +77,11 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import clanList from '@/assets/json/sampleClanList.json';
+import { mapState, mapGetters } from 'vuex';
+// import clanList from '@/assets/json/sampleClanList.json';
 import Modal from '@/components/common/Modal.vue'
 import axios from 'axios'
-// import { addClan } from '@/api/clan.js'
-// import { updateClan } from '@/api/clan.js'
-// import { fetchClanInfo } from '@/api/clan.js'
+import { addClan, updateClan, fetchClanInfo } from '@/api/clan.js'
 
 export default {
   components: {
@@ -94,11 +92,11 @@ export default {
       clanInfo: {
         name: '',
         locked: null,
-        leader: '현재 로그인한 유저 닉네임',
+        leaderId: '현재 로그인한 유저 닉네임',
         password: null,
         description: '',
-        clanMarkUrl: '',
-        clanMarkDeleteHash: ''
+        clanmark: '',
+        clanmarkdeletehash: ''
       },
       clanMark: null,
       fileName: '',
@@ -113,14 +111,17 @@ export default {
     ...mapState({
       mode: state => state.common.mode,
     }),
+    ...mapGetters(['info']),
     noMarkImage() {
-      return (this.editClanID && !this.clanInfo.clanMarkUrl && !this.clanMark) || (!this.editClanID && !this.clanMark)
+      return (this.editClanID && !this.clanInfo.clanmark && !this.clanMark) || (!this.editClanID && !this.clanMark)
     }
   },
   created() {
     if (this.$route.name === 'ClanEdit') {
       this.editClanID = Number(this.$route.path.split('/').reverse()[0])
       this.getClanInfo()
+    } else {
+      this.clanInfo.leaderId = this.info['access-Token']['username']
     }
   },
   mounted() {
@@ -130,23 +131,25 @@ export default {
   },
   methods: {
     async getClanInfo() { // 해당 클랜 정보 받아오는 로직 작성
-      // let getClanData = await fetchClanInfo(this.clanid)
-      // this.clanInfo = getClanData.data
+      let getClanData = await fetchClanInfo(this.editClanID)
+      let clanData = getClanData.data
+      console.log(clanData)
 
       // 우선 지금은 임시로 asset에 json 파일로 만든 데이터 사용
-      let clanData = clanList[this.editClanID - 1]
+      // let clanData = clanList[this.editClanID - 1]
+
       this.clanInfo.name = clanData.name
       this.clanInfo.locked = clanData.locked
-      this.clanInfo.leader = clanData.leader
+      this.clanInfo.leaderId = this.info['access-Token']['username']
       this.clanInfo.password = clanData.password
       this.clanInfo.description = clanData.description
-      this.clanInfo.clanMarkUrl = clanData.clanmark
-      this.clanInfo.clanMarkDeleteHash = clanData.clanmarkdeletehash
+      this.clanInfo.clanmark = clanData.clanmark
+      this.clanInfo.clanmarkdeletehash = clanData.clanmarkdeletehash
       setTimeout(() => {
-        if (this.clanInfo.clanMarkUrl) {
+        if (this.clanInfo.clanmark) {
           let imgTag = document.createElement('img');
           imgTag.setAttribute('class', 'clan-mark-image');
-          imgTag.setAttribute('src', this.clanInfo.clanMarkUrl);
+          imgTag.setAttribute('src', this.clanInfo.clanmark);
           imgTag.setAttribute('style', 'width: 150px; height: 150px; vertical-align: top; margin: 0 auto;');
           document.querySelector('.preview-mark').appendChild(imgTag);
         }
@@ -162,7 +165,8 @@ export default {
         await this.getImgurMarkUrl()
         return
       }
-      // this.$route.name === 'ClanForm' ? addClan(this.clanInfo) : updateClan(this.clanInfo) // 백엔드와 연동 후 axios baseURL 정해지면 이 코드 주석 해제
+      this.clanInfo.leaderId = this.info['access-Token']['id']
+      this.$route.name === 'ClanForm' ? addClan(this.clanInfo) : updateClan(this.clanInfo) // 백엔드와 연동 후 axios baseURL 정해지면 이 코드 주석 해제
       this.completeModal = true
     },
     getImgurMarkUrl() {
@@ -171,9 +175,10 @@ export default {
       axios.post('https://api.imgur.com/3/image', formData, { headers: { Authorization: `Client-ID ${process.env.VUE_APP_IMGUR_CLIENT_ID}` } })
         .then(response => {
           let getImgData = response.data.data
-          this.clanInfo.clanMarkUrl = getImgData.link
-          this.clanInfo.clanMarkDeleteHash = getImgData.deletehash
-          // this.$route.name === 'ClanForm' ? addClan(this.clanInfo) : updateClan(this.clanInfo) // 백엔드와 연동 후 axios baseURL 정해지면 이 코드 주석 해제
+          this.clanInfo.clanmark = getImgData.link
+          this.clanInfo.clanmarkdeletehash = getImgData.deletehash
+          this.clanInfo.leaderId = this.info['access-Token']['id']
+          this.$route.name === 'ClanForm' ? addClan(this.clanInfo) : updateClan(this.clanInfo) // 백엔드와 연동 후 axios baseURL 정해지면 이 코드 주석 해제
           this.completeModal = true
         })
         .catch(error => {
@@ -209,7 +214,7 @@ export default {
       this.$refs.file.value = '';
       this.clanMark = null;
       this.fileName = '';
-      this.clanInfo.clanMarkUrl = '';
+      this.clanInfo.clanmark = '';
     },
     changeColor(mode) {
       if (mode === 'white') { // 화이트 모드일 때
