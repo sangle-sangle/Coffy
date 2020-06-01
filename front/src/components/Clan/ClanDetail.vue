@@ -11,7 +11,7 @@
         </div>
         <div class="clan-short-info">
           <div class="clan-name">{{ clanInfo.name }}</div>
-          <div class="clan-master">Master : {{ clanInfo.leader }}</div>
+          <div class="clan-master">Master : {{ clanInfo.leaderId }}</div>
           <div class="clan-btn-group">
             <div class="clan-master" @click="toggleMasterSection"><i class="fas fa-tools"></i> 관리자 모드</div>
             <div class="clan-register" @click="toggleClanRegisterModal"><i class="fas fa-plus"></i> 클랜 가입</div>
@@ -30,7 +30,7 @@
             <small>하단 버튼을 클릭하면 클랜 정보를 수정할 수 있습니다.</small>
             <button @click="goEditPage(clanId)">수정 페이지로 이동</button>
           </div>
-          <div>
+          <div> <!-- v-if="this.$store.getters.info['access-Token']['id'] === clanInfo.leaderId" -->
             <div class="edit-clan-info-title">클랜 삭제</div>
             <small>하단 버튼을 클릭하면 클랜을 삭제할 수 있습니다.</small>
             <button @click="toggleClanDeleteModal">클랜 삭제</button>
@@ -58,11 +58,11 @@
 <script>
 import { mapState } from 'vuex'
 import Modal from '@/components/common/Modal.vue'
-import clanList from '@/assets/json/sampleClanList.json'
+// import clanList from '@/assets/json/sampleClanList.json'
 import ClanRegisterModal from '@/components/Clan/ClanRegisterModal.vue'
 import ClanSignOutModal from '@/components/Clan/ClanSignOutModal.vue'
 import ClanDeleteModal from '@/components/Clan/ClanDeleteModal.vue'
-// import { fetchClanInfo } from '@/api/clan.js'
+import { fetchClanInfo } from '@/api/clan.js'
 
 export default {
   components: {
@@ -73,7 +73,7 @@ export default {
   },
   data() {
     return {
-      clanId: this.$route.path.split('/').reverse()[0],
+      clanId: Number(this.$route.path.split('/').reverse()[0]),
       clanInfo: {},
       showClanMaster: false,
       showModal: false,
@@ -96,11 +96,11 @@ export default {
   },
   methods: {
     async getClanInfo() { // 해당 클랜 정보 받아오는 로직 작성
-      // let getClanData = await fetchClanInfo(this.clanid)
-      // this.clanInfo = getClanData.data
+      let getClanData = await fetchClanInfo(this.clanId)
+      this.clanInfo = getClanData.data
 
       // 우선 지금은 임시로 asset에 json 파일로 만든 데이터 사용
-      this.clanInfo = clanList[this.clanId - 1]
+      // this.clanInfo = clanList[this.clanId - 1]
     },
     toggleMasterSection() {
       this.showClanMaster = !this.showClanMaster
@@ -138,10 +138,6 @@ export default {
 </script>
 
 <style scoped>
-.clan-detail-wrapper {
-  height: 100vh;
-}
-
 .clan-detail-title {
   display: inline-block;
   font-size: 2em;
@@ -305,7 +301,8 @@ export default {
   }
 
   .clan-btn-group > .clan-master,
-  .clan-btn-group > .clan-register {
+  .clan-btn-group > .clan-register,
+  .clan-btn-group > .clan-sign-out {
     display: block;
     margin: 0 auto 10px;
     width: 100%;

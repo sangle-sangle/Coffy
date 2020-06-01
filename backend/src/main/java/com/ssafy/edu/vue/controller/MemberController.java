@@ -28,7 +28,7 @@ import com.ssafy.edu.vue.service.IMemberService;
 
 import io.swagger.annotations.ApiOperation;
 
-@CrossOrigin(origins = { "*" }, maxAge = 6000)
+@CrossOrigin(origins = { "*" }, maxAge = 6000, exposedHeaders = "access-token", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api")
 public class MemberController {

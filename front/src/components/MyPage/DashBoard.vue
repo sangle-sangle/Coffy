@@ -11,36 +11,38 @@
       </ul>
     </div>
     <div class="filter-items-wrapper">
-      
-      <div class="filter-item filter-search" style="margin-bottom:10px;">
-        <div class="filter-search-bar">
-          <input type="text" class="filter-search-input" placeholder="Search keyword" v-model="keyword">
-        </div>
-        <button class="filter-search-button">검색</button>
-      </div>
-
-      <div class="filter-item filter-sort">
-        <span class="filter-sort-direction span-items">정렬 방향</span>
-        <div class="sort_button_group">
-          <button class="filter-sort-button" :class="filterButton === false ? 'active-sort' : ''" @click="filterButton = false">
-            <i class="fas fa-chevron-up"></i>
-          </button>
-          <button class="filter-sort-button" :class="filterButton === true ? 'active-sort' : ''" @click="filterButton = true">
-            <i class="fas fa-chevron-down"></i>
-          </button>
+      <div class="filter-left">
+        <div class="filter-item filter-search">
+          <div class="filter-search-bar">
+            <input type="text" class="filter-search-input" placeholder="Search keyword" v-model="keyword">
+          </div>
+          <button class="filter-search-button">검색</button>
         </div>
       </div>
 
-      <div class="filter-item filter-menu">
-        <span class="filter-sort-method span-items">정렬 방식</span>
-        <div class="dropdown-menu">
-          <span class="filter-drop-button span-items">{{menuItems[menuIndex]}}</span>
-          <div class="dropdown-contents">
-            <li class="d" v-for="(item, index) in menuItems" :key="index" @click="menuIndex=index">{{item}}</li>
+      <div class="filter-right">
+        <div class="filter-item filter-sort">
+          <span class="filter-sort-direction span-items">정렬 방향</span>
+          <div class="sort_button_group">
+            <button class="filter-sort-button" :class="filterButton === false ? 'active-sort' : ''" @click="filterButton = false">
+              <i class="fas fa-chevron-up"></i>
+            </button>
+            <button class="filter-sort-button" :class="filterButton === true ? 'active-sort' : ''" @click="filterButton = true">
+              <i class="fas fa-chevron-down"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="filter-item filter-menu">
+          <span class="filter-sort-method span-items">정렬 방식</span>
+          <div class="dropdown-menu">
+            <span class="filter-drop-button span-items">{{menuItems[menuIndex]}}</span>
+            <div class="dropdown-contents">
+              <li class="d" v-for="(item, index) in menuItems" :key="index" @click="menuIndex=index">{{item}}</li>
+            </div>
           </div>
         </div>
       </div>
-      
     </div>
     <div class="dash-board-tab-contents">
       <div class="tab-content">
@@ -135,25 +137,33 @@ export default {
 
 .filter-items-wrapper {
   display: flex;
-  flex-flow: row wrap;
+  flex-wrap: wrap;
   background-color: #444857;
-  padding:0.5rem;
+  padding:0.5rem 0.75rem;
+}
+
+.filter-left {
+  flex-grow: 1;
+  margin: 4px 0;
+}
+
+.filter-right {
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-end;
+  margin: 4px 0;
 }
 
 .filter-item {
   display: flex;
   flex-flow: wrap;
-  margin-right: 10px;
-}
-
-.filter-search {
-  width: 80%;
-  max-width: 430px;
 }
 
 .filter-search-bar {
+  flex-grow: 1;
   height: 35px;
   width: 75%;
+  max-width: 700px;
   background-color: rgb(37, 40, 48);
 }
 
@@ -168,7 +178,7 @@ export default {
 
 .filter-search-button {
   height: 35px;
-  width: 25%;
+  width: 60px;
   border: transparent;
   background-color: rgb(30, 30, 34);
   color: #eee;
@@ -176,7 +186,6 @@ export default {
 
 .filter-sort {
   background-color: rgb(37, 40, 48);
-  width: 25%;
   height: 35px;
   max-width: 170px;
   margin-right: 11px;
@@ -211,9 +220,7 @@ export default {
 
 .filter-menu {
   background-color: rgb(37, 40, 48);
-  width: 35%;
   height: 35px;
-  margin-right: 11px;
 }
 
 .filter-sort-method {
@@ -249,10 +256,4 @@ export default {
 }
 
 .dropdown-contents li:hover {background-color: #ddd}
-@media (max-width: 600px) {
-  .filter-item {
-    width: 100%;
-    margin-right: 0px;
-  }
-}
 </style>
