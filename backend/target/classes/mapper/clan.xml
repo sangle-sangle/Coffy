@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ssafy.clan">
-	<select id="getClans"
+	<select id="getClans" parameterType="java.lang.Integer"
 		resultType="com.ssafy.edu.vue.dto.Clan">
 		select id, name, description, leaderId, locked, password, created_at, clanmark
 		from clan
