@@ -16,6 +16,8 @@ public class Clan {
 	private int leaderId;
 	private int locked; // 0: 공개, 1: 비공개 
 	private String password;
+	private String clanmark;
+	private String clanmarkdeletehash;
 	private String created_at;
 	
 	public Clan() {
@@ -24,7 +26,7 @@ public class Clan {
 	}
 
 		
-	public Clan(int id, String name, String description, int leaderId, int locked, String password, String created_at) {
+	public Clan(int id, String name, String description, int leaderId, int locked, String password, String clanmark, String clanmarkdeletehash, String created_at) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -32,6 +34,8 @@ public class Clan {
 		this.leaderId = leaderId;
 		this.locked = locked;
 		this.password = password;
+		this.clanmark = clanmark;
+		this.clanmarkdeletehash = clanmarkdeletehash;
 		this.created_at = created_at;
 	}
 
@@ -39,7 +43,8 @@ public class Clan {
 	@Override
 	public String toString() {
 		return "Clan [id=" + id + ", name=" + name + ", description=" + description + ", leaderId=" + leaderId
-				+ ", locked=" + locked + ", password=" + password + ", created_at=" + created_at + "]";
+				+ ", locked=" + locked + ", password=" + password + ", clanmark=" + clanmark
+				+ ", clanmarkdeletehash=" + clanmarkdeletehash + ", created_at=" + created_at + "]";
 	}
 		
 	

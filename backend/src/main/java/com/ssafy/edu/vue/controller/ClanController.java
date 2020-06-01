@@ -25,7 +25,7 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("/api") // api 요청 주소, 이후에  @RequestMapping(value = "/")로 추가된다
 public class ClanController {
-	public static final Logger logger = LoggerFactory.getLogger(CodeController.class);
+	public static final Logger logger = LoggerFactory.getLogger(ClanController.class);
 
 	@Autowired
 	private IClanService clanservice;
@@ -67,8 +67,8 @@ public class ClanController {
 	}
 	
 	@ApiOperation(value = "clan 삭제", response = BoolResult.class)
-	@RequestMapping(value = "/code/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<BoolResult> deleteCode(@PathVariable int id) throws Exception {
+	@RequestMapping(value = "/clan/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<BoolResult> deleteClan(@PathVariable int id) throws Exception {
 		logger.info("1-------------deleteClan-----------------" + new Date());
 		clanservice.deleteClan(id);
 		BoolResult nr = new BoolResult();
