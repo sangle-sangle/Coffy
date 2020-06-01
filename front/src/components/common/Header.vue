@@ -91,6 +91,7 @@ export default {
     }
   },
   mounted() {
+    this.changeMode = this.mode
     this.mobileSize = window.innerWidth <= 900;
     window.addEventListener('resize', () => {
       if (window.innerWidth > 900) {
@@ -130,7 +131,6 @@ export default {
       } else {
         sessionStorage.setItem('mode', 'dark');
       }
-      this.mode = sessionStorage.getItem('mode')
       this.$store.commit('toggleMode');
     }
   },
