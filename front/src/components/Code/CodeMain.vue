@@ -58,7 +58,6 @@
             <!-- <codearea title="JS" :theme="theme" v-model="codeData.jsText" name="text"></codearea> -->
           </div>
         </div>
-        <div class="apply" @click="apply">적용하기 </div>
         <div id="applyform" class="rowapply">
           <div class='itembox'></div>
           <ApplyCode class='itembox' :code="afterData" />
@@ -115,34 +114,9 @@ export default {
       },
       theme: 0,
       codeData : {
-        htmlText : `<div class="maindiv"> 
-  <div class="center-div">
-    <div class="text">
-      중앙정렬
-    </div>
-  </div>
-</div>`,
-        cssText : `.maindiv {
-  width : 100%;
-  height : 100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.center-div {
-  width : 100px;
-  height : 100px;
-  background-color : black;
-}
-.text {
-  text-align:center;
-  color : white;
-  line-height : 100px;
-}`,
-        jsText : `console.log('asdf')
-let a = document.querySelector(.text)
-console.log(a)`    
+        htmlText : '',
+        cssText : '',
+        jsText : ''    
       },
       afterData : {},
       expandCheck : [false,false,false]
@@ -155,7 +129,6 @@ console.log(a)`
   },
   mounted(){
     this.theme = this.$store.state.common.mode === 'dark' ? 1: 0
-    // this.$store.commit('toggleMode');
     this.changeColor(this.mode);
   },
   watch:{
