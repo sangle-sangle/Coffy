@@ -301,7 +301,8 @@ export default {
   }
 
   .clan-btn-group > .clan-master,
-  .clan-btn-group > .clan-register {
+  .clan-btn-group > .clan-register,
+  .clan-btn-group > .clan-sign-out {
     display: block;
     margin: 0 auto 10px;
     width: 100%;
