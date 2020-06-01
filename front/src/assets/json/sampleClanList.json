@@ -2,85 +2,121 @@
   {
     "id": 1,
     "name": "ssafy-seoul-1",
-    "leaderid": 1234567,
-    "private": 1,
-    "description": "설명1"
+    "leader": 1234567,
+    "locked": 1,
+    "password": 1234567,
+    "description": "설명1",
+    "clanmarkdeletehash": "yvrrNg2BTUJxPuc",
+    "clanmark": "https://i.imgur.com/6vMrWoM.png"
   },
   {
     "id": 2,
     "name": "ssafy-daejeon-1",
-    "leaderid": 2134683,
-    "private": 0,
-    "description": "설명2"
+    "leader": 2134683,
+    "locked": 0,
+    "password": null,
+    "description": "설명2",
+    "clanmarkdeletehash": "0hN071Wgx456D2O",
+    "clanmark": "https://i.imgur.com/ECpLhvj.png"
   },
   {
     "id": 3,
     "name": "ssafy-gawngju-1",
-    "leaderid": 918273,
-    "private": 1,
-    "description": "설명3"
+    "leader": 918273,
+    "locked": 1,
+    "password": 918273,
+    "description": "설명3",
+    "clanmarkdeletehash": "yvrrNg2BTUJxPuc",
+    "clanmark": "https://i.imgur.com/6vMrWoM.png"
   },
   {
     "id": 4,
     "name": "ssafy-gumi-1",
-    "leaderid": 647472,
-    "private": 0,
-    "description": "설명4"
+    "leader": 647472,
+    "locked": 0,
+    "password": null,
+    "description": "설명4",
+    "clanmarkdeletehash": "yvrrNg2BTUJxPuc",
+    "clanmark": "https://i.imgur.com/6vMrWoM.png"
   },
   {
     "id": 5,
     "name": "ssafy-seoul-2",
-    "leaderid": 111111,
-    "private": 0,
-    "description": "설명5"
+    "leader": 111111,
+    "locked": 0,
+    "password": null,
+    "description": "설명5",
+    "clanmarkdeletehash": "0hN071Wgx456D2O",
+    "clanmark": "https://i.imgur.com/ECpLhvj.png"
   },
   {
     "id": 6,
     "name": "ssafy-daejeon-2",
-    "leaderid": 2683,
-    "private": 1,
-    "description": "설명6"
+    "leader": 26832683,
+    "locked": 1,
+    "password": 26832683,
+    "description": "설명6",
+    "clanmarkdeletehash": "yvrrNg2BTUJxPuc",
+    "clanmark": "https://i.imgur.com/6vMrWoM.png"
   },
   {
     "id": 7,
     "name": "ssafy-gawngju-2",
-    "leaderid": 91823,
-    "private": 0,
-    "description": "설명7"
+    "leader": 91823,
+    "locked": 0,
+    "password": null,
+    "description": "설명7",
+    "clanmarkdeletehash": "",
+    "clanmark": ""
   },
   {
     "id": 8,
     "name": "ssafy-gumi-2",
-    "leaderid": 72,
-    "private": 0,
-    "description": "설명8"
+    "leader": 72,
+    "locked": 0,
+    "password": null,
+    "description": "설명8",
+    "clanmarkdeletehash": "0hN071Wgx456D2O",
+    "clanmark": "https://i.imgur.com/ECpLhvj.png"
   },
   {
     "id": 9,
     "name": "ssafy-seoul-3",
-    "leaderid": 123,
-    "private": 0,
-    "description": "설명9"
+    "leader": 123,
+    "locked": 0,
+    "password": null,
+    "description": "설명9",
+    "clanmarkdeletehash": "0hN071Wgx456D2O",
+    "clanmark": "https://i.imgur.com/ECpLhvj.png"
   },
   {
     "id": 10,
     "name": "ssafy-daejeon-3",
-    "leaderid": 275683,
-    "private": 0,
-    "description": "설명10"
+    "leader": 275683,
+    "locked": 0,
+    "password": null,
+    "description": "설명10",
+    "clanmarkdeletehash": "0hN071Wgx456D2O",
+    "clanmark": "https://i.imgur.com/ECpLhvj.png"
   },
   {
     "id": 11,
     "name": "ssafy-gawngju-3",
-    "leaderid": 99987,
-    "private": 1,
-    "description": "설명11"
+    "leader": 999871,
+    "locked": 1,
+    "password": 999871,
+    "description": "설명11",
+    "clanmarkdeletehash": "",
+    "clanmark": ""
   },
   {
     "id": 12,
     "name": "ssafy-gumi-3",
-    "leaderid": 54541,
-    "private": 1,
-    "description": "설명12"
+    "leader": 545412,
+    "locked": 1,
+    "password": 545412,
+    "description": "설명12",
+    "clanmarkdeletehash": "",
+    "clanmark": ""
   }
 ]
