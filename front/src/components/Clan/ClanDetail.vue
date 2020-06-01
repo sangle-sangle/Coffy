@@ -138,10 +138,6 @@ export default {
 </script>
 
 <style scoped>
-.clan-detail-wrapper {
-  height: 100vh;
-}
-
 .clan-detail-title {
   display: inline-block;
   font-size: 2em;
