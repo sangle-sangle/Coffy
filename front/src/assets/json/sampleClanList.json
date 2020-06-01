@@ -2,7 +2,7 @@
   {
     "id": 1,
     "name": "ssafy-seoul-1",
-    "leader": 1234567,
+    "leaderId": 1234567,
     "locked": 1,
     "password": 1234567,
     "description": "설명1",
@@ -12,7 +12,7 @@
   {
     "id": 2,
     "name": "ssafy-daejeon-1",
-    "leader": 2134683,
+    "leaderId": 2134683,
     "locked": 0,
     "password": null,
     "description": "설명2",
@@ -22,7 +22,7 @@
   {
     "id": 3,
     "name": "ssafy-gawngju-1",
-    "leader": 918273,
+    "leaderId": 918273,
     "locked": 1,
     "password": 918273,
     "description": "설명3",
@@ -32,7 +32,7 @@
   {
     "id": 4,
     "name": "ssafy-gumi-1",
-    "leader": 647472,
+    "leaderId": 647472,
     "locked": 0,
     "password": null,
     "description": "설명4",
@@ -42,7 +42,7 @@
   {
     "id": 5,
     "name": "ssafy-seoul-2",
-    "leader": 111111,
+    "leaderId": 111111,
     "locked": 0,
     "password": null,
     "description": "설명5",
@@ -52,7 +52,7 @@
   {
     "id": 6,
     "name": "ssafy-daejeon-2",
-    "leader": 26832683,
+    "leaderId": 26832683,
     "locked": 1,
     "password": 26832683,
     "description": "설명6",
@@ -62,7 +62,7 @@
   {
     "id": 7,
     "name": "ssafy-gawngju-2",
-    "leader": 91823,
+    "leaderId": 91823,
     "locked": 0,
     "password": null,
     "description": "설명7",
@@ -72,7 +72,7 @@
   {
     "id": 8,
     "name": "ssafy-gumi-2",
-    "leader": 72,
+    "leaderId": 72,
     "locked": 0,
     "password": null,
     "description": "설명8",
@@ -82,7 +82,7 @@
   {
     "id": 9,
     "name": "ssafy-seoul-3",
-    "leader": 123,
+    "leaderId": 123,
     "locked": 0,
     "password": null,
     "description": "설명9",
@@ -92,7 +92,7 @@
   {
     "id": 10,
     "name": "ssafy-daejeon-3",
-    "leader": 275683,
+    "leaderId": 275683,
     "locked": 0,
     "password": null,
     "description": "설명10",
@@ -102,7 +102,7 @@
   {
     "id": 11,
     "name": "ssafy-gawngju-3",
-    "leader": 999871,
+    "leaderId": 999871,
     "locked": 1,
     "password": 999871,
     "description": "설명11",
@@ -112,7 +112,7 @@
   {
     "id": 12,
     "name": "ssafy-gumi-3",
-    "leader": 545412,
+    "leaderId": 545412,
     "locked": 1,
     "password": 545412,
     "description": "설명12",

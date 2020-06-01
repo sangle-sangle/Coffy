@@ -22,9 +22,33 @@ function githubLogin() {
 
 }
 
+// 내 정보 수정
+function updateMyInfo(userData) {
+  return instance.put('member', userData)
+}
+
+// 회원탈퇴
+function deleteMyInfo(memberid) {
+  return instance.delete(`member/${memberid}`)
+}
+
+// 유저 전체 목록 불러오기(관리자용)
+function fetchAllUsers() {
+  return instance.get('memberlist')
+}
+
+// 가입된 회원수 가져오기(관리자용)
+function fetchUsersCount() {
+  return instance.get('member')
+}
+
 export { 
   fetchMyInfo,
   registerUser,
   loginUser,
-  githubLogin
+  githubLogin,
+  updateMyInfo,
+  deleteMyInfo,
+  fetchAllUsers,
+  fetchUsersCount
 }

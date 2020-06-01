@@ -48,7 +48,7 @@ export default {
     },
     async clanDelete() {
       // 하단에 await문으로 실제 클랜 가입 신청 로직 작성
-      console.log(this.clanInfo.id);
+      // await deleteClan(this.clanInfo.id);
       this.$router.push('/clan');
     }
   },
