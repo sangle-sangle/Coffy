@@ -75,6 +75,7 @@ export default new Router({
       children: [
         { path: 'dashboard', name: 'DashBoard', component: loadComponent('MyPage', 'DashBoard') },
         { path: 'profile', name: 'Profile', component: loadComponent('MyPage', 'Profile') },
+        { path: 'account', name: 'Account', component: loadComponent('MyPage', 'Account') }
       ]
     }
   ]
