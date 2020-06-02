@@ -9,8 +9,10 @@ C:\Users\home\Desktop\심화프로젝트\Coffy\backend\src\main\java\com\ssafy\edu\vue
 C:\Users\home\Desktop\심화프로젝트\Coffy\backend\src\main\java\com\ssafy\edu\vue\controller\JwtInterceptor.java
 C:\Users\home\Desktop\심화프로젝트\Coffy\backend\src\main\java\com\ssafy\edu\vue\dto\Clan.java
 C:\Users\home\Desktop\심화프로젝트\Coffy\backend\src\main\java\com\ssafy\edu\vue\controller\ClanController.java
+C:\Users\home\Desktop\심화프로젝트\Coffy\backend\src\main\java\com\ssafy\edu\vue\dao\GameDaoImpl.java
 C:\Users\home\Desktop\심화프로젝트\Coffy\backend\src\main\java\com\ssafy\edu\SwaggerConfig.java
 C:\Users\home\Desktop\심화프로젝트\Coffy\backend\src\main\java\com\ssafy\edu\vue\dto\CheckSignUp.java
+C:\Users\home\Desktop\심화프로젝트\Coffy\backend\src\main\java\com\ssafy\edu\vue\dto\Game.java
 C:\Users\home\Desktop\심화프로젝트\Coffy\backend\src\main\java\com\ssafy\edu\vue\dao\ClanDaoImpl.java
 C:\Users\home\Desktop\심화프로젝트\Coffy\backend\src\main\java\com\ssafy\edu\vue\service\ClanServiceImpl.java
 C:\Users\home\Desktop\심화프로젝트\Coffy\backend\src\main\java\com\ssafy\edu\vue\service\MemberServiceImpl.java
@@ -21,5 +23,8 @@ C:\Users\home\Desktop\심화프로젝트\Coffy\backend\src\main\java\com\ssafy\edu\vue
 C:\Users\home\Desktop\심화프로젝트\Coffy\backend\src\main\java\com\ssafy\edu\SangleApplication.java
 C:\Users\home\Desktop\심화프로젝트\Coffy\backend\src\main\java\com\ssafy\edu\vue\dto\Code.java
 C:\Users\home\Desktop\심화프로젝트\Coffy\backend\src\main\java\com\ssafy\edu\vue\dto\Member.java
+C:\Users\home\Desktop\심화프로젝트\Coffy\backend\src\main\java\com\ssafy\edu\vue\service\IGameService.java
 C:\Users\home\Desktop\심화프로젝트\Coffy\backend\src\main\java\com\ssafy\edu\vue\service\IMemberService.java
+C:\Users\home\Desktop\심화프로젝트\Coffy\backend\src\main\java\com\ssafy\edu\vue\controller\GameController.java
 C:\Users\home\Desktop\심화프로젝트\Coffy\backend\src\main\java\com\ssafy\edu\vue\controller\UnauthorizedException.java
+C:\Users\home\Desktop\심화프로젝트\Coffy\backend\src\main\java\com\ssafy\edu\vue\service\GameServiceImpl.java

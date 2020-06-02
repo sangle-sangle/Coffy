@@ -14,5 +14,6 @@
 		<mapper resource="mapper/code.xml" />
 		<mapper resource="mapper/member.xml" />
 		<mapper resource="mapper/clan.xml" />
+		<mapper resource="mapper/game.xml" />
 	</mappers>
 </configuration>
