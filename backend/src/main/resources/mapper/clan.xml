@@ -4,22 +4,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ssafy.clan">
 	<select id="getClans" parameterType="java.lang.Integer"
-		resultType="com.ssafy.edu.vue.dto.Clan">
-		select id, name, description, leaderId, locked, password, created_at, clanmark
+        resultType="com.ssafy.edu.vue.dto.Clan">
+		select id, name, description, leaderId, locked, password, created_at, clanmark, clanmarkdeletehash
 		from clan
 		order by id	desc
 	</select>
 
 	<select id="getClan" parameterType="java.lang.Integer"
 		resultType="com.ssafy.edu.vue.dto.Clan">
-		select id, name, description, leaderId, locked, password, created_at, clanmark
+		select id, name, description, leaderId, locked, password, created_at, clanmark, clanmarkdeletehash
 		from clan
 		where id=#{id}
 	</select>
 
 	<insert id="addClan" parameterType="com.ssafy.edu.vue.dto.Clan">
-		insert into clan(name, description, leaderId, locked, password, created_at, clanmark)
-		values(#{name}, #{description}, #{leaderId}, #{locked}, #{password}, now(), #{clanmark})
+		insert into clan(name, description, leaderId, locked, password, created_at, clanmark, clanmarkdeletehash)
+		values(#{name}, #{description}, #{leaderId}, #{locked}, #{password}, now(), #{clanmark} #{clanmarkdeletehash})
 	</insert>
 	
 	<update id="updateClan"
@@ -29,8 +29,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		description=#{description},
 		leaderId=#{leaderId},
 		locked=#{locked},
-		password=#{password}
-		clanmark=#{clanmark}
+		password=#{password},
+		clanmark=#{clanmark},
+		clanmarkdeletehash=#{clanmarkdeletehash}
 		where id=#{id}
 	</update>
 

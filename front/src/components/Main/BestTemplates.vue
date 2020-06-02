@@ -1,8 +1,8 @@
 <template>
   <div class="best-templates-wrapper">
     <div class="best-templates-intro">
-      <div>BEST Template TOP 20</div>
-      <small>Coffy에서 인기 있는 BEST Template을 소개해드립니다.</small>
+      <div style="font-size:calc( 2rem + 1vw)">BEST Template TOP 20</div>
+      <small style="font-size:calc(0.8rem + 0.1vw)">Coffy에서 인기 있는 BEST Template을 소개해드립니다.</small>
     </div>
     <!-- template card component 생성 후 구성 예정 -->
     <div class="best-templates-section">

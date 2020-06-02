@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 import ToggleSwitch from '@/components/common/ToggleSwitch.vue';
 
 export default {
@@ -76,10 +76,10 @@ export default {
     ...mapState({
       mode: state => state.common.mode,
       isLogin: state => state.user.isLogin,
+      userInfo: state => state.user.userInfo
     }),
-    ...mapGetters(['info']),
     clanPageUrl() {
-      return this.info.clanid !== undefined && this.info.clanid >= 1 ? `/clan/detail/${this.info.clanid}` : '/clan'
+      return Object.keys(this.userInfo).length && this.userInfo['access-Token'].clanid >= 1 ? `/clan/detail/${this.userInfo.clanid}` : '/clan'
     }
   },
   data() {

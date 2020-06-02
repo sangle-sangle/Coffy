@@ -5,7 +5,8 @@ const state = {
   adminAuth: 0,
   token: sessionStorage.getItem('token'),
   isLogin: sessionStorage.getItem('token') === null ? false : true,
-  isLoginError: false
+  isLoginError: false,
+  userInfo : sessionStorage.getItem('token') === null ? {} : jwtDecode(sessionStorage.getItem('token'))
 };
 
 const mutations = {
@@ -14,6 +15,7 @@ const mutations = {
     sessionStorage.setItem('token', token)
     state.isLogin = true
     state.isLoginError = false
+    state.userInfo = jwtDecode(token)
   },
   logout(state) {
     state.token = ''
@@ -40,9 +42,9 @@ const actions = {
 };
 
 const getters = {
-  info(state) {
-    return state.token ? jwtDecode(state.token) : {}
-  }
+  // info(state) {
+  //   return state.token ? jwtDecode(state.token) : {}
+  // }
 }
 
 export default {
