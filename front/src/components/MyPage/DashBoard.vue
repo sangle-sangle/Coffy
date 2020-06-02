@@ -83,12 +83,13 @@ export default {
   mounted() {
     this.changeColor(this.mode);
     window.onclick = function(event) {
+      let dropDown = document.getElementsByClassName("dropdown-contents")[0]
       if (event.target.matches('.dropdown-menu') | event.target.matches('.filter-sort-method') | event.target.matches('.filter-drop-button')){
-        document.getElementsByClassName("dropdown-contents")[0].classList.toggle('active-dropdown')
+        dropDown.classList.toggle('active-dropdown')
       }
       else {
-        if (document.getElementsByClassName("dropdown-contents")[0].classList.contains('active-dropdown')) {
-          document.getElementsByClassName("dropdown-contents")[0].classList.remove('active-dropdown');
+        if (dropDown && dropDown.classList.contains('active-dropdown')) {
+          dropDown.classList.remove('active-dropdown');
         }
       }
     }
