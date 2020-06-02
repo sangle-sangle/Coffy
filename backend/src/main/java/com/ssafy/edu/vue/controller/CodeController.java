@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.edu.vue.dto.Code;
+import com.ssafy.edu.vue.dto.LikeCode;
 import com.ssafy.edu.vue.help.BoolResult;
 import com.ssafy.edu.vue.service.ICodeService;
 
@@ -78,4 +80,35 @@ public class CodeController {
    		nr.setState("succ");
 		return new ResponseEntity<BoolResult>(nr, HttpStatus.OK);
 	}
+	
+	@ApiOperation(value = "Code Like 추가 (like count up)", response = List.class)
+	@RequestMapping(value = "/likecode", method = RequestMethod.POST)
+	public ResponseEntity<BoolResult> addLikeCode(@RequestBody LikeCode likecode) throws Exception {
+		logger.info("1----------------addLikeCode------------------" + new Date());
+		codeservice.addLikeCode(likecode);
+		BoolResult nr = new BoolResult();
+		nr.setName("addLikeCode");
+		nr.setState("succ");
+		return new ResponseEntity<BoolResult>(nr, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "code Like 삭제 (like count down)", response = List.class)
+	@RequestMapping(value = "/likecode", method = RequestMethod.DELETE)
+	public ResponseEntity<BoolResult> deleteLikeCode(@RequestBody LikeCode likecode) throws Exception {
+		logger.info("1-----------deleteLikeCode------------" + new Date());
+		codeservice.deleteLikeCode(likecode);
+		BoolResult nr = new BoolResult();
+		nr.setName("deleteLikeCode");
+		nr.setState("succ");
+		return new ResponseEntity<BoolResult>(nr, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "code 좋아요 수 출력", response = BoolResult.class)
+	@RequestMapping(value = "/likecounts", method = RequestMethod.GET)
+	public ResponseEntity<Integer> getLikeCounts(@ModelAttribute LikeCode likecode) throws Exception {
+		logger.info("1---------getLikeCounts----------" + new Date());
+		int counts = codeservice.getLikeCounts(likecode);
+		return new ResponseEntity<Integer>(counts, HttpStatus.OK);
+	}
+	
 }
