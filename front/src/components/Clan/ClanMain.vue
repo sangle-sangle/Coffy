@@ -15,7 +15,7 @@
         <input type="text" id="search-clan" placeholder="Search Clan Name" v-model="keyword">
         <label for="search-clan" @click="searchClan"><i class="fas fa-search"></i></label>
       </form>
-      <div class="clan-main-header-right">
+      <div class="clan-main-header-right" v-if="this.userInfo['access-Token'].clanid === 0">
         <div class="add-clan-btn" @click="goAddForm"><i class="fas fa-plus"></i> 클랜 생성</div>
       </div> 
     </div>
@@ -64,6 +64,7 @@ export default {
   computed: {
     ...mapState({
       mode: state => state.common.mode,
+      userInfo: state => state.user.userInfo
     })
   },
   created() {

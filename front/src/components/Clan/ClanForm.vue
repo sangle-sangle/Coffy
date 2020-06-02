@@ -78,7 +78,6 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-// import clanList from '@/assets/json/sampleClanList.json';
 import Modal from '@/components/common/Modal.vue'
 import axios from 'axios'
 import { addClan, updateClan, fetchClanInfo } from '@/api/clan.js'

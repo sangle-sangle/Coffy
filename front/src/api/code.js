@@ -27,11 +27,23 @@ function deleteCode(codeid) {
   return instance.delete(`code/${codeid}`)
 }
 
+// 코드 좋아요 추가
+function postLikeCode(params) {
+  return instance.post('likecode', params)
+}
+
+// 코드 좋아요 삭제
+function deleteLikeCode(params) {
+  return instance.delete('likecode', params)
+}
+
 
 export {
   fetchAllCode,
   fetchCodeInfo,
   addCode,
   updateCode,
-  deleteCode
+  deleteCode,
+  postLikeCode,
+  deleteLikeCode
 }

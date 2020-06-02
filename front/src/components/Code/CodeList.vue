@@ -18,7 +18,7 @@
       <div v-for="code in codeList" :key="code.id" class="code-card">
         <div class="code-title">{{ code.title }}</div>
         <div class="code-preview">
-          코드 미리보기 영역
+          <ApplyCode class='itembox' :code="codeData(code.html, code.css, code.javascript)" />
         </div>
         <div class="info-wrapper">
           <div class="code-info">
@@ -31,7 +31,7 @@
               <div class="scrap-info"><i class="fas fa-bookmark"></i> 5</div>
             </div>
           </div>
-          <div class="detail-btn">
+          <div class="detail-btn" @click="goCodeDetail(code.id)">
             <i class="fas fa-info"></i> 상세 정보
           </div>
         </div>
@@ -42,12 +42,16 @@
 
 <script>
 import { mapState } from 'vuex'
-import codeList from '@/assets/json/sampleCodeList.json';
+import { fetchAllCode } from '@/api/code.js'
+import ApplyCode from '@/components/Code/ApplyCode.vue'
 
 export default {
+  components: {
+    ApplyCode
+  },
   data() {
     return {
-      codeList
+      codeList: []
     }
   },
   computed: {
@@ -55,15 +59,33 @@ export default {
       mode: state => state.common.mode,
     })
   },
+  created() {
+    this.getAllCode();
+  },
   mounted() {
     this.changeColor(this.mode);
   },
   methods: {
+    async getAllCode() {
+      const { data } = await fetchAllCode();
+      this.codeList = data;
+    },
     goAddCodePage() {
-      this.$router.push('/code/form')
+      this.$router.push('/code/form');
     },
     goGamePage() {
-      this.$router.push('/game')
+      this.$router.push('/game');
+    },
+    goCodeDetail(id) {
+      this.$router.push(`/code/detail/${id}`);
+    },
+    codeData(html, css, js) {
+      let code = {
+        htmlText : html,
+        cssText : css,
+        jsText : js    
+      }
+      return code
     },
     changeColor(mode) {
       if (mode === 'white') { // 화이트 모드일 때
@@ -96,7 +118,7 @@ export default {
 
 .code-list-title {
   display: inline-block;
-  font-size: 2em;
+  font-size: calc(2rem + 1vw);
   font-family: 'Noto Sans KR';
   font-weight: 600;
   padding-bottom: 5px;
@@ -105,7 +127,7 @@ export default {
 }
 
 .code-list-description {
-  font-size: 13.5px;
+  font-size: calc(0.7rem + 0.3vw);
 }
 
 .code-list-header-right > div {
@@ -114,7 +136,7 @@ export default {
 
 .add-code-btn,
 .go-game-btn {
-  font-size: 15px;
+  font-size: calc(0.7rem + 0.3vw);
   font-family: 'Gothic A1';
   font-weight: 600;
   letter-spacing: -0.5px;
@@ -153,7 +175,7 @@ export default {
 
 .code-card .code-title {
   display: inline-block;
-  font-size: 18px;
+  font-size: calc(1.3rem + 0.3vw);
   font-weight: 600;
   font-family: 'Gothic A1';
   padding-bottom: 4px;
@@ -177,8 +199,12 @@ export default {
   border-radius: 50%;
 }
 
+.writer-info > span {
+  font-size: calc(0.7rem + 0.3vw);
+}
+
 .code-like {
-  font-size: 13px;
+  font-size: calc(0.5rem + 0.3vw);
   color: white;
 }
 
@@ -195,7 +221,7 @@ export default {
 }
 
 .detail-btn {
-  font-size: 15px;
+  font-size: calc(0.7rem + 0.3vw);
   font-weight: 600;
   font-family: 'Gothic A1';
   background-color: #f7c389;
@@ -206,6 +232,10 @@ export default {
 
 .detail-btn:hover {
   cursor: pointer;
+}
+
+.itembox {
+  background-color : #eee;
 }
 
 @media (min-width: 600px) and (max-width: 960px) {
