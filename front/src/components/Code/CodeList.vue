@@ -14,7 +14,7 @@
         <div class="go-game-btn" @click="goGamePage"><i class="fas fa-gamepad"></i> 코드 게임</div>
       </div>
     </div>
-    <div class="code-list">
+    <div class="code-list" v-if="!loading">
       <div v-for="code in codeList" :key="code.id" class="code-card">
         <div class="code-title">{{ code.title }}</div>
         <div class="code-preview">
@@ -37,6 +37,7 @@
         </div>
       </div>
     </div>
+    <Loading v-else></Loading>
   </div>
 </template>
 
@@ -44,14 +45,17 @@
 import { mapState } from 'vuex'
 import { fetchAllCode } from '@/api/code.js'
 import ApplyCode from '@/components/Code/ApplyCode.vue'
+import Loading from '@/components/common/Loading.vue'
 
 export default {
   components: {
-    ApplyCode
+    ApplyCode,
+    Loading
   },
   data() {
     return {
-      codeList: []
+      codeList: [],
+      loading: false
     }
   },
   computed: {
@@ -60,6 +64,7 @@ export default {
     })
   },
   created() {
+    this.loading = true;
     this.getAllCode();
   },
   mounted() {
@@ -69,6 +74,7 @@ export default {
     async getAllCode() {
       const { data } = await fetchAllCode();
       this.codeList = data;
+      this.loading = false;
     },
     goAddCodePage() {
       this.$router.push('/code/form');

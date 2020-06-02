@@ -176,6 +176,16 @@ export default {
       this.codeData.jsText = this.codeDetail.javascript;
     },
     async submitCode(){
+      if (!this.title) {
+        alert('제목을 작성해주세요.');
+        return
+      } else if (!this.description) {
+        alert('코드 설명을 작성해주세요.');
+        return
+      } else if (!this.codeData.htmlText && !this.codeData.cssText && !this.codeData.jsText) {
+        alert('HTML, CSS, JS 중 한 언어 이상 사용해서 코드를 작성해주세요.');
+        return
+      }
       let data = {
         title : this.title,
         description : this.description,

@@ -1,111 +1,114 @@
 <template>
-  <div class="code-detail-wrapper">
-    <div class="code-title">
-      <span>{{ codeDetail.title }}</span>
-      <div class="btn-group">
-        <div class="edit-btn" @click="editCodePage(codeid)" v-if="checkMyCode">수정</div>
-        <div class="delete-btn" @click="toggleDeleteModal" v-if="checkMyCode">삭제</div>
-      </div>
-    </div>
-    <div class="code-short-info">
-      <div class="writer-info">
-        <img :src="writerImage" alt="writer-image">
-        <span>{{ writerName }}</span>
-      </div>
-      <div class="mini-info">
-        <div class="code-date-info"><i class="fas fa-calendar-day"></i> {{ codeDetail.created_at }}</div>
-        <div class="like-info" @click="toggleLikeCode" :style="{ 'color': likeCode ? '#f9462a' : '#fff' }"><i class="fas fa-heart"></i> 10</div>
-        <div class="scrap-info"><i class="fas fa-bookmark"></i> 5</div>
-      </div>
-    </div>
-    <div class="code-section">
-      <div class="language-btn">
-        <div class="lang-btn" v-for="(lang, idx) in ['html', 'css', 'javascript']" :key="lang" @click="toggleCodeMirror(idx)">
-          <img :src="langImgUrl(lang)" :alt="`${lang}`" width="50">
-          <span v-if="!checkMobileSize">{{ lang.toUpperCase() }}</span>
-        </div>
-        <div class="toggle">
-          <input type="radio" id="theme1" value="0" v-model.number="theme" hidden>
-          <label for="theme1" v-if="theme"><i class="fas fa-exchange-alt"></i> Dark</label>
-          <input type="radio" id="theme2" value="1" v-model.number="theme" hidden>
-          <label for="theme2" v-if="!theme"><i class="fas fa-exchange-alt"></i> White</label>
+  <div>
+    <div class="code-detail-wrapper" v-if="!loading">
+      <div class="code-title">
+        <span>{{ codeDetail.title }}</span>
+        <div class="btn-group">
+          <div class="edit-btn" @click="editCodePage(codeid)" v-if="checkMyCode">수정</div>
+          <div class="delete-btn" @click="toggleDeleteModal" v-if="checkMyCode">삭제</div>
         </div>
       </div>
-      <div v-if="htmlShowCode" class="html-section">
-        <div class="lang-name border-tag">HTML</div>
-        <div class="code-mirror-section border-tag">
-          <CodeMirror 
-            :value="codeData.htmlText"
-            :options="htmlOptions"
-          />
+      <div class="code-short-info">
+        <div class="writer-info">
+          <img :src="writerImage" alt="writer-image">
+          <span>{{ writerName }}</span>
+        </div>
+        <div class="mini-info">
+          <div class="code-date-info"><i class="fas fa-calendar-day"></i> {{ codeDetail.created_at }}</div>
+          <div class="like-info" @click="toggleLikeCode" :style="{ 'color': likeCode ? '#f9462a' : '#fff' }"><i class="fas fa-heart"></i> 10</div>
+          <div class="scrap-info"><i class="fas fa-bookmark"></i> 5</div>
         </div>
       </div>
-      <div v-if="cssShowCode" class="css-section">
-        <div class="lang-name border-tag">CSS</div>
-        <div class="code-mirror-section border-tag">
-          <CodeMirror 
-            :value="codeData.cssText"
-            :options="cssOptions"
-          />
-        </div>
-      </div>
-      <div v-if="jsShowCode" class="js-section">
-        <div class="lang-name border-tag">Javascript</div>
-        <div class="code-mirror-section border-tag">
-          <CodeMirror 
-            :value="codeData.jsText"
-            :options="jsOptions"
-          />
-        </div>
-      </div>
-      <div class="result-tag border-tag">Result</div>
-      <div class="result-section border-tag">
-        <ApplyCode class='itembox' :code="codeData" />
-      </div>
-      <div class="description-tag border-tag">Description</div>
-      <div class="description border-tag">{{ codeDetail.description }}</div>
-      <div class="comment-tag border-tag">Comments</div>
-      <div class="comment-section border-tag">
-        <form @submit.prevent="submitComment" class="border-bottom-tag">
-          <textarea v-model="comment"></textarea>
-          <button type="submit" class="submit-comment-btn">작성</button>
-        </form>
-        <div class="comments" v-if="comments">
-          <div class="comment-item border-bottom-tag" v-for="(comment, idx) in comments" :key="idx">
-            <div class="comment-info">
-              <div class="left">{{ comment.username }}</div>
-              <div class="right">
-                <div class="comment-btn">
-                  <i class="fas fa-edit"></i>
-                  <i class="fas fa-trash-alt"></i>
-                </div>
-                <div class="comment-date">{{ comment.created_at }}</div>
-              </div>
-            </div>
-            <div class="comment-contents">{{ comment.comment }}</div>
+      <div class="code-section">
+        <div class="language-btn">
+          <div class="lang-btn" v-for="(lang, idx) in ['html', 'css', 'javascript']" :key="lang" @click="toggleCodeMirror(idx)">
+            <img :src="langImgUrl(lang)" :alt="`${lang}`" width="50">
+            <span v-if="!checkMobileSize">{{ lang.toUpperCase() }}</span>
+          </div>
+          <div class="toggle">
+            <input type="radio" id="theme1" value="0" v-model.number="theme" hidden>
+            <label for="theme1" v-if="theme"><i class="fas fa-exchange-alt"></i> Dark</label>
+            <input type="radio" id="theme2" value="1" v-model.number="theme" hidden>
+            <label for="theme2" v-if="!theme"><i class="fas fa-exchange-alt"></i> White</label>
           </div>
         </div>
-        <div class="no-comments border-bottom-tag" v-else>
-          <i class="fas fa-pen-square"></i>
-          <div>작성된 댓글이 없습니다.<br>댓글을 작성해주세요!</div>
+        <div v-if="htmlShowCode" class="html-section">
+          <div class="lang-name border-tag">HTML</div>
+          <div class="code-mirror-section border-tag">
+            <CodeMirror 
+              :value="codeData.htmlText"
+              :options="htmlOptions"
+            />
+          </div>
+        </div>
+        <div v-if="cssShowCode" class="css-section">
+          <div class="lang-name border-tag">CSS</div>
+          <div class="code-mirror-section border-tag">
+            <CodeMirror 
+              :value="codeData.cssText"
+              :options="cssOptions"
+            />
+          </div>
+        </div>
+        <div v-if="jsShowCode" class="js-section">
+          <div class="lang-name border-tag">Javascript</div>
+          <div class="code-mirror-section border-tag">
+            <CodeMirror 
+              :value="codeData.jsText"
+              :options="jsOptions"
+            />
+          </div>
+        </div>
+        <div class="result-tag border-tag">Result</div>
+        <div class="result-section border-tag">
+          <ApplyCode class='itembox' :code="codeData" />
+        </div>
+        <div class="description-tag border-tag">Description</div>
+        <div class="description border-tag">{{ codeDetail.description }}</div>
+        <div class="comment-tag border-tag">Comments</div>
+        <div class="comment-section border-tag">
+          <form @submit.prevent="submitComment" class="border-bottom-tag">
+            <textarea v-model="comment"></textarea>
+            <button type="submit" class="submit-comment-btn">작성</button>
+          </form>
+          <div class="comments" v-if="comments">
+            <div class="comment-item border-bottom-tag" v-for="(comment, idx) in comments" :key="idx">
+              <div class="comment-info">
+                <div class="left">{{ comment.username }}</div>
+                <div class="right">
+                  <div class="comment-btn">
+                    <i class="fas fa-edit"></i>
+                    <i class="fas fa-trash-alt"></i>
+                  </div>
+                  <div class="comment-date">{{ comment.created_at }}</div>
+                </div>
+              </div>
+              <div class="comment-contents">{{ comment.comment }}</div>
+            </div>
+          </div>
+          <div class="no-comments border-bottom-tag" v-else>
+            <i class="fas fa-pen-square"></i>
+            <div>작성된 댓글이 없습니다.<br>댓글을 작성해주세요!</div>
+          </div>
         </div>
       </div>
+      <Modal :showModal="showDeleteCodeModal">
+        <div class="modal-header">
+          <div class="modal-title">코드 삭제</div>
+          <div class="modal-close-btn" @click="toggleDeleteModal">CLOSE</div>
+        </div>
+        <div class="message">
+          <p class="delete-message">해당 코드를 삭제하시겠습니까?</p>
+          <p class="warning-message">(하단 '코드 삭제' 버튼을 누르면 코드가 삭제되고 내용을 복구할 수 없습니다.)</p>
+        </div>
+        <div class="delete-btn-wrapper">
+          <div class="delete-btn">
+            <span @click="deleteCode">코드 삭제</span>
+          </div>
+        </div>
+      </Modal>
     </div>
-    <Modal :showModal="showDeleteCodeModal">
-      <div class="modal-header">
-        <div class="modal-title">코드 삭제</div>
-        <div class="modal-close-btn" @click="toggleDeleteModal">CLOSE</div>
-      </div>
-      <div class="message">
-        <p class="delete-message">해당 코드를 삭제하시겠습니까?</p>
-        <p class="warning-message">(하단 '코드 삭제' 버튼을 누르면 코드가 삭제되고 내용을 복구할 수 없습니다.)</p>
-      </div>
-      <div class="delete-btn-wrapper">
-        <div class="delete-btn">
-          <span @click="deleteCode">코드 삭제</span>
-        </div>
-      </div>
-    </Modal>
+    <Loading v-else></Loading>
   </div>
 </template>
 
@@ -121,12 +124,14 @@ import 'codemirror/mode/css/css.js'
 import 'codemirror/mode/xml/xml.js'
 import ApplyCode from '@/components/Code/ApplyCode.vue'
 import Modal from '@/components/common/Modal.vue'
+import Loading from '@/components/common/Loading.vue'
 
 export default {
   components : {
     CodeMirror,
     ApplyCode,
-    Modal
+    Modal,
+    Loading
   },
   data() {
     return {
@@ -182,20 +187,23 @@ export default {
       ],
       checkMobileSize: false,
       likeCode: false,
-      showDeleteCodeModal: false
+      showDeleteCodeModal: false,
+      loading: false
     }
   },
   computed: {
     ...mapState({
       mode: state => state.common.mode,
+      isLogin: state => state.user.isLogin,
       userInfo : state => state.user.userInfo
     }),
     checkMyCode() {
-      return this.userInfo['access-Token'].id === this.codeDetail.writerid
+      return this.isLogin && this.userInfo['access-Token'].id === this.codeDetail.writerid
     }
   },
   created() {
-    this.getCodeInfo(this.codeid);
+    this.loading = false;
+    this.getCodeInfo();
   },
   mounted() {
     this.changeColor(this.mode);
@@ -204,8 +212,8 @@ export default {
     window.addEventListener('resize', () => this.checkMobileSize = window.innerWidth <= 600);
   },
   methods: {
-    async getCodeInfo(id) {
-      const codeInfo = await fetchCodeInfo(id);
+    async getCodeInfo() {
+      const codeInfo = await fetchCodeInfo(this.codeid);
       this.codeDetail = codeInfo.data;
       this.codeDetail['created_at'] = this.codeDetail['created_at'].slice(0, 10);
       this.codeData.htmlText = this.codeDetail.html;
@@ -218,6 +226,7 @@ export default {
         this.writerImage = writerData.data.img;
       }
       this.writerName = writerData.data.username;
+      this.loading = false;
     },
     async toggleLikeCode() {
       // (1) 해당 코드 좋아요 관련 로직 작성
@@ -542,6 +551,7 @@ export default {
 
 .itembox {
   background-color : #eee;
+  height: 50vh;
 }
 
 .modal-header {
