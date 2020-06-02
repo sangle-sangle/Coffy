@@ -29,7 +29,7 @@ public class Code implements Serializable {
 		this.writerid = writerid;
 		this.created_at = created_at;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Code [id=" + id + ", title=" + title + ", description=" + description + ", html=" + html + ", css="
