@@ -1,8 +1,12 @@
 package com.ssafy.edu.vue.controller;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-	
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.edu.vue.dto.Code;
 import com.ssafy.edu.vue.dto.LikeCode;
+import com.ssafy.edu.vue.dto.Member;
 import com.ssafy.edu.vue.help.BoolResult;
 import com.ssafy.edu.vue.service.ICodeService;
 
@@ -42,10 +47,32 @@ public class CodeController {
 	
 	@ApiOperation(value = "code 상세 보기", response = List.class)
 	@RequestMapping(value = "/code/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Code> getCode(@PathVariable int id) throws Exception {
+	public ResponseEntity<Map<String, Object>> getCode(@PathVariable int id, HttpServletRequest rs) throws Exception {
 		logger.info("1-------------getCode-----------------------------" + new Date());
+		Map<String, Object> result = new HashMap();
+		LikeCode likecode = new LikeCode();
+		int memberid = 0;
+//		인자로 받은 id : 코드 id 
+		if(rs.getAttribute("loginMember")!=null ) {
+			Member member = (Member) rs.getAttribute("loginMember");
+			memberid = member.getId();
+			likecode.setUserid(memberid);
+		}
+		
+		likecode.setCodeid(id);
+		
 		Code code = codeservice.getCode(id);
-		return new ResponseEntity<Code>(code, HttpStatus.OK);
+		result.put("code", code);
+		
+		//	좋아요 눌렀는지 안눌렀는지 확인 flag(유저 아이디가 들어감)
+		int flag = 0;
+		if(memberid!=0) {
+			likecode.setUserid(memberid);
+			flag=codeservice.isLike(likecode);	
+		}
+		result.put("flag", flag);
+		
+		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "code 추가", response = List.class)
@@ -109,6 +136,14 @@ public class CodeController {
 		logger.info("1---------getLikeCounts----------" + new Date());
 		int counts = codeservice.getLikeCounts(likecode);
 		return new ResponseEntity<Integer>(counts, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value= "좋아요 클릭 여부 확인", response = List.class)
+	@RequestMapping(value = "/like", method = RequestMethod.GET)
+	public ResponseEntity<Integer> isLike(@ModelAttribute("data") LikeCode likecode) throws Exception {
+		logger.info("1--------------isLike-------------------");
+		int result = codeservice.isLike(likecode);
+		return new ResponseEntity<Integer>(result, HttpStatus.OK);
 	}
 	
 }
