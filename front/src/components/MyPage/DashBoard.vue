@@ -1,44 +1,51 @@
 <template>
-  <div class="dash-board-wrapper">
-    <div class="dash-board-title">
-      DashBoard
-    </div>
-    <div class="dash-board-header">
-      <ul class="dash-board-tab-menu">
-        <li :class="currentTab === index ? 'active-tab' : ''" class="dash-board-tab-item" v-for="(tab, index) in tabs" :key="tab" @click="currentTab = index">
-          <button>{{tab}}</button>
-        </li>
-      </ul>
-    </div>
-    <div class="filter-items-wrapper">
-      <div class="filter-left">
-        <div class="filter-item filter-search">
-          <div class="filter-search-bar">
-            <input type="text" class="filter-search-input" placeholder="Search keyword" v-model="keyword">
-          </div>
-          <button class="filter-search-button">검색</button>
+  <div class="dashboard-wrapper">
+    <div class="dashboard-header">
+      <div class="dashboard-header-left">
+        <div class="dashboard-title">
+          Dashboard
+        </div>
+        <div class="dashboard-description">
+          ☕좋아요, 스크랩한 코드들을 볼 수 있습니다.
         </div>
       </div>
-
-      <div class="filter-right">
-        <div class="filter-item filter-sort">
-          <span class="filter-sort-direction span-items">정렬 방향</span>
-          <div class="sort_button_group">
-            <button class="filter-sort-button" :class="filterButton === false ? 'active-sort' : ''" @click="filterButton = false">
-              <i class="fas fa-chevron-up"></i>
-            </button>
-            <button class="filter-sort-button" :class="filterButton === true ? 'active-sort' : ''" @click="filterButton = true">
-              <i class="fas fa-chevron-down"></i>
-            </button>
+    </div>
+    <div class="dashboard-main">
+      <div class="dashboard-main-header">
+        <ul class="dashboard-tab-menu">
+          <li :class="currentTab === index ? mode === 'white'?'active-tab-white':'active-tab':''" class="dashboard-tab-item" v-for="(tab, index) in tabs" :key="tab" @click="currentTab = index">
+            {{tab}}
+          </li>
+        </ul>
+        <div class="filter-items-wrapper">
+          <div class="filter-left">
+            <div class="filter-item filter-search">
+              <div class="filter-search-bar">
+                <input type="text" class="filter-search-input" placeholder="Search keyword" v-model="keyword">
+              </div>
+              <button class="filter-search-button">검색</button>
+            </div>
           </div>
-        </div>
-
-        <div class="filter-item filter-menu">
-          <span class="filter-sort-method span-items">정렬 방식</span>
-          <div class="dropdown-menu">
-            <span class="filter-drop-button span-items">{{menuItems[menuIndex]}}</span>
-            <div class="dropdown-contents">
-              <li class="d" v-for="(item, index) in menuItems" :key="index" @click="menuIndex=index">{{item}}</li>
+          <div class="filter-right">
+            <div class="filter-item filter-menu">
+              <span class="filter-sort-method span-items">정렬 방식</span>
+              <div class="dropdown-menu">
+                <span class="filter-drop-button">{{menuItems[menuIndex]}}</span>
+                <div class="dropdown-contents">
+                  <li class="d" v-for="(item, index) in menuItems" :key="index" @click="menuIndex=index">{{item}}</li>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item filter-sort">
+              <span class="filter-sort-direction span-items">정렬 방향</span>
+              <div class="sort_button_group">
+                <button class="filter-sort-button" :class="filterButton === false ? 'active-sort' : ''" @click="filterButton = false">
+                  <i class="fas fa-chevron-up"></i>
+                </button>
+                <button class="filter-sort-button" :class="filterButton === true ? 'active-sort' : ''" @click="filterButton = true">
+                  <i class="fas fa-chevron-down"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -96,10 +103,37 @@ export default {
   },
   methods: {
     changeColor(mode) {
+      let activeTab = document.querySelector('.active-tab')
+      let filterWrapper = document.querySelector('.filter-items-wrapper')
+      let filterSearchInput = document.querySelector('.filter-search-input')
+      let filterSort = document.querySelector('.filter-sort')
+      let filterMenu = document.querySelector('.filter-menu')
+      let filterSearchButton = document.querySelector('.filter-search-button')
+      let spanItems = document.querySelectorAll('.span-items')
       if (mode === 'white') { // 화이트 모드일 때
-        console.log('white')
+        if (activeTab){
+          activeTab.classList.remove('active-tab')
+          activeTab.classList.add('active-tab-white')
+        }
+        filterWrapper.style.backgroundColor = '#0d0d0f42'
+        filterSearchInput.style.backgroundColor = 'rgb(238, 238, 238)'
+        filterSort.style.backgroundColor = 'rgb(238, 238, 238)'
+        filterMenu.style.backgroundColor = 'rgb(238, 238, 238)'
+        filterSearchInput.style.color = 'black'
+        filterSearchButton.style.backgroundColor = 'rgb(212, 212, 212)'
+        spanItems.forEach(span=> {span.style.color = '#717790'})
       } else { // 다크 모드일 때
-        console.log('dark')
+        if (activeTab){
+          activeTab.classList.remove('active-tab-white')
+          activeTab.classList.add('active-tab-black')
+        }
+        filterWrapper.style.backgroundColor = '#444857'
+        filterSearchInput.style.backgroundColor = 'rgb(37, 40, 48)'
+        filterSort.style.backgroundColor = 'rgb(37, 40, 48)'
+        filterMenu.style.backgroundColor = 'rgb(37, 40, 48)'
+        filterSearchInput.style.color = 'white'
+        filterSearchButton.style.backgroundColor = 'rgb(30, 30, 34)'
+        spanItems.forEach(span=> {span.style.color = '#717790'})
       }
     },
   },
@@ -112,46 +146,60 @@ export default {
 </script>
 
 <style>
-.dash-board-title {
-  font-size: 2em;
+.dashboard-wrapper {
+  padding:15px;
+}
+.dashboard-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.dashboard-title {
+  display: inline-block;
+  font-size: calc( 2rem + 0.5vw );
   font-family: 'Noto Sans KR';
   font-weight: 600;
-  padding-bottom: 10px;
-  margin-bottom: 20px;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid silver;
 }
 
-.dash-board-wrapper {
-  height: 100vh;
-  margin: 0 auto;
-  padding: 3rem 0 1rem;
-  width: 90%;
-}
-
-.dash-board-tab-item {
+.dashboard-tab-item {
   display: inline-block;
-  padding: 0.5rem 0.3rem
+  font-size: calc( 0.7rem + 0.3vw );
+  font-weight: bolder;
+  padding: 0.6rem 1rem
 }
 
 .active-tab {
   background-color: #444857;
 }
 
+.active-tab-white {
+  background-color: #0d0d0f42;
+}
+
 .filter-items-wrapper {
   display: flex;
   flex-wrap: wrap;
-  background-color: #444857;
   padding:0.5rem 0.75rem;
 }
 
 .filter-left {
   flex-grow: 1;
   margin: 4px 0;
+  max-width: 620px;
+  min-width: 320px;
+  margin-right: 15px;
 }
 
 .filter-right {
   display: flex;
+  width: 300px;
   flex-grow: 1;
-  justify-content: flex-end;
   margin: 4px 0;
 }
 
@@ -165,7 +213,6 @@ export default {
   height: 35px;
   width: 75%;
   max-width: 700px;
-  background-color: rgb(37, 40, 48);
 }
 
 .filter-search-input {
@@ -173,39 +220,35 @@ export default {
   width: calc(100% - 20px);
   border: 0px;
   padding: 0px 10px;
-  background-color: rgb(37, 40, 48);
-  color: #eee;
+  font-size: calc(0.6rem + 0.3vw);
 }
 
 .filter-search-button {
   height: 35px;
   width: 60px;
   border: transparent;
-  background-color: rgb(30, 30, 34);
-  color: #eee;
+  padding: 0px 10px;
+  line-height: 25px;
+  font-size: calc(0.6rem + 0.3vw);
 }
 
 .filter-sort {
   background-color: rgb(37, 40, 48);
   height: 35px;
-  max-width: 170px;
-  margin-right: 11px;
-}
-
-.filter-sort-direction {
-  width: calc(100% - 57.35px);
+  width: calc(4rem + 1vw + 80px);
 }
 
 .span-items {
   padding: 5px 10px;
   line-height: 25px;
-  font-size: 13.3333px;
+  font-size: calc(0.6rem + 0.3vw);
   border: transparent;
-  color: #eee;
+  font-weight: bolder;
+  width: calc(4rem + 1vw);
 }
 
 .sort_button_group {
-  width: 57.35px;
+  width: 67.35px;
   height: 35px;
   padding: 5px;
 }
@@ -213,6 +256,7 @@ export default {
 .filter-sort-button {
   height: 25px;
   background-color: #9498a7;
+  font-weight: bold;
 }
 
 .active-sort {
@@ -222,16 +266,21 @@ export default {
 .filter-menu {
   background-color: rgb(37, 40, 48);
   height: 35px;
-}
-
-.filter-sort-method {
-  width: calc(100% - 82.66px);
+  margin-right: 15px;
+  width: calc(9rem + 2vw + 30px);
 }
 
 .dropdown-menu{
   position: relative;
-  width: 82.66px;
-  padding-top:5px;
+  width: calc(5rem + 1vw);
+}
+
+.filter-drop-button{
+  line-height: 35px;
+  padding-left: 10px;
+  text-align: center;
+  font-size: calc(0.6rem + 0.3vw);
+  font-weight: 300;
 }
 
 .dropdown-contents {
@@ -254,6 +303,7 @@ export default {
   color: black;
   padding: 5px 10px;
   display: block;
+  font-size: calc(0.6rem + 0.3vw);
 }
 
 .dropdown-contents li:hover {background-color: #ddd}
