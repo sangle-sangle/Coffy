@@ -103,4 +103,21 @@ public class GameController {
    		nr.setState("succ");
 		return new ResponseEntity<BoolResult>(nr, HttpStatus.OK);
 	}
+	
+	@ApiOperation(value = "category당 푼 문제수", response = BoolResult.class)
+	@RequestMapping(value = "/solvedcounts/{category}", method = RequestMethod.GET)
+	public ResponseEntity<Integer> getSolvedCounts(@PathVariable int category, HttpServletRequest rs) throws Exception {
+		logger.info("1-------------getSolvedCounts-----------------------------" + new Date());
+		Solved solved = new Solved();
+		int memberid = 0;
+		if(rs.getAttribute("loginMember")!=null) {
+			Member member = (Member) rs.getAttribute("loginMember");
+			memberid = member.getId();
+			solved.setUser_id(memberid);
+		}
+		solved.setCategory_id(category);
+		int counts = gameservice.getSolvedCounts(solved);
+		return new ResponseEntity<Integer>(counts, HttpStatus.OK);
+	}
+	
 }

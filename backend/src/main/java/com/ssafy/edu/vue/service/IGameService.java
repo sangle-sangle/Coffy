@@ -16,4 +16,6 @@ public interface IGameService {
 
 	void addSolved(Solved solved);
 
+	int getSolvedCounts(Solved solved);
+
 }
