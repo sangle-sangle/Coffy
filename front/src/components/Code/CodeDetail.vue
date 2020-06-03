@@ -1,0 +1,614 @@
+<template>
+  <div>
+    <div class="code-detail-wrapper" v-if="!loading">
+      <div class="code-title">
+        <span>{{ codeDetail.title }}</span>
+        <div class="btn-group">
+          <div class="edit-btn" @click="editCodePage(codeid)" v-if="checkMyCode">수정</div>
+          <div class="delete-btn" @click="toggleDeleteModal" v-if="checkMyCode">삭제</div>
+        </div>
+      </div>
+      <div class="code-short-info">
+        <div class="writer-info">
+          <img :src="writerImage" alt="writer-image">
+          <span>{{ writerName }}</span>
+        </div>
+        <div class="mini-info">
+          <div class="code-date-info"><i class="fas fa-calendar-day"></i> {{ codeDetail.created_at }}</div>
+          <div class="like-info" @click="toggleLikeCode" :style="{ 'color': likeCode ? '#f9462a' : '#fff' }"><i class="fas fa-heart"></i> 10</div>
+          <div class="scrap-info"><i class="fas fa-bookmark"></i> 5</div>
+        </div>
+      </div>
+      <div class="code-section">
+        <div class="language-btn">
+          <div class="lang-btn" v-for="(lang, idx) in ['html', 'css', 'javascript']" :key="lang" @click="toggleCodeMirror(idx)">
+            <img :src="langImgUrl(lang)" :alt="`${lang}`" width="50">
+            <span v-if="!checkMobileSize">{{ lang.toUpperCase() }}</span>
+          </div>
+          <div class="toggle">
+            <input type="radio" id="theme1" value="0" v-model.number="theme" hidden>
+            <label for="theme1" v-if="theme"><i class="fas fa-exchange-alt"></i> Dark</label>
+            <input type="radio" id="theme2" value="1" v-model.number="theme" hidden>
+            <label for="theme2" v-if="!theme"><i class="fas fa-exchange-alt"></i> White</label>
+          </div>
+        </div>
+        <div v-if="htmlShowCode" class="html-section">
+          <div class="lang-name border-tag">HTML</div>
+          <div class="code-mirror-section border-tag">
+            <CodeMirror 
+              :value="codeData.htmlText"
+              :options="htmlOptions"
+            />
+          </div>
+        </div>
+        <div v-if="cssShowCode" class="css-section">
+          <div class="lang-name border-tag">CSS</div>
+          <div class="code-mirror-section border-tag">
+            <CodeMirror 
+              :value="codeData.cssText"
+              :options="cssOptions"
+            />
+          </div>
+        </div>
+        <div v-if="jsShowCode" class="js-section">
+          <div class="lang-name border-tag">Javascript</div>
+          <div class="code-mirror-section border-tag">
+            <CodeMirror 
+              :value="codeData.jsText"
+              :options="jsOptions"
+            />
+          </div>
+        </div>
+        <div class="result-tag border-tag">Result</div>
+        <div class="result-section border-tag">
+          <ApplyCode class='itembox' :code="codeData" />
+        </div>
+        <div class="description-tag border-tag">Description</div>
+        <div class="description border-tag">{{ codeDetail.description }}</div>
+        <div class="comment-tag border-tag">Comments</div>
+        <div class="comment-section border-tag">
+          <form @submit.prevent="submitComment" class="border-bottom-tag">
+            <textarea v-model="comment"></textarea>
+            <button type="submit" class="submit-comment-btn">작성</button>
+          </form>
+          <div class="comments" v-if="comments">
+            <div class="comment-item border-bottom-tag" v-for="(comment, idx) in comments" :key="idx">
+              <div class="comment-info">
+                <div class="left">{{ comment.username }}</div>
+                <div class="right">
+                  <div class="comment-btn">
+                    <i class="fas fa-edit"></i>
+                    <i class="fas fa-trash-alt"></i>
+                  </div>
+                  <div class="comment-date">{{ comment.created_at }}</div>
+                </div>
+              </div>
+              <div class="comment-contents">{{ comment.comment }}</div>
+            </div>
+          </div>
+          <div class="no-comments border-bottom-tag" v-else>
+            <i class="fas fa-pen-square"></i>
+            <div>작성된 댓글이 없습니다.<br>댓글을 작성해주세요!</div>
+          </div>
+        </div>
+      </div>
+      <Modal :showModal="showDeleteCodeModal">
+        <div class="modal-header">
+          <div class="modal-title">코드 삭제</div>
+          <div class="modal-close-btn" @click="toggleDeleteModal">CLOSE</div>
+        </div>
+        <div class="message">
+          <p class="delete-message">해당 코드를 삭제하시겠습니까?</p>
+          <p class="warning-message">(하단 '코드 삭제' 버튼을 누르면 코드가 삭제되고 내용을 복구할 수 없습니다.)</p>
+        </div>
+        <div class="delete-btn-wrapper">
+          <div class="delete-btn">
+            <span @click="deleteCode">코드 삭제</span>
+          </div>
+        </div>
+      </Modal>
+    </div>
+    <Loading v-else></Loading>
+  </div>
+</template>
+
+<script>
+import { mapState } from 'vuex'
+import { fetchCodeInfo, deleteCode, postLikeCode, deleteLikeCode } from '@/api/code.js'
+import { fetchMyInfo } from '@/api/user.js'
+import { codemirror as CodeMirror } from 'vue-codemirror'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/theme/base16-dark.css'
+import 'codemirror/mode/javascript/javascript.js'
+import 'codemirror/mode/css/css.js'
+import 'codemirror/mode/xml/xml.js'
+import ApplyCode from '@/components/Code/ApplyCode.vue'
+import Modal from '@/components/common/Modal.vue'
+import Loading from '@/components/common/Loading.vue'
+
+export default {
+  components : {
+    CodeMirror,
+    ApplyCode,
+    Modal,
+    Loading
+  },
+  data() {
+    return {
+      codeid: Number(this.$route.path.split('/').reverse()[0]),
+      codeDetail: {},
+      writerImage: '',
+      writerName: '',
+      htmlOptions : {
+        tabSize: 4,
+        mode: 'xml',
+        theme: 'default',
+        lineNumbers: true,
+        line: true,
+        readOnly: true
+      },
+      cssOptions : {
+        tabSize: 4,
+        mode: 'css',
+        theme: 'default',
+        lineNumbers: true,
+        line: true,
+        readOnly: true
+      },
+      jsOptions: {
+        tabSize: 4,
+        mode: 'text/javascript',
+        theme: 'default',
+        lineNumbers: true,
+        line: true,
+        readOnly: true
+      },
+      theme: 0,
+      codeData : {
+        htmlText : '',
+        cssText : '',
+        jsText : ''    
+      },
+      htmlShowCode: false,
+      cssShowCode: false,
+      jsShowCode: false,
+      comment: '',
+      comments: [
+        {
+          username: 'user1',
+          comment: 'comment1',
+          created_at: '2020-06-02 14:00:00'
+        },
+        {
+          username: 'user2',
+          comment: 'comment2',
+          created_at: '2020-06-02 15:00:00'
+        },
+      ],
+      checkMobileSize: false,
+      likeCode: false,
+      showDeleteCodeModal: false,
+      loading: false
+    }
+  },
+  computed: {
+    ...mapState({
+      mode: state => state.common.mode,
+      isLogin: state => state.user.isLogin,
+      userInfo : state => state.user.userInfo
+    }),
+    checkMyCode() {
+      return this.isLogin && this.userInfo['access-Token'].id === this.codeDetail.writerid
+    }
+  },
+  created() {
+    this.loading = false;
+    this.getCodeInfo();
+  },
+  mounted() {
+    this.changeColor(this.mode);
+    this.theme = this.mode === 'dark' ? 1 : 0;
+    this.checkMobileSize = window.innerWidth <= 600;
+    window.addEventListener('resize', () => this.checkMobileSize = window.innerWidth <= 600);
+  },
+  methods: {
+    async getCodeInfo() {
+      const codeInfo = await fetchCodeInfo(this.codeid);
+      this.codeDetail = codeInfo.data;
+      this.codeDetail['created_at'] = this.codeDetail['created_at'].slice(0, 10);
+      this.codeData.htmlText = this.codeDetail.html;
+      this.codeData.cssText = this.codeDetail.css;
+      this.codeData.jsText = this.codeDetail.javascript;
+      const writerData = await fetchMyInfo(this.codeDetail.writerid);
+      if (writerData.data.img === null) {
+        this.writerImage = 'https://user-images.githubusercontent.com/52685250/73902320-c72d6c00-48d8-11ea-82b4-eb9bfebfe9fb.png';
+      } else {
+        this.writerImage = writerData.data.img;
+      }
+      this.writerName = writerData.data.username;
+      this.loading = false;
+    },
+    async toggleLikeCode() {
+      // (1) 해당 코드 좋아요 관련 로직 작성
+      let paramsData = {
+        codeid: this.codeid,
+        userid: this.userInfo['access-Token'].id
+      }
+      if (!this.likeCode) { // 좋아요 X => 좋아요 O
+        await postLikeCode(paramsData)
+      } else { // 좋아요 O => 좋아요 X
+        await deleteLikeCode(paramsData)
+      }
+      // (2) 색깔 변경
+      setTimeout(() => this.likeCode = !this.likeCode, 0);
+    },
+    langImgUrl(lang) {
+      return require(`../../assets/images/mainpage/${lang.toLowerCase()}.png`)
+    },
+    toggleCodeMirror(idx) {
+      if (idx === 0) {
+        this.htmlShowCode = !this.htmlShowCode
+      } else if (idx === 1) {
+        this.cssShowCode = !this.cssShowCode
+      } else {
+        this.jsShowCode = !this.jsShowCode
+      }
+    },
+    editCodePage(codeid) {
+      this.$router.push(`/code/edit/${codeid}`)
+    },
+    toggleDeleteModal() {
+      this.showDeleteCodeModal = !this.showDeleteCodeModal
+    },
+    async deleteCode() {
+      try {
+        await deleteCode(this.codeid);
+        setTimeout(() => this.$router.push('/code'), 0);
+      } catch {
+        alert('코드 삭제 과정에서 오류가 발생했습니다. 관리자에게 문의하세요.');
+      }
+    },
+    changeColor(mode) {
+      if (mode === 'white') {
+        document.querySelectorAll('.border-tag').forEach(elem => {
+          elem.style.borderColor = '#333';
+        })
+        document.querySelectorAll('.border-bottom-tag').forEach(elem => {
+          elem.style.borderColor = '#333';
+        })
+        document.querySelector('textarea').style.backgroundColor = '#eee';
+        document.querySelector('textarea').style.color = '#333';
+      } else {
+        document.querySelectorAll('.border-tag').forEach(elem => {
+          elem.style.borderColor = 'silver';
+        })
+        document.querySelectorAll('.border-bottom-tag').forEach(elem => {
+          elem.style.borderColor = 'silver';
+        })
+        document.querySelector('textarea').style.backgroundColor = '#252830';
+        document.querySelector('textarea').style.color = 'white';
+      }
+    }
+  },
+  watch: {
+    mode() {
+      this.changeColor(this.mode);
+    },
+    theme() {
+      if (this.theme) {
+        this.htmlOptions.theme="base16-dark"
+        this.jsOptions.theme="base16-dark"
+        this.cssOptions.theme="base16-dark"
+      } else {
+        this.htmlOptions.theme="default"
+        this.jsOptions.theme="default"
+        this.cssOptions.theme="default"
+      }
+    }
+  }
+}
+</script>
+
+<style scoped>
+.code-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: calc(2rem + 1vw);
+  font-family: 'Noto Sans KR';
+  font-weight: 600;
+  padding-bottom: 5px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid silver;
+}
+
+.code-title > span:first-child {
+  margin-right: 5px;
+}
+
+.code-title > .btn-group {
+  display: flex;
+}
+
+.code-title > .btn-group > .edit-btn,
+.code-title > .btn-group > .delete-btn {
+  font-size: calc(0.7rem + 0.3vw);
+  font-family: 'Gothic A1';
+  font-weight: 600;
+  text-align: center;
+  padding: 6px 8px;
+  border-radius: 8px;
+  margin-right: 5px;
+}
+
+.code-title > .btn-group > .edit-btn {
+  color: black;
+  background-color: #ffdd40;
+}
+
+.code-title > .btn-group > .delete-btn {
+  color: white;
+  background-color: #ff4500;
+}
+
+.code-short-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: calc(0.7rem + 0.3vw);
+}
+
+.writer-info {
+  margin: 0 8px 8px 0;
+}
+
+.mini-info > div[class$='-info'] {
+  display: inline-block;
+  background-color: #666;
+  padding: 3px 6px;
+  border-radius: 4px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  margin: 0 8px 8px 0;
+  color: #fff;
+  transition: all .15s;
+}
+
+.code-title > .btn-group > div:hover,
+.mini-info > .like-info:hover {
+  cursor: pointer;
+}
+
+.writer-info img {
+  vertical-align: middle;
+  width: 35px;
+  border-radius: 50%;
+}
+
+.language-btn {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  font-size: calc(0.7rem + 0.3vw);
+}
+
+.language-btn .lang-btn {
+  display: flex;
+  align-items: center;
+  color: black;
+  border-radius: 15px;
+  padding: 5px 15px;
+  margin-right: 20px;
+  font-weight: 600;
+}
+
+.toggle > label:hover,
+.comment-btn > i:hover,
+.language-btn .lang-btn:hover {
+  cursor: pointer;
+}
+
+.lang-btn > img + span {
+  margin-left: 8px;
+}
+
+.lang-btn:first-child {
+  background-color: rgb(223, 183, 165);
+}
+
+.lang-btn:nth-child(2) {
+  background-color: rgb(179, 204, 228);
+}
+
+.lang-btn:nth-child(3) {
+  background-color: rgb(218, 213, 170);
+}
+
+.lang-name,
+.result-tag,
+.comment-tag,
+.description-tag {
+  display: inline-block;
+  padding: 10px 14px;
+  border: 1px solid silver;
+  font-weight: 600;
+}
+
+.result-tag,
+.comment-tag,
+.description-tag {
+  border-bottom: transparent;
+}
+
+.code-section > div[class$='-section'] {
+  margin-bottom: 30px;
+}
+
+.code-mirror-section {
+  border: 1px solid silver;
+}
+
+.result-section,
+.description {
+  border: 1px solid silver;
+  margin-bottom: 30px;
+}
+
+.description {
+  padding: 10px;
+}
+
+.comment-section {
+  border: 1px solid silver;
+  padding: 10px;
+}
+
+.comment-section > form {
+  display: flex;
+  padding-bottom: 30px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid white;
+}
+
+.comment-section > form > textarea {
+  flex-grow: 1;
+  height: 40px;
+  color: white;
+  background-color: #252830;
+  padding: 10px 5px;
+  border: transparent;
+  border-radius: 15px;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+  margin-right: 20px;
+}
+
+.submit-comment-btn {
+  font-family: 'Gothic A1';
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: black;
+  text-align: center;
+  border-radius: 8px;
+  background-color: #47cf73;
+}
+
+.comment-item {
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid white;
+}
+
+.comment-info,
+.comment-info > .right {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.comment-info {
+  justify-content: space-between;
+  font-family: 'Gothic A1';
+}
+
+.comment-btn {
+  margin-right: 8px;
+}
+
+.comment-btn > i {
+  padding: 0 8px;
+}
+
+.comment-btn > i:first-child {
+  color: goldenrod;
+}
+
+.comment-btn > i:last-child {
+  color: crimson;
+}
+
+.comment-contents {
+  margin-top: 8px;
+  padding: 8px 0;
+}
+
+.no-comments {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid white;
+}
+
+.no-comments > i {
+  font-size: 5rem;
+  margin: 0 10px;
+}
+
+.no-comments > div {
+  line-height: 1.4;
+}
+
+.itembox {
+  background-color : #eee;
+  height: 50vh;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Noto Sans KR';
+}
+
+.modal-header .modal-title {
+  font-size: calc(1.3rem + 0.3vw);
+  font-weight: 600;
+}
+
+.modal-close-btn:hover {
+  cursor: pointer;
+}
+
+.message {
+  padding: 18px 0;
+  margin: 14px 0;
+  border-top: 1px solid silver;
+  border-bottom: 1px solid silver;
+}
+
+.message > p {
+  line-height: 1.5;
+}
+
+.message > p.warning-message {
+  font-weight: 600;
+  color: #ff4500;
+}
+
+.delete-btn-wrapper {
+  text-align: right;
+}
+
+.delete-btn > span {
+  font-size: calc(0.7rem + 0.3vw);
+  font-weight: 600;
+  color: white;
+  border-radius: 8px;
+  padding: 4px 6px;
+  background-color: #ff4500;
+}
+
+.delete-btn > span:hover {
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .language-btn .lang-btn {
+    display: inline-block;
+    flex-grow: 1;
+    text-align: center;
+    margin: 0 10px;
+  }
+}
+</style>

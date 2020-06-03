@@ -13,7 +13,7 @@
           <div class="clan-name">{{ clanInfo.name }}</div>
           <div class="clan-master">Master : {{ clanInfo.leaderId }}</div>
           <div class="clan-btn-group">
-            <div class="clan-master" @click="toggleMasterSection"><i class="fas fa-tools"></i> 관리자 모드</div>
+            <div class="clan-master" @click="toggleMasterSection" v-if="this.userInfo['access-Token'].id === clanInfo.leaderId"><i class="fas fa-tools"></i> 관리자 모드</div>
             <div class="clan-register" @click="toggleClanRegisterModal"><i class="fas fa-plus"></i> 클랜 가입</div>
             <div class="clan-sign-out" @click="toggleClanSignOutModal"><i class="fas fa-minus"></i> 클랜 탈퇴</div>
           </div>
@@ -30,7 +30,7 @@
             <small>하단 버튼을 클릭하면 클랜 정보를 수정할 수 있습니다.</small>
             <button @click="goEditPage(clanId)">수정 페이지로 이동</button>
           </div>
-          <div> <!-- v-if="this.$store.getters.info['access-Token']['id'] === clanInfo.leaderId" -->
+          <div>
             <div class="edit-clan-info-title">클랜 삭제</div>
             <small>하단 버튼을 클릭하면 클랜을 삭제할 수 있습니다.</small>
             <button @click="toggleClanDeleteModal">클랜 삭제</button>
@@ -42,7 +42,7 @@
       </div>
     </div>
     <div class="clan-description">
-      <div class="description-icon"><i class="fas fa-list"></i>설명</div>
+      <div class="description-icon"><i class="fas fa-list"></i> 설명</div>
       <div class="description">
         {{ clanInfo.description !== '' ? clanInfo.description : '내용 없음' }}
       </div>
@@ -58,7 +58,6 @@
 <script>
 import { mapState } from 'vuex'
 import Modal from '@/components/common/Modal.vue'
-// import clanList from '@/assets/json/sampleClanList.json'
 import ClanRegisterModal from '@/components/Clan/ClanRegisterModal.vue'
 import ClanSignOutModal from '@/components/Clan/ClanSignOutModal.vue'
 import ClanDeleteModal from '@/components/Clan/ClanDeleteModal.vue'
@@ -86,6 +85,7 @@ export default {
   computed: {
     ...mapState({
       mode: state => state.common.mode,
+      userInfo: state => state.user.userInfo
     })
   },
   created() {
@@ -140,7 +140,7 @@ export default {
 <style scoped>
 .clan-detail-title {
   display: inline-block;
-  font-size: 2em;
+  font-size: calc(2rem + 0.5vw);
   font-family: 'Noto Sans KR';
   font-weight: 600;
   padding-bottom: 5px;
@@ -169,13 +169,13 @@ export default {
 }
 
 .clan-name {
-  font-size: 1.8rem;
+  font-size: calc(1.3rem + 0.3vw);
   font-weight: 600;
   margin-bottom: 10px;
 }
 
 .clan-header-left .clan-master {
-  font-size: 1.1rem;
+  font-size: calc(0.6rem + 0.3vw);
   margin-bottom: 10px;
 }
 
@@ -184,7 +184,7 @@ export default {
 .clan-btn-group > .clan-sign-out {
   display: inline-block;
   margin-right: 6px;
-  font-size: 14px;
+  font-size: calc(0.5rem + 0.3vw);
   font-family: 'Gothic A1';
   font-weight: 600;
   padding: 6px;
@@ -282,6 +282,7 @@ export default {
 .clan-description > .description {
   border: 1px solid silver;
   padding: 10px 14px;
+  font-size: calc(0.6rem + 0.3vw);
 }
 
 @media (max-width: 600px) {

@@ -37,7 +37,8 @@
 </script>
 
 <style>
-  .code-apply{
-    width: 100%;
-  }
+.code-apply{
+  width: 100%;
+  height: 100%;
+}
 </style>

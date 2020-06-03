@@ -15,7 +15,7 @@
         <input type="text" id="search-clan" placeholder="Search Clan Name" v-model="keyword">
         <label for="search-clan" @click="searchClan"><i class="fas fa-search"></i></label>
       </form>
-      <div class="clan-main-header-right">
+      <div class="clan-main-header-right" v-if="this.userInfo['access-Token'].clanid === 0">
         <div class="add-clan-btn" @click="goAddForm"><i class="fas fa-plus"></i> 클랜 생성</div>
       </div> 
     </div>
@@ -64,6 +64,7 @@ export default {
   computed: {
     ...mapState({
       mode: state => state.common.mode,
+      userInfo: state => state.user.userInfo
     })
   },
   created() {
@@ -130,7 +131,7 @@ export default {
 
 .clan-main-title {
   display: inline-block;
-  font-size: 2em;
+  font-size: calc( 2rem + 0.5vw );
   font-family: 'Noto Sans KR';
   font-weight: 600;
   padding-bottom: 5px;
@@ -139,7 +140,7 @@ export default {
 }
 
 .clan-main-description {
-  font-size: 13.5px;
+  font-size: calc(0.7rem + 0.3vw);
 }
 
 .clan-search {
@@ -155,9 +156,10 @@ export default {
 }
 
 .search-box > input {
-  height: 25px;
+  font-size: calc(0.8rem + 0.3vw);
+  height: calc(1.2rem + 0.3vw);
   width: 100%;
-  padding: 5px;
+  padding: calc(0.3rem + 0.3vw) calc(0.7rem + 0.3vw);
   border: transparent;
   border-radius: 10px;
   background-color: rgb(37, 40, 48);
@@ -165,8 +167,13 @@ export default {
   margin-right: 8px;
 }
 
+.clan-main-header-right{
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 .add-clan-btn {
-  font-size: 15px;
+  font-size: calc(0.7rem + 0.3vw);
   font-family: 'Gothic A1';
   font-weight: 600;
   letter-spacing: -0.5px;
@@ -175,7 +182,7 @@ export default {
   padding: 10px;
   border-radius: 8px;
   background-color: #47cf73;
-  margin-left: 8px;
+  margin-left:8px;
 }
 
 .add-clan-btn:hover {
@@ -208,7 +215,7 @@ export default {
 
 .clan-private {
   display: inline-block;
-  font-size: 15px;
+  font-size: calc(0.3rem + 0.3vw);
   font-weight: 600;
   padding: 6px;
   border-radius: 8px;
@@ -223,7 +230,7 @@ export default {
 }
 
 .clan-name {
-  font-size: 1.5rem;
+  font-size: calc(1.3rem + 0.3vw);
   font-weight: 600;
   font-family: 'Gothic A1';
   padding-bottom: 10px;
@@ -244,7 +251,7 @@ export default {
 
 .clan-footer > .clan-register-btn,
 .clan-footer > .clan-detail-btn {
-  font-size: 14px;
+  font-size: calc(0.5rem + 0.3vw);
   font-family: 'Gothic A1';
   font-weight: 600;
   padding: 6px;
@@ -281,11 +288,7 @@ export default {
 
   .clan-private,
   .clan-master {
-    font-size: 14px;
-  }
-
-  .clan-name {
-    font-size: 17px;
+    font-size: calc(0.3rem + 0.3vw);
   }
 
   .clan-search {

@@ -1,7 +1,7 @@
 <template>
   <div class="preview-intro-wrapper">
     <div class="preview-intro">
-      <div style="font-size:calc( 2rem + 1vw )">실시간 미리보기</div>
+      <div style="font-size:calc( 1rem + 1vw )">실시간 미리보기</div>
       <small style="font-size:calc(0.8rem + 0.1vw)">현재까지 작성된 코드의 결과물을 실시간으로 미리볼 수 있습니다.</small>
     </div>
     <!-- 아래 이미지들을 추후 서비스 완성 후 우리 서비스 화면으로 대체 예정 -->
