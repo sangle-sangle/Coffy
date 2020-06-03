@@ -1,65 +1,64 @@
 <template>
   <div>
-    <div class="ctr80">
-      <div class="toggle">
-        <div @click="formChange">폼 변경</div>
-        <input type="radio" id="theme1" value="0" v-model.number="theme">
-        <label for="theme1">Main</label>
-        <br>
-        <input type="radio" id="theme2" value="1" v-model.number="theme">
-        <label for="theme2">dark </label>
-      </div> 
-      <div class="title">
-        <div>
-          <label for="title">제목 </label>
-          <input v-model="title" type="text" name="title" id="title">
-        </div>
-        <button @click="submitCode" v-if="Object.keys(userInfo).length && this.$route.name === 'CodeForm'">작성</button>
-        <button @click="submitCode" v-if="Object.keys(userInfo).length && this.$route.name === 'CodeEdit'">수정</button>
+    <div class="code-form-header">
+      <div class="code-form-title">
+        코드 {{ pageTitle }}
       </div>
-      <div>
-        <span>코드 설명</span>
-        <textarea v-model="description" class="description" />
+      <div class="code-btn-group">
+        <div class="code-btn change-layout" @click="formChange">레이아웃 변경</div>
+        <input type="radio" id="theme1" value="0" v-model.number="theme" hidden>
+        <label class="code-btn dark-theme" for="theme1" v-if="theme === 1"><i class="fas fa-exchange-alt"></i> Dark Theme</label>
+        <input type="radio" id="theme2" value="1" v-model.number="theme" hidden>
+        <label class="code-btn white-theme" for="theme2" v-if="theme === 0"><i class="fas fa-exchange-alt"></i> White Theme</label>
       </div>
-      <div id="codecreateform">
-        <div id="inputbox" class="flex">
-          <div id="htmlcol" class="col">
-            <div class="coltitle"> 
-              <span>HTML</span>
-            </div>
-            <i class="fas fa-expand expandicon" @click="expand($event,0)"></i>
-            <CodeMirror 
-              :value="codeData.htmlText"
-              :options="htmlOptions"
-              @input="updateCode('htmlText',$event)"
-            />
+    </div>
+    <div class="title">
+      <div class="title-wrapper">
+        <label for="title" class="name-tag">제목</label>
+        <input v-model="title" type="text" name="title" id="title">
+      </div>
+      <div class="submit-btn" @click="submitCode" v-if="Object.keys(userInfo).length">{{ pageTitle }}</div>
+    </div>
+    <label class="description name-tag" for="code-description">코드 설명</label>
+    <textarea v-model="description" class="description-textarea" id="code-description" />
+    <div id="codecreateform">
+      <div id="inputbox" :class="!mobileSize ? 'flex' : ''">
+        <div id="htmlcol" :class="!mobileSize ? 'col border' : 'border'">
+          <div class="coltitle"> 
+            <span><i class="fab fa-html5" style="color: orange;"></i> HTML</span>
           </div>
-          <div id="csscol" class="col border">
-            <div class="coltitle"> 
-              <span>CSS</span>
-            </div>
-            <i class="fas fa-expand expandicon" @click="expand($event,1)"></i>
-            <CodeMirror 
-              :value="codeData.cssText"
-              :options="cssOptions"
-              @input="updateCode('cssText',$event)"
-            />
-          </div>
-          <div :hidden="expandCheck[0] && expandCheck[1]" id="jscol" class="col">
-            <div class="coltitle"> 
-              <span>JS</span>
-            </div>
-            <i class="fas fa-expand expandicon" @click="expand($event, 2)"></i>
-            <CodeMirror 
-              :value="codeData.jsText"
-              :options="jsOptions"
-              @input="updateCode('jsText',$event)"
-            />
-          </div>
+          <i class="fas fa-expand expandicon" @click="expand($event,0)" v-if="!mobileSize"></i>
+          <CodeMirror 
+            :value="codeData.htmlText"
+            :options="htmlOptions"
+            @input="updateCode('htmlText',$event)"
+          />
         </div>
-        <div id="applyform" class="rowapply">
-          <ApplyCode class='itembox' :code="afterData" />
+        <div id="csscol" :class="!mobileSize ? 'col border' : 'border'">
+          <div class="coltitle"> 
+            <span><i class="fab fa-css3-alt" style="color: skyblue;"></i> CSS</span>
+          </div>
+          <i class="fas fa-expand expandicon" @click="expand($event,1)" v-if="!mobileSize"></i>
+          <CodeMirror 
+            :value="codeData.cssText"
+            :options="cssOptions"
+            @input="updateCode('cssText',$event)"
+          />
         </div>
+        <div :hidden="expandCheck[0] && expandCheck[1]" id="jscol" :class="!mobileSize ? 'col border' : 'border'">
+          <div class="coltitle"> 
+            <span><i class="fab fa-js" style="color: gold;"></i> JS</span>
+          </div>
+          <i class="fas fa-expand expandicon" @click="expand($event, 2)" v-if="!mobileSize"></i>
+          <CodeMirror 
+            :value="codeData.jsText"
+            :options="jsOptions"
+            @input="updateCode('jsText',$event)"
+          />
+        </div>
+      </div>
+      <div id="applyform" class="rowapply">
+        <ApplyCode class='itembox' :idtag="`frame${editCodeId}`" :code="afterData" :colLayout="colLayout" />
       </div>
     </div>
   </div>
@@ -115,14 +114,19 @@ export default {
         jsText : ''    
       },
       afterData : {},
-      expandCheck : [false,false,false]
+      expandCheck : [false,false,false],
+      colLayout: false,
+      mobileSize: false
     }
   },
   computed: {
     ...mapState({
       mode: state => state.common.mode,
       userInfo: state => state.user.userInfo
-    })
+    }),
+    pageTitle() {
+      return this.$route.name === 'CodeForm' ? '작성' : '수정'
+    }
   },
   created() {
     if (this.$route.name === 'CodeEdit') {
@@ -131,26 +135,18 @@ export default {
     }
   },
   mounted(){
+    this.checkWindowWidth();
     this.theme = this.$store.state.common.mode === 'dark' ? 1: 0
     this.changeColor(this.mode);
+    window.addEventListener('resize', () => this.checkWindowWidth());
   },
   watch:{
     theme() {
-      let title = document.querySelector("#title")
-      let textarea = document.querySelector('.description')
       if (this.theme) {
-        title.style.backgroundColor = '#252830'
-        title.style.color = 'white'
-        textarea.style.backgroundColor = '#252830'
-        textarea.style.color = 'white'
         this.htmlOptions.theme="base16-dark"
         this.jsOptions.theme="base16-dark"
         this.cssOptions.theme="base16-dark"
       } else {
-        title.style.backgroundColor = '#eee'
-        title.style.color = 'black'
-        textarea.style.backgroundColor = '#eee'
-        textarea.style.color = 'black'
         this.htmlOptions.theme="default"
         this.jsOptions.theme="default"
         this.cssOptions.theme="default"
@@ -217,6 +213,7 @@ export default {
       this.codeData[type] = value
     },
     formChange(){
+      this.colLayout = !this.colLayout;
       let input = document.querySelector('#inputbox')
       let apply = document.querySelector('#applyform')
       let box = document.querySelector('#codecreateform')
@@ -278,11 +275,34 @@ export default {
         jsText : this.codeData.jsText
       }
     },
+    checkWindowWidth() {
+      if (window.innerWidth < 600) {
+        this.mobileSize = true;
+        document.querySelector('#codecreateform').className = '';
+      } else {
+        this.mobileSize = false;
+        document.querySelector('#codecreateform').className = this.colLayout ? 'flex' : '';
+        document.querySelector('#inputbox').className = this.colLayout ? 'colinput' : 'flex';
+        document.querySelector('#htmlcol').className = this.colLayout ? 'border' : 'col border';
+        document.querySelector('#csscol').className = this.colLayout ? 'border' : 'col border';
+        document.querySelector('#jscol').className = this.colLayout ? 'border' : 'col border';
+      }
+    },
     changeColor(mode) {
       if (mode === 'white') { // 화이트 모드일 때
-        console.log('white')
+        document.querySelector('input#title').style.borderColor = '#000';
+        document.querySelector('input#title').style.backgroundColor = '#fff';
+        document.querySelector('input#title').style.color = '#000';
+        document.querySelector('textarea').style.backgroundColor = '#fff';
+        document.querySelector('textarea').style.color = '#000';
+        document.querySelectorAll('.border').forEach(elem => elem.style.borderColor = '#000');
       } else { // 다크 모드일 때
-        console.log('dark')
+      document.querySelector('input#title').style.borderColor = '#767676';
+        document.querySelector('input#title').style.backgroundColor = '#252830';
+        document.querySelector('input#title').style.color = '#fff';
+        document.querySelector('textarea').style.backgroundColor = '#252830';
+        document.querySelector('textarea').style.color = '#fff';
+        document.querySelectorAll('.border').forEach(elem => elem.style.borderColor = '#767676');
       }
     }
   }
@@ -290,62 +310,156 @@ export default {
 </script>
 
 <style scoped>
-.flex { 
-  display:flex
+.code-form-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.expandicon {
-  float:right;
-  margin-right:2px;
+.code-form-header > .code-form-title {
+  display: inline-block;
+  font-size: calc(2rem + 1vw);
+  font-family: 'Noto Sans KR';
+  font-weight: 600;
+  padding-bottom: 5px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid silver;
 }
-.colinput {
-  width : 60%;
+
+.code-btn-group {
+  display: flex;
+  padding-bottom: 5px;
+  margin-bottom: 20px;
+}
+
+.code-btn-group > .code-btn,
+.title > .submit-btn {
+  font-size: calc(0.7rem + 0.3vw);
+  font-family: 'Gothic A1';
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  text-align: center;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.code-btn.change-layout {
+  background-color: #47cf73;
+  color: black;
+  margin-right: 10px;
+}
+
+.code-btn.dark-theme {
+  background-color: #555;
+  color: white;
+}
+
+.code-btn.white-theme {
+  background-color: #ddd;
+  color: black;
+}
+
+.code-btn-group > .code-btn:hover,
+.title > .submit-btn {
+  cursor: pointer;
+}
+
+.name-tag {
+  font-weight: 600;
+  padding: 10px 14px;
 }
 
 .title {
   display : flex;
+  flex-wrap: wrap;
   justify-content: space-between;
+  align-items: center;
   margin-bottom : 1rem;
 }
 
+.title-wrapper {
+  display: flex;
+}
+
+.title-wrapper > label {
+  line-height: 1.8;
+  border: 1px solid #767676;
+  border-right: 1px solid transparent;
+}
+
+.title-wrapper > input {
+  padding: 0 14px;
+  max-width: 200px;
+}
+
+.title > .submit-btn {
+  background-color: #ffdd40;
+  color: black;
+}
+
+.description.name-tag {
+  display: inline-block;
+  border: 1px solid #767676;
+  border-bottom: transparent;
+}
+
+.description-textarea {
+  width: 100%;
+  height: 200px;
+  padding: 10px 14px;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.flex { 
+  display: flex;
+  margin-bottom: 15px;
+}
+
+.expandicon {
+  float: right;
+  margin-right:2px;
+}
+.colinput {
+  width : 40%;
+  min-width: 340px;
+}
+
 #title {
-  border : 1px orange solid
+  border: 1px solid silver;
 }
 
 .coltitle {
-  text-align:center;
+  font-size: calc(1rem + 0.3vw);
+  font-weight: 600;
+  font-family: 'Gothic A1';
+  text-align: center;
+  padding: 10px 0;
 }
+
 .border {
-  border : 1px solid #eee;
+  border: 1px solid #252830;
 }
+
 .col {
-  width : 33%;
+  width: 33.3%;
   position: relative;
   -webkit-transition: width 1s;
   transition: width 1s;
 }
 
-.description {
-  width : 100%;
-  height : 100px;
-}
-
 .windowsize {
-  width : 1000px;
-  height : 500px;
+  width: 1000px;
+  height: 500px;
 }
 
 .col:focus-within {
-  width : 100%;
-}
-
-.ctr80 {
-  width : 90%;
-  margin : 0 auto;  
+  width: 100%;
 }
 
 .codetitle {
-  display : flex;
+  display: flex;
   justify-content: space-evenly;
 }
 
@@ -358,24 +472,26 @@ export default {
 .rowapply {
   display: flex;
   justify-content: space-evenly;
-  text-align : center;
+  text-align: center;
 }
 
 .colapply {
-  width : 40%;
+  width: 60%;
 }
 
-.itembox{
-  background-color : #eee;
-  min-width : 400px;
-  min-height: 400px;
-  border:1px black solid;
+.itembox {
+  background-color: #fff;
+  border: 1px black solid;
   width: 100%;
 }
 
-.toggle {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom : 2rem;
+.mobile-box > .border {
+  margin-bottom: 15px;
+}
+
+@media (max-width: 600px) {
+  .colapply {
+    width: 100%;
+  }
 }
 </style>

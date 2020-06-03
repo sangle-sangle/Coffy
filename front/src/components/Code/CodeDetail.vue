@@ -4,7 +4,7 @@
       <div class="code-title">
         <span>{{ codeDetail.title }}</span>
         <div class="btn-group">
-          <div class="edit-btn" @click="editCodePage(codeid)" v-if="checkMyCode">수정</div>
+          <div class="edit-btn" @click="editCodePage(codeId)" v-if="checkMyCode">수정</div>
           <div class="delete-btn" @click="toggleDeleteModal" v-if="checkMyCode">삭제</div>
         </div>
       </div>
@@ -61,7 +61,7 @@
         </div>
         <div class="result-tag border-tag">Result</div>
         <div class="result-section border-tag">
-          <ApplyCode class='itembox' :code="codeData" />
+          <ApplyCode class='itembox' :idtag="`frame${codeId}`" :code="codeData" />
         </div>
         <div class="description-tag border-tag">Description</div>
         <div class="description border-tag">{{ codeDetail.description }}</div>
@@ -135,7 +135,7 @@ export default {
   },
   data() {
     return {
-      codeid: Number(this.$route.path.split('/').reverse()[0]),
+      codeId: Number(this.$route.path.split('/').reverse()[0]),
       codeDetail: {},
       writerImage: '',
       writerName: '',
@@ -213,7 +213,7 @@ export default {
   },
   methods: {
     async getCodeInfo() {
-      const codeInfo = await fetchCodeInfo(this.codeid);
+      const codeInfo = await fetchCodeInfo(this.codeId);
       this.codeDetail = codeInfo.data;
       this.codeDetail['created_at'] = this.codeDetail['created_at'].slice(0, 10);
       this.codeData.htmlText = this.codeDetail.html;
@@ -231,7 +231,7 @@ export default {
     async toggleLikeCode() {
       // (1) 해당 코드 좋아요 관련 로직 작성
       let paramsData = {
-        codeid: this.codeid,
+        codeid: this.codeId,
         userid: this.userInfo['access-Token'].id
       }
       if (!this.likeCode) { // 좋아요 X => 좋아요 O
@@ -254,15 +254,15 @@ export default {
         this.jsShowCode = !this.jsShowCode
       }
     },
-    editCodePage(codeid) {
-      this.$router.push(`/code/edit/${codeid}`)
+    editCodePage(codeId) {
+      this.$router.push(`/code/edit/${codeId}`)
     },
     toggleDeleteModal() {
       this.showDeleteCodeModal = !this.showDeleteCodeModal
     },
     async deleteCode() {
       try {
-        await deleteCode(this.codeid);
+        await deleteCode(this.codeId);
         setTimeout(() => this.$router.push('/code'), 0);
       } catch {
         alert('코드 삭제 과정에서 오류가 발생했습니다. 관리자에게 문의하세요.');
@@ -317,17 +317,18 @@ export default {
   font-size: calc(2rem + 1vw);
   font-family: 'Noto Sans KR';
   font-weight: 600;
-  padding-bottom: 5px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid silver;
 }
 
 .code-title > span:first-child {
-  margin-right: 5px;
+  padding-bottom: 5px;
+  margin: 0 5px 20px;
+  border-bottom: 1px solid silver;
 }
 
 .code-title > .btn-group {
   display: flex;
+  padding-bottom: 5px;
+  margin-bottom: 20px;
 }
 
 .code-title > .btn-group > .edit-btn,
@@ -551,7 +552,7 @@ export default {
 
 .itembox {
   background-color : #eee;
-  height: 50vh;
+  /* height: 50vh; */
 }
 
 .modal-header {

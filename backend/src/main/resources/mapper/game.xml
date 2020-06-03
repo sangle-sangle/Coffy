@@ -32,4 +32,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="deleteGame" parameterType="java.lang.Integer">
 		delete from game where id=#{id}
 	</delete>
+	
+	<insert id="addSolved" parameterType="com.ssafy.edu.vue.dto.Solved">
+		insert into solved(category_id, game_id, user_id)
+		values(#{category_id}, #{game_id}, #{user_id})
+	</insert>
 </mapper>

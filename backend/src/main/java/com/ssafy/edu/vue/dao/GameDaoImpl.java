@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ssafy.edu.vue.dto.Game;
 import com.ssafy.edu.vue.dto.GameInfo;
+import com.ssafy.edu.vue.dto.Solved;
 
 @Repository
 public class GameDaoImpl {
@@ -29,6 +30,10 @@ public class GameDaoImpl {
 
 	public void deleteGame(int id) {
 		sqlSession.delete(ns+"deleteGame",id);
+	}
+
+	public void addSolved(Solved solved) {
+		sqlSession.insert(ns+"addSolved",solved);
 	}
 
 }

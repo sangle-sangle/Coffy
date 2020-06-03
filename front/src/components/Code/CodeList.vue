@@ -17,9 +17,7 @@
     <div class="code-list" v-if="!loading">
       <div v-for="code in codeList" :key="code.id" class="code-card">
         <div class="code-title">{{ code.title }}</div>
-        <div class="code-preview">
-          <ApplyCode class='itembox' :code="codeData(code.html, code.css, code.javascript)" />
-        </div>
+        <ApplyCode class='itembox' :idtag="`frame${code.id}`" :code="codeData(code.html, code.css, code.javascript)" />
         <div class="info-wrapper">
           <div class="code-info">
             <div class="writer-info">
