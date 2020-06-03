@@ -36,4 +36,8 @@ public class GameDaoImpl {
 		sqlSession.insert(ns+"addSolved",solved);
 	}
 
+	public int getSolvedCounts(Solved solved) {
+		return sqlSession.selectOne(ns+"getSolvedCounts",solved);
+	}
+
 }
