@@ -6,7 +6,8 @@ const state = {
   token: sessionStorage.getItem('token'),
   isLogin: sessionStorage.getItem('token') === null ? false : true,
   isLoginError: false,
-  userInfo : sessionStorage.getItem('token') === null ? {} : jwtDecode(sessionStorage.getItem('token'))
+  userInfo : sessionStorage.getItem('token') === null ? {} : jwtDecode(sessionStorage.getItem('token')),
+  isPasswordConfirmed: false
 };
 
 const mutations = {
@@ -26,6 +27,12 @@ const mutations = {
   },
   loginError(state) {
     state.isLoginError = true
+  },
+  confirmComplete(state){
+    state.isPasswordConfirmed = true
+  },
+  enteredAccount(state){
+    state.isPasswordConfirmed = false
   }
 }
 
@@ -38,7 +45,18 @@ const actions = {
       commit('loginError')
     }
     return result
+  },
+  async PASSWORDCONFIRM({commit}, userData) {
+    const result = await loginUser(userData)
+    if (result.headers['access-token']) {
+      commit('confirmComplete')
+      commit('setToken', result.headers['access-token'])
+    } else {
+      commit('loginError')
+    }
+    return result
   }
+  
 };
 
 const getters = {
