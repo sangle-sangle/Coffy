@@ -40,4 +40,8 @@ public class GameDaoImpl {
 		return sqlSession.selectOne(ns+"getSolvedCounts",solved);
 	}
 
+	public int isSolve(Solved solved) {
+		return sqlSession.selectOne(ns+"isSolve",solved);
+	}
+
 }

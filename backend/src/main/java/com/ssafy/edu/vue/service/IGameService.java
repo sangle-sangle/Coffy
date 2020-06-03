@@ -18,4 +18,6 @@ public interface IGameService {
 
 	int getSolvedCounts(Solved solved);
 
+	int isSolve(Solved solved);
+
 }

@@ -108,6 +108,24 @@ public class GameController {
 		return new ResponseEntity<BoolResult>(nr, HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "문제 풀이 여부 확인", response = List.class)
+	@RequestMapping(value = "/solve/{category}/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Integer> isSolve(@PathVariable int category, @PathVariable int id, HttpServletRequest rs) throws Exception {
+		logger.info("1-------------isSolve-----------------------------" + new Date());
+		int memberid = 0;
+		Solved solved = new Solved();
+		solved.setCategory_id(category);
+		solved.setGame_id(id);
+		if(rs.getAttribute("loginMember")!=null) {
+			System.out.println("rs");
+			Member member = (Member) rs.getAttribute("loginMember");
+			memberid = member.getId();
+			solved.setUser_id(memberid);
+      		}
+		int result = gameservice.isSolve(solved);
+		return new ResponseEntity<Integer>(result, HttpStatus.OK);
+	}
+	
 	@ApiOperation(value = "category당 푼 문제수", response = BoolResult.class)
 	@RequestMapping(value = "/solvedcounts/{category}", method = RequestMethod.GET)
 	public ResponseEntity<Integer> getSolvedCounts(@PathVariable int category, HttpServletRequest rs) throws Exception {
