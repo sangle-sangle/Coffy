@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Modal :showModal="result">
+    <Modal v-if="result">
       <div class="modal-wrapper">
         <div class="button-wrapper">
           <button @click="toggleModal">CLOSE</button>
@@ -8,8 +8,7 @@
         <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
         <div>
           참잘했어요
-          <i v-if="result" class="collecticon fab fa-angellist"></i>
-          <i class="far fa-next" />
+          <i class="collecticon fab fa-angellist"></i>
         </div>
       </div>
     </Modal>
@@ -47,12 +46,48 @@
         </div>
       </div>
     </div>
+    <Modal id="tip1" v-if="tips===1">
+      <div class="modal-wrapper">
+        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
+        <div>
+          <div class="tiptext">
+            CSS 조작을 통하여 해당 요소의 Display 에 Flex를 달아주세요            
+          </div>
+          <button @click="nexttip">다음</button>
+        </div>
+      </div>
+    </Modal>
+    <Modal id="tip2" v-if="tips===2">
+      <div class="modal-wrapper">
+        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
+        <div>
+          <div class="tiptext">
+            위의 CSS 조작을 하게 되면 아래에 있는 조그마한 박스가 큰 박스안에 위치하게 됩니다
+            그렇게 만들어보세요
+            쉽지않죠? 
+            하하하
+          </div>
+          <button @click="nexttip">2다음 팁</button>
+        </div>
+      </div>
+    </Modal>
+    <Modal id="tip3" v-if="tips===3">
+      <div class="modal-wrapper">
+        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
+        <div>
+          <div class="tiptext">
+            3번째 팁ㅇ은바로asdfasdfkasdjfhaskdfjasldfkjasdflkjasdflkjasdflkj 
+          </div>
+          <button @click="nexttip">3다음 팁</button>
+        </div>
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script>
 import Modal from '@/components/common/Modal.vue';
-import { getGame } from '@/api/game'
+import { getGame, solvedProblem } from '@/api/game'
 
 export default {
   components: {
@@ -60,69 +95,9 @@ export default {
   },
   data() {
     return {
-      game: {
-        category : 1,
-        title : '',
-        base : {},
-        problem : {},
-        description : '',
-        hint: '',
-        item_cnt : 1,
-      },
-        // id: 1,
-        // category: 1,
-        // title: 'justify-content',
-        // base: {
-        //   'display': 'flex',
-        //   'justify-content': 'space-between'
-        // },
-        // problem: {
-        //   '': 'flex',
-        //   'justify-content': ''
-        // },
-        // description: "justify-content 의 종류에 대하여 알아보아요 ~",
-        // hint: "justify-content 에는 center, flex-end, space-around, space-between, space-even 등이 있어요",
-        // item_cnt: 2,
-        // },
-        // {
-        //     id : 2,
-        //     category : 1,
-        //     title: 'flex-direction',
-        //     base: {"display": "flex", "flex-direction": "column-reverse"},
-        //     problem: {"": "flex", "flex-direction": ""},
-        //     description: "flex-direction 사용법을 익혀보아요",
-        //     hint: "'flex-direction'은 가로 방향으로 배치하는 'row', 세로 방향으로 배치하는 'column'이 있고 이를 거꾸로 배치하고 싶으면 '-reverse'를 붙이면 돼요",
-        //     item_cnt : 2,
-        // },
-        // {
-        //     id : 3,
-        //     category : 1,
-        //     title: 'flex 속성을 이용한 정가운데 배치',
-        //     base: {"display": "flex", "justify-content": "center", "align-items": "center"},
-        //     problem: {"": "flex", "justify-content": "", "align-items": ""},
-        //     description: 'flex 속성을 이용해서 정가운데에 요소를 배치하는 방법을 익혀보아요',
-        //     hint: "'align-items' 속성은 수직축 방향으로 아이템들을 정렬하는 속성이에요. 'justify-content'를 기준으로 수직 방향이라고 생각하면 돼요.",
-        //     item_cnt : 3,
-        // },
-        // {
-        //     id : 4,
-        //     category : 1,
-        //     title: 'flex 속성 정리',
-        //     base: {'display': 'flex', 'flex-direction': 'row-reverse', 'justify-content': 'space-between', 'align-items': 'flex-end'},
-        //     problem: {'display': '', '': 'row-reverse', 'justify-content': 'space-between', 'align-items': ''},
-        //     description: 'flex 속성을 이용해서 요소들을 맨 아래에 거꾸로 배치해보아요',
-        //     hint: "No.1 ~ No.3 까지 익혔던 속성들을 이용하면 충분히 해결할 수 있어요~",
-        //     item_cnt : 3,
-        // },
-        // {
-        //     id : 5,
-        //     category : 1,   
-        //     title: 'flex 속성 정리',
-        //     base: {'display': 'flex', 'flex-direction': 'column', 'justify-content': 'space-between', 'align-items': 'center'},
-        //     problem: {'display': '', 'flex-direction': '', 'justify-content': '', 'align-items': ''},
-        //     description: 'flex 속성을 이용해서 요소들을 정가운데에 세로로 배치해보아요',
-        //     hint: "flex-direction 값에 따라서 justify-content와 align-items의 정렬 방향이 달라짐을 잊지마세요!",
-        //     item_cnt : 3,
+      tips : 1,
+      solved : false,
+      game: {},
       basecolor: ['basered', 'basegreen', 'baseblue'],
       color: ['red', 'green', 'blue'],
       answer: [],
@@ -133,8 +108,11 @@ export default {
     this.getGamedata()
   },
   methods: {
+    nexttip(){
+      this.tips ++
+    },
     getGamedata() {
-      getGame(this.$route.params.id).then(response => {
+      getGame(1,this.$route.params.id).then(response => {
         this.game = response.data
         this.game.base = JSON.parse(response.data.base.split(`'`).join(`"`))
         this.game.problem = JSON.parse(response.data.problem.split(`'`).join(`"`))
@@ -161,6 +139,23 @@ export default {
     }
   },
   watch: {
+    tips() {
+      console.log(this.tips)
+      let answerboard = document.querySelector('.answer-board');
+      let itembox = document.querySelector('.itembox');
+      let modal = document.querySelector('#slot-modal')
+
+      if (this.tips===2){
+        answerboard.style['position'] = 'sticky'
+        answerboard.style['z-index'] = 5
+        modal.style['transform'] = 'translate(0px,0px)'
+      } else if (this.tips === 3){
+        answerboard.style['z-index'] = 0
+        itembox.style['position'] = 'sticky'
+        itembox.style['z-index'] = 5
+        modal.style['transform'] = 'translate(200px,-300px)'
+      }
+    },
     answer() {
       let idx = 0;
       let result = true;
@@ -186,6 +181,16 @@ export default {
       }
       if (result) {
         this.result = true
+          if (!(this.solved)) {
+            let data = {
+              category_id:1,
+              game_id:this.game.id,
+            }
+            solvedProblem(data).then(response=> {
+              console.log(response)
+            })
+            this.solved = true
+          }
       } else {
         this.result = false
       }
@@ -214,6 +219,9 @@ export default {
     background-color: #eee;
   }
 
+  .modal-select{
+    opacity: 0;
+  }
   #base-ground {
     width: 700px;
     height: 700px;
