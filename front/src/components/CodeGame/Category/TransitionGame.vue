@@ -1,15 +1,16 @@
 <template>
   <div>
-    <Modal :showModal="result">
+    <Modal v-if="result">
       <div class="modal-wrapper">
         <div class="button-wrapper">
-          <button @click="toggleModal">CLOSE</button>
         </div>
         <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
         <div>
-          참잘했어요
           <i v-if="result" class="collecticon fab fa-angellist"></i>
+          참잘했어요
         </div>
+        <button v-if="game.id!==5" @click="goNext(game.id)">다음 문제로</button>
+        
       </div>
     </Modal>
     <div>
@@ -21,8 +22,8 @@
           <span class="game-description">{{game.description}}</span>
         </div>
         <div>
-          <span class="game-hint">{{game.hint}}</span>
-        </div>
+          <span v-if="game.id===1" class="game-hint" @click="movetip(1)">설명 다시보기</span>
+          <span v-else class="game-hint" @click="movetip(7)">힌트보러가기</span>        </div>
       </div>
       <div class="answer-board">
         <div class="css" v-for="(key,value,index) in game.problem" :key="value">
@@ -43,6 +44,85 @@
       <div v-text="game.text" id="user-ground">
       </div>
     </div>
+  <div v-if="game.id===1">
+    <Modal id="tip1" v-if="tips===1">
+      <div class="modal-wrapper">
+        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
+        <div>
+          <div class="tiptext">
+            <strong>Transition 을 한번 배워봅시다 !</strong><br><br>
+            Transition 은 변화하는 과정을 보여주게 되는 속성입니다<br>
+            상태 변화가 일어날 때의 속성값을 정해줄 수 있습니다 <br><br>
+            <strong>transition</strong> 트랜지션 속성을 한번에 설정할 수 있음 <br>
+            <strong>transition-delay</strong> 트랜지션이 몇초 후에 실행될 지 설정함<br>
+            <strong>transition-duration</strong> 트랜지션이 몇초 동안 실행될 지 설정함<br>
+            <strong>transition-property</strong> 트랜지션이 일어날 속성을 지정함<br>
+            <strong>transition-timing-function</strong> 트랜지션 함수를 지정 
+          </div>
+          <button @click="movetip(2)">다음</button>
+        </div>
+      </div>
+    </Modal>
+    <Modal id="tip2" v-if="tips===2">
+      <div class="modal-wrapper">
+        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
+        <div>
+          <div class="tiptext">
+            요소들의 Style을 조작할 수 있는 CSS 화면입니다.<br>
+            기본적인 width가 20%로 설정이 되어있으며<br>
+            transition 을 클릭하면 width의 변화가 있습니다 <br>
+            transition 요소를 이용하여 변화를 알아봅시다<br>
+          </div>
+          <button @click="movetip(1)">이전</button>
+          <button @click="movetip(3)">다음</button>
+        </div>
+      </div>
+    </Modal>
+    <Modal id="tip3" v-if="tips===3">
+      <div class="modal-wrapper">
+        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
+        <div>
+          <div class="tiptext">
+            위의 div는 transition 이 적용된 div이고 <br>
+            아래의 div는 transition 이 적용이 안된 div입니다 <br>
+            transition 을 클릭하고 시간에 따라 변화하는 상태를 본 후 <br>
+            CSS의 속성 변경을 하여 transition을 다시 눌러보세요 <br>
+              {{game.hint}}
+          </div>
+          <button @click="movetip(2)">이전</button>
+          <button @click="movetip(4)">다음</button>
+        </div>
+      </div>
+    </Modal>
+    <Modal id="tip4" v-if="tips===4">
+      <div class="modal-wrapper">
+        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
+        <div>
+          <div class="tiptext">
+              다음 단계부턴 설명이 없이 진행되니 스스로 혼자 성장해 봅시다<br> 유후훗 구글을 잘 이용해보세요 ~ 후훗
+          </div>
+          <button @click="movetip(3)">이전</button>
+          <button @click="movetip(5)">이젠 도움이 필요없어요</button>
+        </div>
+      </div>
+    </Modal>
+  </div>
+    <Modal id="tip7" v-if="tips===7">
+      <div class="modal-wrapper">
+        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
+        <div>
+          <div class="tiptext">
+            위의 div는 transition 이 적용된 div이고 <br>
+            아래의 div는 transition 이 적용이 안된 div입니다 <br>
+            transition 을 클릭하고 시간에 따라 변화하는 상태를 본 후 <br>
+            CSS의 속성 변경을 하여 transition을 다시 눌러보세요 <br>
+            힌트를 드리자면
+              {{game.hint}}
+          </div>
+          <button @click="movetip(8)">가뿐하네</button>
+        </div>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -56,6 +136,7 @@ export default {
   },
   data() {
     return {
+      tips : 1,
       solved : false,
       game: {},
       before : [],
@@ -69,11 +150,15 @@ export default {
     this.getGamedata()
   },
   methods: {
+    movetip(id){
+      this.tips = id
+    },
     getGamedata() {
       getGame(5,this.$route.params.id).then(response => {
         this.game = response.data
         this.game.base = JSON.parse(response.data.base.split(`'`).join(`"`))
         this.game.problem = JSON.parse(response.data.problem.split(`'`).join(`"`))
+        this.game.after = JSON.parse(response.data.after.split(`'`).join(`"`))
       }).then(()=>{
         this.baseSetting()
         this.problemSetting()
@@ -82,12 +167,18 @@ export default {
     baseSetting() {
       this.answer = new Array(Object.keys(this.game.base).length)
       let baseGround = document.querySelector('#base-ground');
+      if (this.game.id !== 2){
+        baseGround.style['background-color'] = 'rgb(147, 252, 115)'
+      }
       for (let i in this.game.base) {
         baseGround.style[i] = this.game.base[i]
       }
     },
     problemSetting() {
       let userGround = document.querySelector('#user-ground');
+      if (this.game.id !== 2){
+        userGround.style['background-color'] = 'rgb(132, 130, 248)'
+      }
       for (let i in this.game.problem) {
         userGround.style[i] = this.game.problem[i]
       }
@@ -95,8 +186,11 @@ export default {
     toggleModal() {
       this.result = !this.result
     },
+    goNext(id){
+      this.$router.push(`/game/transition/${id+1}/`)
+    },
     run(){
-      console.log(this.game)
+      document.querySelector('button.runbutton').disabled = true
       let idx = 0;
       let result = true;
       let userGround = document.querySelector('#user-ground');
@@ -126,6 +220,7 @@ export default {
         userGround.style[i] = this.game.after[i]
       }
       setTimeout(()=> {
+        document.querySelector('button.runbutton').disabled = false
         let idx = 0
         for (let i in this.game.after){
           baseGround.style[i] = this.before[idx]
@@ -135,14 +230,44 @@ export default {
         if (result) {
           this.result = true
           if (!(this.solved)) {
-            console.log({category:5,id:this.game.id})
             solvedProblem({category:5,id:this.game.id})
           }
         } else {
           this.result = false
         }
-      },3000)
-    }
+      },2000)
+    },
+  },
+  watch: {
+    '$route'() {
+      window.location.reload()
+   },
+    tips() {
+      let answerboard = document.querySelector('.answer-board');
+      let itembox = document.querySelector('.itembox');
+      let modal = document.querySelector('#slot-modal');
+      let runbutton = document.querySelector('button.runbutton');
+      if (this.tips === 1){
+        answerboard.style['z-index'] = 0
+        itembox.style['position'] = 'sticky'
+        modal.style['transform'] = 'translate(200px,-300px)'
+      } else if (this.tips===2){
+        itembox.style['position'] = 'sticky'
+        itembox.style['z-index'] = 0
+        answerboard.style['position'] = 'sticky'
+        answerboard.style['z-index'] = 5
+        modal.style['transform'] = 'translate(0px,0px)'
+      } else if (this.tips === 3 || this.tips === 7){
+        runbutton.style['z-index'] = 5
+        runbutton.style['position'] = 'sticky'
+        answerboard.style['z-index'] = 0
+        itembox.style['position'] = 'sticky'
+        itembox.style['z-index'] = 5
+        modal.style['transform'] = 'translate(200px,-300px)'
+      } else if (this.tips ===4 ) {
+        modal.style['transform'] = 'translate(200px,-300px)'
+      }
+    },
   }
 }
 </script>
@@ -163,20 +288,21 @@ export default {
 
   .itembox {
     width: 700px;
-    height: 700px;
+    height: 500px;
     background-color: #eee;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   #base-ground {
     margin : 0 auto;
     height : 100px;
-    background-color :rgb(147, 252, 115)
   }
 
   #user-ground {
     margin : 0 auto;
     height : 100px;
-    background-color :rgb(132, 130, 248)
   }
 
   .game-title {
