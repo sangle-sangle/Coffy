@@ -155,6 +155,8 @@ public class MemberController {
 	@RequestMapping(value = "/member/{memberid}", method = RequestMethod.DELETE)
 	public ResponseEntity<BoolResult> deleteMember(@PathVariable int memberid, HttpServletRequest rs) throws Exception {
 		logger.info("1-------------deleteMember-----------------------------" + new Date());
+		System.out.println("1"+rs.getHeader("access-token"));
+		System.out.println("2"+rs.getAttribute("loginMember"));
 		int loginid = 0;
 		if (rs.getAttribute("loginMember") != null) {
 			Member member = (Member) rs.getAttribute("loginMember");
@@ -162,6 +164,7 @@ public class MemberController {
 		}
 
 		logger.info("2-----"+loginid+"////"+memberid);
+		System.out.println(loginid+" "+memberid);
 		if (loginid == memberid) {
 			memberservice.deleteMember(memberid);
 			BoolResult nr = new BoolResult();

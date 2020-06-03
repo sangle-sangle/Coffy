@@ -108,7 +108,7 @@
         </div>
       </Modal>
     </div>
-    <Loading v-else></Loading>
+    <SpinnerLoading v-else></SpinnerLoading>
   </div>
 </template>
 
@@ -124,14 +124,14 @@ import 'codemirror/mode/css/css.js'
 import 'codemirror/mode/xml/xml.js'
 import ApplyCode from '@/components/Code/ApplyCode.vue'
 import Modal from '@/components/common/Modal.vue'
-import Loading from '@/components/common/Loading.vue'
+import SpinnerLoading from '@/components/common/SpinnerLoading.vue'
 
 export default {
   components : {
     CodeMirror,
     ApplyCode,
     Modal,
-    Loading
+    SpinnerLoading
   },
   data() {
     return {

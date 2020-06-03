@@ -37,7 +37,7 @@
         <router-link to="/mypage/profile">Profile</router-link>
       </li>
       <li>
-        <router-link to="/mypage/account">Account</router-link>
+        <router-link to="/mypage/passwordconfirm">Account</router-link>
       </li>
     </ul>
   </div>

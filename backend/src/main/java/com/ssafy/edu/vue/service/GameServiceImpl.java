@@ -50,4 +50,9 @@ public class GameServiceImpl implements IGameService {
 	public int getSolvedCounts(Solved solved) {
 		return gamedao.getSolvedCounts(solved);
 	}
+
+	@Override
+	public int isSolve(Solved solved) {
+		return gamedao.isSolve(solved);
+	}
 }

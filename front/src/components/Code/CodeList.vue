@@ -35,7 +35,8 @@
         </div>
       </div>
     </div>
-    <Loading v-else></Loading>
+    <Pagination :itemCount="this.$store.state.code.codeData.length" @setNowPage="setNowPage" v-if="!loading"></Pagination>
+    <SpinnerLoading v-else></SpinnerLoading>
   </div>
 </template>
 
@@ -43,22 +44,25 @@
 import { mapState } from 'vuex'
 import { fetchAllCode } from '@/api/code.js'
 import ApplyCode from '@/components/Code/ApplyCode.vue'
-import Loading from '@/components/common/Loading.vue'
+import SpinnerLoading from '@/components/common/SpinnerLoading.vue'
+import Pagination from '@/components/common/Pagination.vue'
 
 export default {
   components: {
     ApplyCode,
-    Loading
+    SpinnerLoading,
+    Pagination,
   },
   data() {
     return {
       codeList: [],
-      loading: false
+      loading: false,
+      nowPage: 1
     }
   },
   computed: {
     ...mapState({
-      mode: state => state.common.mode,
+      mode: state => state.common.mode
     })
   },
   created() {
@@ -71,8 +75,8 @@ export default {
   methods: {
     async getAllCode() {
       const { data } = await fetchAllCode();
-      this.codeList = data;
-      this.loading = false;
+      this.$store.commit('saveCodeData', data);
+      this.setNowPage(1);
     },
     goAddCodePage() {
       this.$router.push('/code/form');
@@ -90,6 +94,12 @@ export default {
         jsText : js    
       }
       return code
+    },
+    setNowPage(pageNm) {
+      let allCodes = this.$store.state.code.codeData;
+      this.nowPage = pageNm;
+      this.codeList = allCodes.slice(12 * (this.nowPage - 1), 12 * this.nowPage);
+      this.loading = false;
     },
     changeColor(mode) {
       if (mode === 'white') { // 화이트 모드일 때
