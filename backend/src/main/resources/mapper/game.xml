@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssafy.game">
+	<select id="getGame" parameterType="java.lang.Integer"
+		resultType="com.ssafy.edu.vue.dto.Game">
+		select id, title, category, base, problem, description, hint, item_cnt, text
+		from game
+		where id=#{id}
+	</select>
+
+	<insert id="addGame" parameterType="com.ssafy.edu.vue.dto.Game">
+		insert into game(title, category, base, problem, description, hint, item_cnt, text)
+		values(#{title}, #{category}, #{base}, #{problem}, #{description}, #{hint}, #{item_cnt}, #{text})
+	</insert>
+	
+	<update id="updateGame"
+		parameterType="com.ssafy.edu.vue.dto.Game">
+		update game set
+		title=#{title},
+		category=#{category},
+		base=#{base},
+		problem=#{problem},
+		description=#{description},
+		hint=#{hint},
+		item_cnt=#{item_cnt},
+		text=#{text}
+		where id=#{id}
+	</update>
+
+	<delete id="deleteGame" parameterType="java.lang.Integer">
+		delete from game where id=#{id}
+	</delete>
+</mapper>

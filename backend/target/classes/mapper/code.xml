@@ -38,4 +38,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="deleteCode" parameterType="java.lang.Integer">
 		delete from code where id=#{id}
 	</delete>
+	
+	<insert id="addLikeCode" parameterType="com.ssafy.edu.vue.dto.LikeCode">
+		insert into
+		likecode(userid, codeid)
+		values(#{userid}, #{codeid})
+	</insert>
+	
+	<delete id="deleteLikeCode" parameterType="com.ssafy.edu.vue.dto.LikeCode">
+		delete
+		from likecode
+		where userid=#{userid} and codeid=#{codeid}		
+	</delete>
+	
+	<select id="getLikeCounts" parameterType="com.ssafy.edu.vue.dto.LikeCode" resultType="java.lang.Integer">
+		select count(*)
+		from likecode
+		where codeid=#{codeid}		
+	</select>
+		
 </mapper>

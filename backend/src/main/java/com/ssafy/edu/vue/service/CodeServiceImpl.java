@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.edu.vue.dao.CodeDaoImpl;
 import com.ssafy.edu.vue.dto.Code;
+import com.ssafy.edu.vue.dto.LikeCode;
 
 @Service
 public class CodeServiceImpl implements ICodeService {
@@ -43,6 +44,22 @@ public class CodeServiceImpl implements ICodeService {
 	@Transactional
 	public void deleteCode(int id) {
 		codedao.deleteCode(id);
+	}
+	
+	@Override
+	public void addLikeCode(LikeCode likecode) {
+		codedao.addLikeCode(likecode);
+	}
+	
+	@Override
+	public void deleteLikeCode(LikeCode likecode) {
+		codedao.deleteLikeCode(likecode);
+	}
+	
+	@Override
+	@Transactional
+	public int getLikeCounts(LikeCode likecode) {
+		return codedao.getLikeCounts(likecode);
 	}
 
 }
