@@ -25,10 +25,11 @@ import com.ssafy.edu.vue.dto.Solved;
 import com.ssafy.edu.vue.help.BoolResult;
 import com.ssafy.edu.vue.service.IGameCategoryService;
 import com.ssafy.edu.vue.service.IGameService;
+import com.ssafy.edu.vue.service.IJwtService;
 
 import io.swagger.annotations.ApiOperation;
 
-@CrossOrigin(origins = { "*" }, maxAge = 6000)
+@CrossOrigin(origins = { "*" }, maxAge = 6000, exposedHeaders = "access-token", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api")
 public class GameController {
@@ -37,6 +38,8 @@ public class GameController {
 	private IGameService gameservice;
 	@Autowired
 	private IGameCategoryService gamecategoryservice;
+	@Autowired
+	private IJwtService jwtService;
 	
 	@ApiOperation(value = "category list 보기", response = List.class)
 	@RequestMapping(value = "/categorylist", method = RequestMethod.GET)
@@ -93,6 +96,7 @@ public class GameController {
 		logger.info("1-------------addSolved-----------------------------" + new Date());
 		int memberid = 0;
 		if(rs.getAttribute("loginMember")!=null) {
+			System.out.println("rs");
 			Member member = (Member) rs.getAttribute("loginMember");
 			memberid = member.getId();
 			solved.setUser_id(memberid);
@@ -119,5 +123,6 @@ public class GameController {
 		int counts = gameservice.getSolvedCounts(solved);
 		return new ResponseEntity<Integer>(counts, HttpStatus.OK);
 	}
+	
 	
 }
