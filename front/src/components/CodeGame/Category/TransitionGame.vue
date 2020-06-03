@@ -9,7 +9,6 @@
         <div>
           참잘했어요
           <i v-if="result" class="collecticon fab fa-angellist"></i>
-          <i class="far fa-next" />
         </div>
       </div>
     </Modal>
@@ -39,9 +38,9 @@
     
     <button class="runbutton" @click="run">transition</button>
     <div class="itembox">
-      <div id="base-ground">
+      <div v-text="game.text" id="base-ground">
       </div>
-      <div id="user-ground">
+      <div v-text="game.text" id="user-ground">
       </div>
     </div>
   </div>
@@ -49,7 +48,7 @@
 
 <script>
 import Modal from '@/components/common/Modal.vue';
-import { getGame } from '@/api/game'
+import { getGame, solvedProblem } from '@/api/game'
 
 export default {
   components: {
@@ -57,16 +56,8 @@ export default {
   },
   data() {
     return {
-      game: {
-        category : 3,
-        title : 'width 기본',
-        base : { 'width' : '30%' , 'transition': 'width 1s'},
-        problem : { 'width' : '30%' , 'transition': ''},
-        description : 'width 에 transition 을 적용해 봅시다',
-        hint: 'width 가 변경이 될 때 1초에 걸쳐서 이동을 해봅시다.',
-        item_cnt : 0,
-        after : {'width' : '50%'},
-      },
+      solved : false,
+      game: {},
       before : [],
       basecolor: ['basered', 'basegreen', 'baseblue'],
       color: ['red', 'green', 'blue'],
@@ -75,13 +66,11 @@ export default {
     }
   },
   mounted(){
-    // this.getGamedata()
-    this.baseSetting()
-    this.problemSetting()
+    this.getGamedata()
   },
   methods: {
     getGamedata() {
-      getGame(this.$route.params.id).then(response => {
+      getGame(5,this.$route.params.id).then(response => {
         this.game = response.data
         this.game.base = JSON.parse(response.data.base.split(`'`).join(`"`))
         this.game.problem = JSON.parse(response.data.problem.split(`'`).join(`"`))
@@ -107,6 +96,7 @@ export default {
       this.result = !this.result
     },
     run(){
+      console.log(this.game)
       let idx = 0;
       let result = true;
       let userGround = document.querySelector('#user-ground');
@@ -144,6 +134,10 @@ export default {
         }
         if (result) {
           this.result = true
+          if (!(this.solved)) {
+            console.log({category:5,id:this.game.id})
+            solvedProblem({category:5,id:this.game.id})
+          }
         } else {
           this.result = false
         }

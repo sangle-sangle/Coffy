@@ -47,7 +47,7 @@
         {{ clanInfo.description !== '' ? clanInfo.description : '내용 없음' }}
       </div>
     </div>
-    <Modal :showModal="showModal">
+    <Modal v-if="showModal">
       <ClanRegisterModal v-if="showClanRegisterModal" :clanInfo="clanInfo" @closeModal="toggleClanRegisterModal"></ClanRegisterModal>
       <ClanSignOutModal v-if="showClanSignOutModal" :clanInfo="clanInfo" @closeModal="toggleClanSignOutModal"></ClanSignOutModal>
       <ClanDeleteModal v-if="showClanDeleteModal" :clanInfo="clanInfo" @closeModal="toggleClanDeleteModal"></ClanDeleteModal>

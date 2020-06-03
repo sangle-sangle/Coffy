@@ -1,7 +1,7 @@
 <template>
-  <div class="modal">
+  <div class="modal" :id="`${this.id}-modal`">
     <div id="slot-modal">
-      <slot v-if="this.showModal"></slot>
+      <slot></slot>
     </div>
   </div>
 </template>
@@ -11,9 +11,8 @@ import { mapState } from 'vuex'
 
 export default {
   props: {
-    showModal: {
-      type: Boolean,
-      default: true
+    id : {
+      type : String,
     }
   },
    computed: {
@@ -22,15 +21,9 @@ export default {
     })
   },
   mounted() {
-    this.toggleModal();
-    // this.$store.commit('toggleMode');
     this.changeColor(this.mode);
   },
   methods: {
-    toggleModal() {
-      document.querySelector('.modal').style.opacity = this.showModal ? 1 : 0;
-      document.querySelector('.modal').style.pointerEvents = this.showModal ? 'auto' : 'none';
-    },
     changeColor(mode) {
       if (mode === 'white') {
         document.querySelector('#slot-modal').style.backgroundColor = '#eee';
@@ -40,9 +33,6 @@ export default {
     },
   },
   watch: {
-    showModal() {
-      this.toggleModal()
-    },
     mode() {
       this.changeColor(this.mode)
     }
@@ -58,8 +48,8 @@ export default {
   top: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;
-  opacity: 0;
+  pointer-events: auto;
+  opacity: 1;
   transition: all .2s;
   z-index: 4;
   display: flex;
@@ -68,6 +58,7 @@ export default {
 }
 
 #slot-modal {
+  transform : translate(200px,-300px);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.8);
