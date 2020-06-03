@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <iframe frameborder="0" class="code-apply" />
+  <div class="wrapper">
+    <iframe :id="idtag" frameborder="0" class="code-apply" />
   </div>
 </template>
 
@@ -8,7 +8,17 @@
   export default {
     name: 'applycode',
     props: {
-      code: Object
+      code: Object,
+      idtag: String,
+      colLayout: {
+        type: Boolean,
+        default: false
+      }
+    },
+    data() {
+      return {
+        windowWidth: 0
+      }
     },
     computed: {
       vhtml() {
@@ -16,29 +26,47 @@
           '/script>'
       }
     },
+    mounted() {
+      this.applyCode();
+      this.adjustPreviewHeight();
+      window.addEventListener('resize', () => this.adjustPreviewHeight());
+    },
     methods: {
       applyCode() {
-        let doc = document.getElementsByClassName('code-apply')[0].contentDocument
+        let doc = document.querySelector(`#${this.idtag}`).contentDocument
         doc.open()
         doc.write(this.vhtml)
         doc.close()
+      },
+      adjustPreviewHeight() {
+        this.windowWidth = window.innerWidth
+        if (this.$route.name !== 'CodeList' && !this.colLayout) {
+          document.querySelector('.wrapper').style.height = '450px';
+        } else if (this.colLayout && this.windowWidth < 600) {
+          document.querySelector('.wrapper').style.height = '450px';
+        } else if (this.colLayout && this.windowWidth >= 600) {
+          document.querySelector('.wrapper').style.height = '100%';
+        }
       },
     },
     watch: {
       code: {
         deep: true,
         handler: 'applyCode'
+      },
+      colLayout() {
+        this.adjustPreviewHeight();
       }
-    },
-    mounted() {
-      this.applyCode()
-    },
+    }
   }
 </script>
 
 <style>
+.wrapper {
+  height: 100%;
+}
 .code-apply{
   width: 100%;
-  height: 100%;
+  height: inherit;
 }
 </style>

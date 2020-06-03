@@ -61,7 +61,7 @@
         </div>
         <div class="result-tag border-tag">Result</div>
         <div class="result-section border-tag">
-          <ApplyCode class='itembox' :code="codeData" />
+          <ApplyCode class='itembox' :idtag="`frame${codeid}`" :code="codeData" />
         </div>
         <div class="description-tag border-tag">Description</div>
         <div class="description border-tag">{{ codeDetail.description }}</div>
@@ -551,7 +551,7 @@ export default {
 
 .itembox {
   background-color : #eee;
-  height: 50vh;
+  /* height: 50vh; */
 }
 
 .modal-header {
