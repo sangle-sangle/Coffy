@@ -71,12 +71,18 @@ export default new Router({
     {
       path: '/mypage',
       component: loadView('MyPage'),
-      // beforeEnter: checkLoginUser,
+      beforeEnter: checkLoginUser,
       children: [
         { path: 'dashboard', name: 'DashBoard', component: loadComponent('MyPage', 'DashBoard') },
         { path: 'profile', name: 'Profile', component: loadComponent('MyPage', 'Profile') },
-        { path: 'account', name: 'Account', component: loadComponent('MyPage', 'Account') }
+        { path: 'passwordconfirm', name: 'PasswordConfirm', component: loadComponent('MyPage', 'PasswordConfirm') },
+        { path: 'account', name: 'Account', component: loadComponent('MyPage', 'Account'), beforeEnter: checkPasswordConfirm }
       ]
+    },
+    {
+      path: '/admin',
+      name: 'Admin',
+      component: loadView('Admin')
     }
   ]
 })
@@ -85,9 +91,13 @@ function checkNoLoginUser(to, from, next) {  // 로그인이 안 된 경우에 �
   store.state.user.isLogin ? next('/') : next()
 }
 
-// function checkLoginUser(to, from, next) { // 로그인이 된 경우에 mypage 접근 가능
-//   !store.state.user.isLogin ? next('/') : next()
-// }
+function checkLoginUser(to, from, next) {  // 로그인이 안 된 경우에 로그인창, 회원가입창 접근 가능
+  store.state.user.isLogin ? next() : next('/login')
+}
+
+function checkPasswordConfirm(to, from, next) {
+  store.state.user.isPasswordConfirmed ? next() : next('/login')
+}
 
 function checkRegisteredClan(to, from, next) { // 로그인한 유저 중 가입된 클랜이 없는 경우에만 클랜 리스트, 클랜 생성 페이지 접근 가능
   if (!store.state.user.isLogin) { // 비로그인 상태이면 로그인을 먼저 하라는 문구 표시 후 로그인 페이지로 이동

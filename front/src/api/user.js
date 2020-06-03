@@ -13,6 +13,7 @@ function registerUser(userData) {
 }
 
 // 로그인
+// 비밀번호 재 확인
 function loginUser(userData) {
   return instance.post('login/', userData)
 }
@@ -20,6 +21,10 @@ function loginUser(userData) {
 // github 로그인
 function githubLogin() {
 
+}
+// 비밀번호 수정
+function changePassword(userData){
+  return instance.put('member/password', userData)
 }
 
 // 내 정보 수정
@@ -47,6 +52,7 @@ export {
   registerUser,
   loginUser,
   githubLogin,
+  changePassword,
   updateMyInfo,
   deleteMyInfo,
   fetchAllUsers,
