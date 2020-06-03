@@ -43,4 +43,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select count(*) from solved
 		where category_id=#{category_id} and user_id = #{user_id}
 	</select>
+	
+	<select id="isSolve" parameterType="com.ssafy.edu.vue.dto.Solved" resultType="java.lang.Integer">
+		select count(*) from solved
+		where category_id=#{category_id} and game_id = #{game_id} and user_id = #{user_id}
+	</select>
 </mapper>
