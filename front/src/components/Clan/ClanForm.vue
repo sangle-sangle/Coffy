@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 import Modal from '@/components/common/Modal.vue'
 import axios from 'axios'
 import { addClan, updateClan, fetchClanInfo } from '@/api/clan.js'
@@ -109,8 +109,8 @@ export default {
   computed: {
     ...mapState({
       mode: state => state.common.mode,
+      info : state => state.user.userInfo
     }),
-    ...mapGetters(['info']),
     noMarkImage() {
       return (this.editClanID && !this.clanInfo.clanmark && !this.clanMark) || (!this.editClanID && !this.clanMark)
     }
