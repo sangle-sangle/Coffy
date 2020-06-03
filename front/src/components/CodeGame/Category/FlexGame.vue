@@ -52,7 +52,7 @@
 
 <script>
 import Modal from '@/components/common/Modal.vue';
-// import { getGame} from '@/api/code'
+import { getGame } from '@/api/game'
 
 export default {
   components: {
@@ -61,28 +61,36 @@ export default {
   data() {
     return {
       game: {
-        id: 1,
-        category: 1,
-        title: 'justify-content',
-        base: {
-          'display': 'flex',
-          'justify-content': 'space-between'
-        },
-        problem: {
-          '': 'flex',
-          'justify-content': ''
-        },
-        description: "justify-content 의 종류에 대하여 알아보아요 ~",
-        hint: "justify-content 에는 center, flex-end, space-around, space-between, space-even 등이 있어요",
-        item_cnt: 2,
+        category : 1,
+        title : '',
+        base : {},
+        problem : {},
+        description : '',
+        hint: '',
+        item_cnt : 1,
+      },
+        // id: 1,
+        // category: 1,
+        // title: 'justify-content',
+        // base: {
+        //   'display': 'flex',
+        //   'justify-content': 'space-between'
+        // },
+        // problem: {
+        //   '': 'flex',
+        //   'justify-content': ''
+        // },
+        // description: "justify-content 의 종류에 대하여 알아보아요 ~",
+        // hint: "justify-content 에는 center, flex-end, space-around, space-between, space-even 등이 있어요",
+        // item_cnt: 2,
         // },
         // {
         //     id : 2,
         //     category : 1,
         //     title: 'flex-direction',
-        //     base: {'display': 'flex', 'flex-direction': 'column-reverse'},
-        //     problem: {'': 'flex', 'flex-direction': ''},
-        //     description: 'flex-direction 사용법을 익혀보아요',
+        //     base: {"display": "flex", "flex-direction": "column-reverse"},
+        //     problem: {"": "flex", "flex-direction": ""},
+        //     description: "flex-direction 사용법을 익혀보아요",
         //     hint: "'flex-direction'은 가로 방향으로 배치하는 'row', 세로 방향으로 배치하는 'column'이 있고 이를 거꾸로 배치하고 싶으면 '-reverse'를 붙이면 돼요",
         //     item_cnt : 2,
         // },
@@ -90,8 +98,8 @@ export default {
         //     id : 3,
         //     category : 1,
         //     title: 'flex 속성을 이용한 정가운데 배치',
-        //     base: {'display': 'flex', 'justify-content': 'center', 'align-items': 'center'},
-        //     problem: {'': 'flex', 'justify-content': '', 'align-items': ''},
+        //     base: {"display": "flex", "justify-content": "center", "align-items": "center"},
+        //     problem: {"": "flex", "justify-content": "", "align-items": ""},
         //     description: 'flex 속성을 이용해서 정가운데에 요소를 배치하는 방법을 익혀보아요',
         //     hint: "'align-items' 속성은 수직축 방향으로 아이템들을 정렬하는 속성이에요. 'justify-content'를 기준으로 수직 방향이라고 생각하면 돼요.",
         //     item_cnt : 3,
@@ -115,23 +123,26 @@ export default {
         //     description: 'flex 속성을 이용해서 요소들을 정가운데에 세로로 배치해보아요',
         //     hint: "flex-direction 값에 따라서 justify-content와 align-items의 정렬 방향이 달라짐을 잊지마세요!",
         //     item_cnt : 3,
-      },
       basecolor: ['basered', 'basegreen', 'baseblue'],
       color: ['red', 'green', 'blue'],
       answer: [],
       result: false,
     }
   },
-  mounted() {
-    this.baseSetting();
-    this.problemSetting();
-    // this.getGamedata()
+  created(){
+    this.getGamedata()
   },
   methods: {
-    // async getGamedata() {
-    //   this.game = await getGame(this.$route.params.id)
-    //   console.log(this.game)
-    // },
+    getGamedata() {
+      getGame(this.$route.params.id).then(response => {
+        this.game = response.data
+        this.game.base = JSON.parse(response.data.base.split(`'`).join(`"`))
+        this.game.problem = JSON.parse(response.data.problem.split(`'`).join(`"`))
+      }).then(()=>{
+        this.baseSetting()
+        this.problemSetting()
+      })
+    },
     baseSetting() {
       this.answer = new Array(Object.keys(this.game.base).length)
       let baseGround = document.querySelector('#base-ground');
