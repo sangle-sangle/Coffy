@@ -34,8 +34,9 @@ export default new Router({
       children: [
         { path: '', name: 'GameList', component: loadComponent('CodeGame', 'GameList') },
         // { path: '', name: 'CodeGame', component: loadComponent('CodeGame', 'GameMain') },
-        { path: 'flex/:id', name: 'FlexGame', component: loadComponent('CodeGame', 'FlexGame'), props : true},
-        { path: 'text/:id', name : 'TextGame', component: loadComponent('CodeGame', 'TextGame'), props: true},
+        { path: 'flex/:id', name: 'FlexGame', component: loadComponent('CodeGame', 'Category/FlexGame'), props : true},
+        { path: 'text/:id', name : 'TextGame', component: loadComponent('CodeGame', 'Category/TextGame'), props: true},
+        { path: 'transition/:id', name : 'TransitionGame', component: loadComponent('CodeGame', 'Category/TransitionGame'), props: true},
       ]
     },
     {
