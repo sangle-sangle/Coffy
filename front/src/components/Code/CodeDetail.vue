@@ -317,17 +317,18 @@ export default {
   font-size: calc(2rem + 1vw);
   font-family: 'Noto Sans KR';
   font-weight: 600;
-  padding-bottom: 5px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid silver;
 }
 
 .code-title > span:first-child {
-  margin-right: 5px;
+  padding-bottom: 5px;
+  margin: 0 5px 20px;
+  border-bottom: 1px solid silver;
 }
 
 .code-title > .btn-group {
   display: flex;
+  padding-bottom: 5px;
+  margin-bottom: 20px;
 }
 
 .code-title > .btn-group > .edit-btn,
