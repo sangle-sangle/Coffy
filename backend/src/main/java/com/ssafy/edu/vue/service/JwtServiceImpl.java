@@ -90,14 +90,16 @@ public class JwtServiceImpl implements IJwtService{
 		Jws<Claims> claims = null;
 		try {
 			claims = Jwts.parser()
-						 .setSigningKey(SALT.getBytes("UTF-8"))
+						 .setSigningKey(this.generateKey())
 						 .parseClaimsJws(jwt);
 		} catch (Exception e) {
+			System.out.println(e);
 			return null;
 			//throw new UnauthorizedException();
 		}
 		@SuppressWarnings("unchecked")
 		Map<String, Object> value = (LinkedHashMap<String, Object>)claims.getBody().get("access-Token");
+
 		String github = null;
 		String img = "";
 		if(value.get("githubid")!=null) {
