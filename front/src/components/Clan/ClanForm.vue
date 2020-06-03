@@ -303,6 +303,10 @@ textarea {
   font-size: 18px;
 }
 
+textarea {
+  box-sizing: content-box;
+}
+
 label[class="form-title"] {
   font-size: 17px;
   font-weight: 600;
