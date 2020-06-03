@@ -57,7 +57,7 @@ export default new Router({
       path: '/clan',
       component: loadView('ClanPage'),
       children: [
-        { path: '', name: 'ClanMain', component: loadComponent('Clan', 'ClanMain'), beforeEnter: checkRegisteredClan }, // 백엔드와 user 관련 데이터 연동 후 beforeEnter: checkRegisteredClan 추가
+        { path: '', name: 'ClanList', component: loadComponent('Clan', 'ClanList'), beforeEnter: checkRegisteredClan }, // 백엔드와 user 관련 데이터 연동 후 beforeEnter: checkRegisteredClan 추가
         { path: 'addform', name: 'ClanForm', component: loadComponent('Clan', 'ClanForm'), beforeEnter: checkRegisteredClan }, // 백엔드와 user 관련 데이터 연동 후 beforeEnter: checkRegisteredClan 추가
         { path: 'detail/:id', name: 'ClanDetail', component: loadComponent('Clan', 'ClanDetail'), props: true },
         { path: 'edit/:id', name: 'ClanEdit', component: loadComponent('Clan', 'ClanForm'), props: true },

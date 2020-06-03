@@ -113,6 +113,7 @@ export default {
         cssText : '',
         jsText : ''    
       },
+      beforeData: {},
       afterData : {},
       expandCheck : [false,false,false],
       colLayout: false,
@@ -170,6 +171,7 @@ export default {
       this.codeData.htmlText = this.codeDetail.html;
       this.codeData.cssText = this.codeDetail.css;
       this.codeData.jsText = this.codeDetail.javascript;
+      this.beforeData = this.codeData;
     },
     async submitCode(){
       if (!this.title) {
