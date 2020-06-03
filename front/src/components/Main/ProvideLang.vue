@@ -1,7 +1,7 @@
 <template>
   <div class="provide-lang-wrapper">
     <div class="provide-lang-intro">
-      <div style="font-size:calc(2rem + 1vw)">지원하는 프로그래밍 언어</div>
+      <div style="font-size:calc(1rem + 1vw)">지원하는 프로그래밍 언어</div>
       <small style="font-size:calc(0.8rem + 0.1vw)">HTML, CSS, Javascript 등 프론트엔드에서 자주 쓰는 언어들을 지원합니다.</small>
     </div>
     <div class="provide-lang-section">
