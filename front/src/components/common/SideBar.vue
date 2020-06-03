@@ -8,7 +8,7 @@
       <ToggleSwitch :mode="changeMode"></ToggleSwitch>
     </div>
     <hr class="divider">
-    <div class="try-btn">
+    <div class="try-btn" @click="goCodeForm">
       ✏️try it!
     </div>
     <ul class="menu-items">
@@ -71,6 +71,9 @@ export default {
     this.changeMode = this.mode
   },
   methods: {
+    goCodeForm() {
+      this.$router.push('/code/form');
+    },
     toggleColorMode() {
       if (sessionStorage.getItem('mode') === 'dark') {
         sessionStorage.setItem('mode', 'white');

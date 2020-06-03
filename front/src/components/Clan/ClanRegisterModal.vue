@@ -81,7 +81,7 @@ export default {
 }
 
 .modal-header .clan-modal-title {
-  font-size: 22px;
+  font-size: calc(1.3rem + 0.3vw);
   font-weight: 600;
 }
 
@@ -101,7 +101,6 @@ export default {
 }
 
 .message > p.waiting-message {
-  font-size: 14px;
   font-weight: 600;
   color: goldenrod;
 }
@@ -111,7 +110,7 @@ export default {
 }
 
 .register-btn > span {
-  font-size: 15px;
+  font-size: calc(0.7rem + 0.3vw);
   font-weight: 600;
   color: black;
   border-radius: 8px;

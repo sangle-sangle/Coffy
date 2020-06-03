@@ -14,7 +14,8 @@
           <label for="title">제목 </label>
           <input v-model="title" type="text" name="title" id="title">
         </div>
-        <button @click="submitCode">작성</button>
+        <button @click="submitCode" v-if="Object.keys(userInfo).length && this.$route.name === 'CodeForm'">작성</button>
+        <button @click="submitCode" v-if="Object.keys(userInfo).length && this.$route.name === 'CodeEdit'">수정</button>
       </div>
       <div>
         <span>코드 설명</span>
@@ -60,8 +61,6 @@
           <ApplyCode class='itembox' :code="afterData" />
         </div>
       </div>
-        <div style="height:500px;">
-      </div>
     </div>
   </div>
 </template>
@@ -69,7 +68,7 @@
 <script>
 import { mapState } from 'vuex'
 import ApplyCode from '@/components/Code/ApplyCode.vue'
-import { addCode } from '@/api/code.js'
+import { addCode, updateCode, fetchCodeInfo } from '@/api/code.js'
 import { codemirror as CodeMirror } from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/base16-dark.css'
@@ -84,6 +83,7 @@ export default {
   },
   data() {
     return {
+      editCodeId: 0,
       form : 0,
       title : '',
       description : '',
@@ -121,7 +121,14 @@ export default {
   computed: {
     ...mapState({
       mode: state => state.common.mode,
+      userInfo: state => state.user.userInfo
     })
+  },
+  created() {
+    if (this.$route.name === 'CodeEdit') {
+      this.editCodeId = Number(this.$route.path.split('/').reverse()[0]);
+      this.getCodeInfo(this.editCodeId);
+    }
   },
   mounted(){
     this.theme = this.$store.state.common.mode === 'dark' ? 1: 0
@@ -159,16 +166,52 @@ export default {
     }
   },
   methods : {
+    async getCodeInfo(id) {
+      const codeInfo = await fetchCodeInfo(id);
+      this.codeDetail = codeInfo.data;
+      this.title = this.codeDetail.title;
+      this.description = this.codeDetail.description;
+      this.codeData.htmlText = this.codeDetail.html;
+      this.codeData.cssText = this.codeDetail.css;
+      this.codeData.jsText = this.codeDetail.javascript;
+    },
     async submitCode(){
-      const data = {
+      if (!this.title) {
+        alert('제목을 작성해주세요.');
+        return
+      } else if (!this.description) {
+        alert('코드 설명을 작성해주세요.');
+        return
+      } else if (!this.codeData.htmlText && !this.codeData.cssText && !this.codeData.jsText) {
+        alert('HTML, CSS, JS 중 한 언어 이상 사용해서 코드를 작성해주세요.');
+        return
+      }
+      let data = {
         title : this.title,
         description : this.description,
         html : this.codeData.htmlText,
         css : this.codeData.cssText,
-        js : this.codeData.jsText
+        javascript : this.codeData.jsText,
+        writerid: this.userInfo['access-Token'].id
       }
-      const response = await addCode(data)
-      console.log(response)
+      if (this.$route.name === 'CodeForm') {
+        try {
+          await addCode(data);
+          alert('작성한 코드가 등록되었습니다.');
+          this.$router.push('/code');
+        } catch {
+          alert('코드 등록 과정에서 오류가 발생했습니다. 관리자에게 문의하세요.');
+        }
+      } else {
+         try {
+          data['id'] = this.editCodeId;
+          await updateCode(data);
+          alert('코드가 수정되었습니다.')
+          this.$router.push(`/code/detail/${this.editCodeId}`);
+        } catch {
+          alert('코드 수정 과정에서 오류가 발생했습니다. 관리자에게 문의하세요.');
+        }
+      }
     },
     updateCode(type, value){
       this.codeData[type] = value
