@@ -40,7 +40,14 @@ public class GameServiceImpl implements IGameService {
 	}
 
 	@Override
+	@Transactional
 	public void addSolved(Solved solved) {
 		gamedao.addSolved(solved);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public int getSolvedCounts(Solved solved) {
+		return gamedao.getSolvedCounts(solved);
 	}
 }

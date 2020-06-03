@@ -5,14 +5,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="ssafy.game">
 	<select id="getGame" parameterType="com.ssafy.edu.vue.dto.GameInfo"
 		resultType="com.ssafy.edu.vue.dto.Game">
-		select id, title, category, base, problem, description, hint, item_cnt, text
+		select id, title, category, base, problem, description, hint, item_cnt, text, after
 		from game
 		where category=#{category} and id=#{id}
 	</select>
 
 	<insert id="addGame" parameterType="com.ssafy.edu.vue.dto.Game">
-		insert into game(id, title, category, base, problem, description, hint, item_cnt, text)
-		values(#{id}, #{title}, #{category}, #{base}, #{problem}, #{description}, #{hint}, #{item_cnt}, #{text})
+		insert into game(id, title, category, base, problem, description, hint, item_cnt, text, after)
+		values(#{id}, #{title}, #{category}, #{base}, #{problem}, #{description}, #{hint}, #{item_cnt}, #{text}, #{after})
 	</insert>
 	
 	<update id="updateGame"
@@ -25,7 +25,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		description=#{description},
 		hint=#{hint},
 		item_cnt=#{item_cnt},
-		text=#{text}
+		text=#{text},
+		after=#{after}
 		where id=#{id}
 	</update>
 
@@ -37,4 +38,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		insert into solved(category_id, game_id, user_id)
 		values(#{category_id}, #{game_id}, #{user_id})
 	</insert>
+	
+	<select id="getSolvedCounts" parameterType="com.ssafy.edu.vue.dto.Solved" resultType="java.lang.Integer">
+		select count(*) from solved
+		where category_id=#{category_id} and user_id = #{user_id}
+	</select>
 </mapper>
