@@ -5,7 +5,10 @@ C:\Users\multicampus\Desktop\s02p31b202\backend\src\main\java\com\ssafy\edu\vue\
 C:\Users\multicampus\Desktop\s02p31b202\backend\src\main\java\com\ssafy\edu\vue\service\CodeServiceImpl.java
 C:\Users\multicampus\Desktop\s02p31b202\backend\src\main\java\com\ssafy\edu\vue\service\IJwtService.java
 C:\Users\multicampus\Desktop\s02p31b202\backend\src\main\java\com\ssafy\edu\vue\service\JwtServiceImpl.java
+C:\Users\multicampus\Desktop\s02p31b202\backend\src\main\java\com\ssafy\edu\vue\dto\GameCategory.java
 C:\Users\multicampus\Desktop\s02p31b202\backend\src\main\java\com\ssafy\edu\vue\controller\UnauthorizedException.java
+C:\Users\multicampus\Desktop\s02p31b202\backend\src\main\java\com\ssafy\edu\vue\dao\GameCategoryDaoImpl.java
+C:\Users\multicampus\Desktop\s02p31b202\backend\src\main\java\com\ssafy\edu\vue\dto\GameInfo.java
 C:\Users\multicampus\Desktop\s02p31b202\backend\src\main\java\com\ssafy\edu\vue\controller\ClanController.java
 C:\Users\multicampus\Desktop\s02p31b202\backend\src\main\java\com\ssafy\edu\vue\dao\MemberDaoImpl.java
 C:\Users\multicampus\Desktop\s02p31b202\backend\src\main\java\com\ssafy\edu\vue\service\ClanServiceImpl.java
@@ -25,5 +28,7 @@ C:\Users\multicampus\Desktop\s02p31b202\backend\src\main\java\com\ssafy\edu\vue\
 C:\Users\multicampus\Desktop\s02p31b202\backend\src\main\java\com\ssafy\edu\vue\dto\Code.java
 C:\Users\multicampus\Desktop\s02p31b202\backend\src\main\java\com\ssafy\edu\vue\controller\GameController.java
 C:\Users\multicampus\Desktop\s02p31b202\backend\src\main\java\com\ssafy\edu\vue\service\GameServiceImpl.java
+C:\Users\multicampus\Desktop\s02p31b202\backend\src\main\java\com\ssafy\edu\vue\service\GameCategoryServiceImpl.java
 C:\Users\multicampus\Desktop\s02p31b202\backend\src\main\java\com\ssafy\edu\vue\dto\Game.java
 C:\Users\multicampus\Desktop\s02p31b202\backend\src\main\java\com\ssafy\edu\TestController.java
+C:\Users\multicampus\Desktop\s02p31b202\backend\src\main\java\com\ssafy\edu\vue\service\IGameCategoryService.java

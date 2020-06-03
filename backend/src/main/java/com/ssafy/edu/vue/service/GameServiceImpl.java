@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.edu.vue.dao.GameDaoImpl;
 import com.ssafy.edu.vue.dto.Game;
+import com.ssafy.edu.vue.dto.GameInfo;
 
 @Service
 public class GameServiceImpl implements IGameService {
@@ -15,8 +16,8 @@ public class GameServiceImpl implements IGameService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Game getGame(int id) {
-		return gamedao.getGame(id);
+	public Game getGame(GameInfo gameinfo) {
+		return gamedao.getGame(gameinfo);
 	}
 
 	@Override
@@ -36,5 +37,4 @@ public class GameServiceImpl implements IGameService {
 	public void deleteGame(int id) {
 		gamedao.deleteGame(id);
 	}
-
 }

@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.edu.vue.dto.Game;
+import com.ssafy.edu.vue.dto.GameCategory;
+import com.ssafy.edu.vue.dto.GameInfo;
 import com.ssafy.edu.vue.help.BoolResult;
+import com.ssafy.edu.vue.service.IGameCategoryService;
 import com.ssafy.edu.vue.service.IGameService;
 
 import io.swagger.annotations.ApiOperation;
@@ -26,15 +29,24 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/api")
 public class GameController {
 	public static final Logger logger = LoggerFactory.getLogger(GameController.class);
-
 	@Autowired
 	private IGameService gameservice;
+	@Autowired
+	private IGameCategoryService gamecategoryservice;
+	
+	@ApiOperation(value = "category list 보기", response = List.class)
+	@RequestMapping(value = "/categorylist", method = RequestMethod.GET)
+	public ResponseEntity<List<GameCategory>> getCategoryList() throws Exception {
+		logger.info("1-------------getGame-----------------------------" + new Date());
+		List<GameCategory> gamecategory = gamecategoryservice.getCategoryList();
+		return new ResponseEntity<List<GameCategory>>(gamecategory, HttpStatus.OK);
+	}
 	
 	@ApiOperation(value = "game 상세 보기", response = List.class)
-	@RequestMapping(value = "/game/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Game> getGame(@PathVariable int id) throws Exception {
+	@RequestMapping(value = "/game/{category}/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Game> getGame(@PathVariable int category, int id) throws Exception {
 		logger.info("1-------------getGame-----------------------------" + new Date());
-		Game game = gameservice.getGame(id);
+		Game game = gameservice.getGame(new GameInfo(category,id));
 		return new ResponseEntity<Game>(game, HttpStatus.OK);
 	}
 	
