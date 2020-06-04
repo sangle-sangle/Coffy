@@ -1,4 +1,5 @@
 import { setInterceptors } from './config/interceptors'
+// import store from '@/store/index.js'
 
 const instance = setInterceptors()
 
@@ -27,14 +28,19 @@ function deleteCode(codeid) {
   return instance.delete(`code/${codeid}`)
 }
 
+// 해당 코드에 내가 좋아요를 눌렀는지 확인
+function checkLikeCode(params) {
+  return instance.get('like', params)
+}
+
 // 코드 좋아요 추가
-function postLikeCode(params) {
-  return instance.post('likecode', params)
+function postLikeCode(codeid) {
+  return instance.post(`likecode/${codeid}`)
 }
 
 // 코드 좋아요 삭제
-function deleteLikeCode(params) {
-  return instance.delete('likecode', params)
+function deleteLikeCode(codeid) {
+  return instance.delete(`likecode/${codeid}`)
 }
 
 
@@ -44,6 +50,7 @@ export {
   addCode,
   updateCode,
   deleteCode,
+  checkLikeCode,
   postLikeCode,
   deleteLikeCode
 }

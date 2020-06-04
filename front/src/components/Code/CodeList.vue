@@ -17,20 +17,22 @@
     <div class="code-list" v-if="!loading">
       <div v-for="code in codeList" :key="code.id" class="code-card">
         <div class="code-title">{{ code.title }}</div>
-        <ApplyCode class='itembox' :idTag="`frame${code.id}`" :code="codeData(code.html, code.css, code.javascript)" />
+        <div class="code-preview">
+          <div @click="goCodeDetail(code.id)" class="go-code-page"></div>
+          <ApplyCode class='itembox' :idtag="`frame${code.id}`" :code="codeData(code.html, code.css, code.javascript)" />
+        </div>
         <div class="info-wrapper">
           <div class="code-info">
             <div class="writer-info">
               <img src="https://user-images.githubusercontent.com/52685250/73902320-c72d6c00-48d8-11ea-82b4-eb9bfebfe9fb.png" alt="">
-              <span>{{ code.writerid }}</span>
+              <span>{{ code.writername }}</span>
             </div>
             <div class="code-like">
-              <div class="like-info"><i class="fas fa-heart"></i> 10</div>
-              <div class="scrap-info"><i class="fas fa-bookmark"></i> 5</div>
+              <div class="like-info"><i class="fas fa-heart"></i> {{ code.likes }}</div>
             </div>
           </div>
-          <div class="detail-btn" @click="goCodeDetail(code.id)">
-            <i class="fas fa-info"></i> 상세 정보
+          <div class="detail-btn" @click="goCodeEditPage(code.id)">
+            <i class="fas fa-edit"></i> 코드 수정
           </div>
         </div>
       </div>
@@ -62,7 +64,9 @@ export default {
   },
   computed: {
     ...mapState({
-      mode: state => state.common.mode
+      isLogin: state => state.user.isLogin,
+      mode: state => state.common.mode,
+      userInfo: state => state.user.userInfo
     })
   },
   created() {
@@ -86,6 +90,9 @@ export default {
     },
     goCodeDetail(id) {
       this.$router.push(`/code/detail/${id}`);
+    },
+    goCodeEditPage(id) {
+      this.$router.push(`/code/edit/${id}`);
     },
     codeData(html, css, js) {
       let code = {
@@ -195,6 +202,21 @@ export default {
   padding-bottom: 4px;
   margin-bottom: 10px;
   border-bottom: 1px solid silver;
+}
+
+.code-preview {
+  position: relative;
+}
+
+.go-code-page {
+  position: absolute;
+  width: 100%;
+  height: 154px;
+  background-color: transparent;
+}
+
+.code-preview:hover {
+  cursor: pointer;
 }
 
 .info-wrapper {

@@ -1,7 +1,8 @@
 import { toggleMode } from '@/utils/toggleMode.js';
 
 const state = {
-  mode: sessionStorage.getItem('mode')
+  mode: sessionStorage.getItem('mode'),
+  goNextPage: ''
 }
 
 const mutations = {
@@ -13,6 +14,9 @@ const mutations = {
       state.mode = sessionStorage.getItem('mode');
     }
     toggleMode(state.mode);
+  },
+  setGoNextPage(state, url) {
+    state.goNextPage = url;
   }
 }
 
