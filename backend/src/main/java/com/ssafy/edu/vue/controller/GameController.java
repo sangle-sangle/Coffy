@@ -51,7 +51,7 @@ public class GameController {
 	
 	@ApiOperation(value = "game 상세 보기", response = List.class)
 	@RequestMapping(value = "/game/{category}/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Game> getGame(@PathVariable int category,@PathVariable int id, HttpServletRequest rs) throws Exception {
+	public ResponseEntity<Map<String,Object>> getGame(@PathVariable int category,@PathVariable int id, HttpServletRequest rs) throws Exception {
 		logger.info("1-------------getGame-----------------------------" + new Date());
 		Map<String,Object> result = new HashMap<>();
 		Solved solved = new Solved();
@@ -62,13 +62,14 @@ public class GameController {
 		}
 		solved.setUser_id(memberid);
 		solved.setCategory_id(category);
-		int counts = gameservice.getSolvedCounts(solved);
+		solved.setGame_id(id);
+		int counts = gameservice.isSolve(solved);
 		result.put("count", counts);
 		
 		Game game = gameservice.getGame(new GameInfo(category,id));
 		result.put("game", game);
 		
-		return new ResponseEntity<Game>(game, HttpStatus.OK);
+		return new ResponseEntity<Map<String,Object>>(result, HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "game 추가", response = List.class)
