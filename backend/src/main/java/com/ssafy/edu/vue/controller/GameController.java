@@ -24,6 +24,7 @@ import com.ssafy.edu.vue.dto.GameCategory;
 import com.ssafy.edu.vue.dto.GameInfo;
 import com.ssafy.edu.vue.dto.Member;
 import com.ssafy.edu.vue.dto.Solved;
+import com.ssafy.edu.vue.dto.SolvedCount;
 import com.ssafy.edu.vue.help.BoolResult;
 import com.ssafy.edu.vue.service.IGameCategoryService;
 import com.ssafy.edu.vue.service.IGameService;
@@ -58,8 +59,8 @@ public class GameController {
 		if(rs.getAttribute("loginMember")!=null) {
 			Member member = (Member) rs.getAttribute("loginMember");
 			memberid = member.getId();
-			solved.setUser_id(memberid);
 		}
+		solved.setUser_id(memberid);
 		solved.setCategory_id(category);
 		int counts = gameservice.getSolvedCounts(solved);
 		result.put("count", counts);
@@ -122,20 +123,19 @@ public class GameController {
 	}
 	
 	@ApiOperation(value = "category당 푼 문제수", response = BoolResult.class)
-	@RequestMapping(value = "/solvedcounts/{category}", method = RequestMethod.GET)
-	public ResponseEntity<Integer> getSolvedCounts(@PathVariable int category, HttpServletRequest rs) throws Exception {
+	@RequestMapping(value = "/solvedcounts", method = RequestMethod.GET)
+	public ResponseEntity<List<SolvedCount>> getSolvedCounts(HttpServletRequest rs) throws Exception {
 		logger.info("1-------------getSolvedCounts-----------------------------" + new Date());
 		Solved solved = new Solved();
 		int memberid = 0;
 		if(rs.getAttribute("loginMember")!=null) {
 			Member member = (Member) rs.getAttribute("loginMember");
 			memberid = member.getId();
-			solved.setUser_id(memberid);
 		}
-		solved.setCategory_id(category);
-		int counts = gameservice.getSolvedCounts(solved);
-		return new ResponseEntity<Integer>(counts, HttpStatus.OK);
+		List<SolvedCount> counts = gameservice.getSolvedCounts(memberid);
+		return new ResponseEntity<List<SolvedCount>>(counts, HttpStatus.OK);
 	}
+	
 	
 	
 }
