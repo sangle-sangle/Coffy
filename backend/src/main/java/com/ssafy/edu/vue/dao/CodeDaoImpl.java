@@ -48,6 +48,10 @@ public class CodeDaoImpl {
 	public int getLikeCounts(LikeCode likecode) {
 		return sqlSession.selectOne(ns+"getLikeCounts", likecode);
 	}
+
+	public int isLike(LikeCode likecode) {
+		return sqlSession.selectOne(ns+"isLike", likecode);
+	}
 	
 	
 

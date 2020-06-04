@@ -1,8 +1,12 @@
 package com.ssafy.edu.vue.controller;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-	
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,25 +20,53 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.edu.vue.dto.Game;
+import com.ssafy.edu.vue.dto.GameCategory;
+import com.ssafy.edu.vue.dto.GameInfo;
+import com.ssafy.edu.vue.dto.Member;
+import com.ssafy.edu.vue.dto.Solved;
 import com.ssafy.edu.vue.help.BoolResult;
+import com.ssafy.edu.vue.service.IGameCategoryService;
 import com.ssafy.edu.vue.service.IGameService;
 
 import io.swagger.annotations.ApiOperation;
 
-@CrossOrigin(origins = { "*" }, maxAge = 6000)
+@CrossOrigin(origins = { "*" }, maxAge = 6000, exposedHeaders = "access-token", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api")
 public class GameController {
 	public static final Logger logger = LoggerFactory.getLogger(GameController.class);
-
 	@Autowired
 	private IGameService gameservice;
+	@Autowired
+	private IGameCategoryService gamecategoryservice;
+	
+	@ApiOperation(value = "category list 보기", response = List.class)
+	@RequestMapping(value = "/categorylist", method = RequestMethod.GET)
+	public ResponseEntity<List<GameCategory>> getCategoryList() throws Exception {
+		logger.info("1-------------getGame-----------------------------" + new Date());
+		List<GameCategory> gamecategory = gamecategoryservice.getCategoryList();
+		return new ResponseEntity<List<GameCategory>>(gamecategory, HttpStatus.OK);
+	}
 	
 	@ApiOperation(value = "game 상세 보기", response = List.class)
-	@RequestMapping(value = "/game/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Game> getGame(@PathVariable int id) throws Exception {
+	@RequestMapping(value = "/game/{category}/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Game> getGame(@PathVariable int category,@PathVariable int id, HttpServletRequest rs) throws Exception {
 		logger.info("1-------------getGame-----------------------------" + new Date());
-		Game game = gameservice.getGame(id);
+		Map<String,Object> result = new HashMap<>();
+		Solved solved = new Solved();
+		int memberid = 0;
+		if(rs.getAttribute("loginMember")!=null) {
+			Member member = (Member) rs.getAttribute("loginMember");
+			memberid = member.getId();
+			solved.setUser_id(memberid);
+		}
+		solved.setCategory_id(category);
+		int counts = gameservice.getSolvedCounts(solved);
+		result.put("count", counts);
+		
+		Game game = gameservice.getGame(new GameInfo(category,id));
+		result.put("game", game);
+		
 		return new ResponseEntity<Game>(game, HttpStatus.OK);
 	}
 	
@@ -70,4 +102,40 @@ public class GameController {
    		nr.setState("succ");
 		return new ResponseEntity<BoolResult>(nr, HttpStatus.OK);
 	}
+	
+	@ApiOperation(value = "solved 추가", response = List.class)
+	@RequestMapping(value = "/solve", method = RequestMethod.POST)
+	public ResponseEntity<BoolResult> addSolved(@RequestBody Solved solved, HttpServletRequest rs) throws Exception {
+		logger.info("1-------------addSolved-----------------------------" + new Date());
+		int memberid = 0;
+		if(rs.getAttribute("loginMember")!=null) {
+			System.out.println("rs");
+			Member member = (Member) rs.getAttribute("loginMember");
+			memberid = member.getId();
+			solved.setUser_id(memberid);
+		}
+		gameservice.addSolved(solved);
+		BoolResult nr=new BoolResult();
+   		nr.setName("addSolved");
+   		nr.setState("succ");
+		return new ResponseEntity<BoolResult>(nr, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "category당 푼 문제수", response = BoolResult.class)
+	@RequestMapping(value = "/solvedcounts/{category}", method = RequestMethod.GET)
+	public ResponseEntity<Integer> getSolvedCounts(@PathVariable int category, HttpServletRequest rs) throws Exception {
+		logger.info("1-------------getSolvedCounts-----------------------------" + new Date());
+		Solved solved = new Solved();
+		int memberid = 0;
+		if(rs.getAttribute("loginMember")!=null) {
+			Member member = (Member) rs.getAttribute("loginMember");
+			memberid = member.getId();
+			solved.setUser_id(memberid);
+		}
+		solved.setCategory_id(category);
+		int counts = gameservice.getSolvedCounts(solved);
+		return new ResponseEntity<Integer>(counts, HttpStatus.OK);
+	}
+	
+	
 }

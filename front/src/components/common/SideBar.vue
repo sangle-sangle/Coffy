@@ -8,7 +8,7 @@
       <ToggleSwitch :mode="changeMode"></ToggleSwitch>
     </div>
     <hr class="divider">
-    <div class="try-btn">
+    <div class="try-btn" @click="goCodeForm">
       ✏️try it!
     </div>
     <ul class="menu-items">
@@ -37,7 +37,7 @@
         <router-link to="/mypage/profile">Profile</router-link>
       </li>
       <li>
-        <router-link to="/mypage/account">Account</router-link>
+        <router-link to="/mypage/passwordconfirm">Account</router-link>
       </li>
     </ul>
   </div>
@@ -64,13 +64,16 @@ export default {
       userInfo: state => state.user.userInfo
     }),
     clanPageUrl() {
-      return Object.keys(this.userInfo).length && this.userInfo['access-Token'].clanid >= 1 ? `/clan/detail/${this.userInfo.clanid}` : '/clan'
+      return Object.keys(this.userInfo).length && this.userInfo['access-Token'].clanid >= 1 ? `/clan/detail/${this.userInfo['access-Token'].clanid}` : '/clan'
     }
   },
   mounted() {
     this.changeMode = this.mode
   },
   methods: {
+    goCodeForm() {
+      this.$router.push('/code/form');
+    },
     toggleColorMode() {
       if (sessionStorage.getItem('mode') === 'dark') {
         sessionStorage.setItem('mode', 'white');

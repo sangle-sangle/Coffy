@@ -68,7 +68,7 @@
         클랜 {{ clanFormName }}
       </div>
     </div>
-    <Modal :showModal="completeModal">
+    <Modal v-if="completeModal">
       <div class="modal-header">Complete!</div>
       <div class="complete-message">클랜 {{ clanFormName }}이 완료되었습니다.</div>
       <div class="back-btn" @click="closeModal">CLOSE</div>
@@ -77,8 +77,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
-// import clanList from '@/assets/json/sampleClanList.json';
+import { mapState } from 'vuex';
 import Modal from '@/components/common/Modal.vue'
 import axios from 'axios'
 import { addClan, updateClan, fetchClanInfo } from '@/api/clan.js'
@@ -110,8 +109,8 @@ export default {
   computed: {
     ...mapState({
       mode: state => state.common.mode,
+      info : state => state.user.userInfo
     }),
-    ...mapGetters(['info']),
     noMarkImage() {
       return (this.editClanID && !this.clanInfo.clanmark && !this.clanMark) || (!this.editClanID && !this.clanMark)
     }
@@ -302,6 +301,10 @@ textarea {
   margin-bottom: 10px;
   margin-left: -5px;
   font-size: 18px;
+}
+
+textarea {
+  box-sizing: content-box;
 }
 
 label[class="form-title"] {

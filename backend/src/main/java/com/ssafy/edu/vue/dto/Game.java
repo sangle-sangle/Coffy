@@ -12,12 +12,14 @@ public class Game implements Serializable{
 	private String hint;
 	private int item_cnt;
 	private String text;
+	private String after;
 	public Game() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
 	public Game(int id, String title, int category, String base, String problem, String description, String hint,
-			int item_cnt, String text) {
+			int item_cnt, String text, String after) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -28,13 +30,16 @@ public class Game implements Serializable{
 		this.hint = hint;
 		this.item_cnt = item_cnt;
 		this.text = text;
+		this.after = after;
 	}
+
 	@Override
 	public String toString() {
 		return "Game [id=" + id + ", title=" + title + ", category=" + category + ", base=" + base + ", problem="
 				+ problem + ", description=" + description + ", hint=" + hint + ", item_cnt=" + item_cnt + ", text="
-				+ text + "]";
+				+ text + ", after=" + after + "]";
 	}
+
 	public int getId() {
 		return id;
 	}
@@ -88,6 +93,12 @@ public class Game implements Serializable{
 	}
 	public void setText(String text) {
 		this.text = text;
+	}
+	public String getAfter() {
+		return after;
+	}
+	public void setAfter(String after) {
+		this.after = after;
 	}
 	
 }

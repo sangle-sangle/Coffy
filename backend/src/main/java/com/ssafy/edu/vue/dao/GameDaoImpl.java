@@ -1,12 +1,12 @@
 package com.ssafy.edu.vue.dao;
 
-import java.util.List;
-
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ssafy.edu.vue.dto.Game;
+import com.ssafy.edu.vue.dto.GameInfo;
+import com.ssafy.edu.vue.dto.Solved;
 
 @Repository
 public class GameDaoImpl {
@@ -15,9 +15,9 @@ public class GameDaoImpl {
 	
 	@Autowired
 	private SqlSession sqlSession;
-
-	public Game getGame(int id) {
-		return sqlSession.selectOne(ns+"getGame",id);
+	
+	public Game getGame(GameInfo gameinfo) {
+		return sqlSession.selectOne(ns+"getGame",gameinfo);
 	}
 
 	public void addGame(Game game) {
@@ -30,6 +30,18 @@ public class GameDaoImpl {
 
 	public void deleteGame(int id) {
 		sqlSession.delete(ns+"deleteGame",id);
+	}
+
+	public void addSolved(Solved solved) {
+		sqlSession.insert(ns+"addSolved",solved);
+	}
+
+	public int getSolvedCounts(Solved solved) {
+		return sqlSession.selectOne(ns+"getSolvedCounts",solved);
+	}
+
+	public int isSolve(Solved solved) {
+		return sqlSession.selectOne(ns+"isSolve",solved);
 	}
 
 }

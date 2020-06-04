@@ -65,3 +65,7 @@ button {
 	cursor: pointer;
 	color: #eee;
 }
+
+textarea {
+	box-sizing: border-box;
+}

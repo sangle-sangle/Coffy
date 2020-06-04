@@ -10,11 +10,11 @@
         </div>
       </div>
     </div>
-    <div class="game-set" v-for="(category, index) in categories" :key="index">
-      <div class="game-category">{{ `${indexIcons[index]} ${category}` }}</div>
-      <div class="description">📌{{ description[index] }}</div>
+    <div class="game-set" v-for="(category,index) in categorys" :key="category.id">
+      <div class="game-category">{{ `${indexIcons[index]} ${category.title}` }}</div>
+      <div class="description">📌{{ category.description }}</div>
       <div class="game-button-set">
-        <div class="game-button" v-for="gameNum in 6" :key="gameNum" @click="goGamePage(category, gameNum)">
+        <div class="game-button" v-for="gameNum in category.game_cnt" :key="gameNum" @click="goGamePage(category.title, gameNum)">
           GAME {{ gameNum }}
         </div>
       </div>
@@ -23,22 +23,24 @@
 </template>
 
 <script>
+import { getCategorys } from '@/api/game'
+
 export default {
   data() {
     return {
+      categorys : [],
       indexIcons: ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'],
-      categories: ['flex', 'grid', 'transition', 'animation', 'text', 'selector'],
-      description: [
-        'flex와 관련된 속성들을 익혀보아요.',
-        'grid와 관련된 속성들을 익혀보아요.',
-        'transition와 관련된 속성들을 익혀보아요.',
-        'animation와 관련된 속성들을 익혀보아요.',
-        'CSS로 text를 꾸미는 여러 가지 기법들을 익혀보아요.',
-        '다양한 선택자들을 익혀보아요.'
-      ]
+      categories: ['flex', 'text', 'grid', 'transition', 'animation', 'selector'],
     }
   },
+  mounted() {
+    this.fetchCategory()
+  },
   methods: {
+    async fetchCategory(){
+      let data = await getCategorys()
+      this.categorys = data.data
+    },
     goGamePage(category, gameNum) {
       this.$router.push(`game/${category}/${gameNum}`)
     }

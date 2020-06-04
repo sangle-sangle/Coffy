@@ -23,4 +23,6 @@ public interface ICodeService {
 	
 	int getLikeCounts(LikeCode likecode);
 
+	int isLike(LikeCode likecode);
+
 }

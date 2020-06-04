@@ -15,11 +15,11 @@
         <input type="text" id="search-clan" placeholder="Search Clan Name" v-model="keyword">
         <label for="search-clan" @click="searchClan"><i class="fas fa-search"></i></label>
       </form>
-      <div class="clan-main-header-right">
+      <div class="clan-main-header-right" v-if="this.userInfo['access-Token'].clanid === 0">
         <div class="add-clan-btn" @click="goAddForm"><i class="fas fa-plus"></i> 클랜 생성</div>
       </div> 
     </div>
-    <div class="clan-list">
+    <div class="clan-list" v-if="!loading">
       <div v-for="clan in clanList" :key="clan.id" class="clan-card">
         <div class="clan-header">
           <div v-if="!clan.locked" class="clan-private open"><i class="fas fa-lock-open"></i>공개</div>
@@ -35,7 +35,9 @@
         </div>
       </div>
     </div>
-    <Modal :showModal="showClanRegisterModal">
+    <Pagination :itemCount="this.$store.state.clan.clanData.length" @setNowPage="setNowPage" v-if="!loading"></Pagination>
+    <SpinnerLoading v-else></SpinnerLoading>
+    <Modal v-if="showClanRegisterModal">
       <ClanRegisterModal :clanInfo="clanList[registerClanId - 1]" @closeModal="closeModal"></ClanRegisterModal>
     </Modal>
   </div>
@@ -43,15 +45,18 @@
 
 <script>
 import { mapState } from 'vuex'
+import { fetchAllClans } from '@/api/clan.js'
 import ClanRegisterModal from '@/components/Clan/ClanRegisterModal.vue'
 import Modal from '@/components/common/Modal.vue';
-import { fetchAllClans } from '@/api/clan.js'
-// import { fetchMyInfo } from '@/api/user.js'
+import SpinnerLoading from '@/components/common/SpinnerLoading.vue'
+import Pagination from '@/components/common/Pagination.vue'
 
 export default {
   components: {
     ClanRegisterModal,
-    Modal
+    Modal,
+    SpinnerLoading,
+    Pagination
   },
   data() {
     return {
@@ -59,14 +64,18 @@ export default {
       keyword: '',
       showClanRegisterModal: false,
       registerClanId: null,
+      loading: false,
+      nowPage: 1
     }
   },
   computed: {
     ...mapState({
       mode: state => state.common.mode,
+      userInfo: state => state.user.userInfo
     })
   },
   created() {
+    this.loading = true;
     this.getAllClans();
   },
   mounted() {
@@ -74,8 +83,9 @@ export default {
   },
   methods: {
     async getAllClans() {
-      const clanData = await fetchAllClans()
-      this.clanList = clanData.data
+      const { data } = await fetchAllClans();
+      this.$store.commit('saveClanData', data);
+      this.setNowPage(1);
     },
     searchClan() {
       if (this.keyword) {
@@ -96,6 +106,12 @@ export default {
     },
     closeModal() {
       this.showClanRegisterModal = false;
+    },
+    setNowPage(pageNm) {
+      let allClans = this.$store.state.clan.clanData;
+      this.nowPage = pageNm;
+      this.clanList = allClans.slice(12 * (this.nowPage - 1), 12 * this.nowPage);
+      this.loading = false;
     },
     changeColor(mode) {
       if (mode === 'white') { // 화이트 모드일 때
@@ -130,7 +146,7 @@ export default {
 
 .clan-main-title {
   display: inline-block;
-  font-size: 2em;
+  font-size: calc( 2rem + 0.5vw );
   font-family: 'Noto Sans KR';
   font-weight: 600;
   padding-bottom: 5px;
@@ -139,7 +155,7 @@ export default {
 }
 
 .clan-main-description {
-  font-size: 13.5px;
+  font-size: calc(0.7rem + 0.3vw);
 }
 
 .clan-search {
@@ -155,9 +171,10 @@ export default {
 }
 
 .search-box > input {
-  height: 25px;
+  font-size: calc(0.8rem + 0.3vw);
+  height: calc(1.2rem + 0.3vw);
   width: 100%;
-  padding: 5px;
+  padding: calc(0.3rem + 0.3vw) calc(0.7rem + 0.3vw);
   border: transparent;
   border-radius: 10px;
   background-color: rgb(37, 40, 48);
@@ -165,8 +182,13 @@ export default {
   margin-right: 8px;
 }
 
+.clan-main-header-right{
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 .add-clan-btn {
-  font-size: 15px;
+  font-size: calc(0.7rem + 0.3vw);
   font-family: 'Gothic A1';
   font-weight: 600;
   letter-spacing: -0.5px;
@@ -175,7 +197,7 @@ export default {
   padding: 10px;
   border-radius: 8px;
   background-color: #47cf73;
-  margin-left: 8px;
+  margin-left:8px;
 }
 
 .add-clan-btn:hover {
@@ -208,7 +230,7 @@ export default {
 
 .clan-private {
   display: inline-block;
-  font-size: 15px;
+  font-size: calc(0.3rem + 0.3vw);
   font-weight: 600;
   padding: 6px;
   border-radius: 8px;
@@ -223,7 +245,7 @@ export default {
 }
 
 .clan-name {
-  font-size: 1.5rem;
+  font-size: calc(1.3rem + 0.3vw);
   font-weight: 600;
   font-family: 'Gothic A1';
   padding-bottom: 10px;
@@ -244,7 +266,7 @@ export default {
 
 .clan-footer > .clan-register-btn,
 .clan-footer > .clan-detail-btn {
-  font-size: 14px;
+  font-size: calc(0.5rem + 0.3vw);
   font-family: 'Gothic A1';
   font-weight: 600;
   padding: 6px;
@@ -281,11 +303,7 @@ export default {
 
   .clan-private,
   .clan-master {
-    font-size: 14px;
-  }
-
-  .clan-name {
-    font-size: 17px;
+    font-size: calc(0.3rem + 0.3vw);
   }
 
   .clan-search {
