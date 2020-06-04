@@ -52,7 +52,7 @@ public class CodeController {
 		Map<String, Object> result = new HashMap();
 		LikeCode likecode = new LikeCode();
 		int memberid = 0;
-//		인자로 받은 id : 코드 id 
+		//	인자로 받은 id : 코드 id 
 		if(rs.getAttribute("loginMember")!=null ) {
 			Member member = (Member) rs.getAttribute("loginMember");
 			memberid = member.getId();

@@ -119,8 +119,8 @@ public class ClanController {
 	@ApiOperation(value = "clan 가입", response = BoolResult.class)
 	@RequestMapping(value = "/joinclan", method = RequestMethod.POST)
 	public ResponseEntity<BoolResult> joinClan(@RequestBody AccessClan accessclan) throws Exception {
-		// locked: 1이면 비밀번호 입력하도록, 0이면 바로 가입되게
-		
+		// accessclan에 담은 password가 clanservice에 있는 password와 같은지 판별
+		// locked: 1이던 0이던 같은지만 판별하면 됨
 		BoolResult nr = new BoolResult();
 		nr.setName("joinClan");
 		if (accessclan.getPwd().equals(clanservice.collectPwd(accessclan))) {
@@ -135,6 +135,7 @@ public class ClanController {
 	@ApiOperation(value = "clan 탈퇴", response = List.class)
 	@RequestMapping(value = "/joinclan", method = RequestMethod.DELETE)
 	public ResponseEntity<BoolResult> quitClan(@RequestBody AccessClan accessclan) throws Exception {
+		//	quitClan하면 clanid에 0이 들어감	
 		clanservice.quitClan(accessclan);
 		BoolResult nr = new BoolResult();
 		nr.setName("quitClan");
