@@ -1,8 +1,11 @@
 package com.ssafy.edu.vue.service;
 
+import java.util.List;
+
 import com.ssafy.edu.vue.dto.Game;
 import com.ssafy.edu.vue.dto.GameInfo;
 import com.ssafy.edu.vue.dto.Solved;
+import com.ssafy.edu.vue.dto.SolvedCount;
 
 public interface IGameService {
 
@@ -19,5 +22,7 @@ public interface IGameService {
 	int getSolvedCounts(Solved solved);
 
 	int isSolve(Solved solved);
+
+	List<SolvedCount> getSolvedCounts(int memberid);
 
 }

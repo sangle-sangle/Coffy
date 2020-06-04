@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         resultType="com.ssafy.edu.vue.dto.Clan">
 		select id, name, description, leaderId, locked, password, created_at, clanmark, clanmarkdeletehash,
 		(select user.username from user where clan.leaderId = user.id) mastername,
-		(select count(*) from clanmember where user.clanid=clan.id) clanmembercount,
+		(select count(*) from clanmember where user.clanid=clan.id) clanmembercount
 		from clan
 		order by id	desc
 	</select>

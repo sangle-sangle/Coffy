@@ -60,7 +60,7 @@
         </div>
         <div class="result-tag border-tag">Result</div>
         <div class="result-section border-tag">
-          <ApplyCode class='itembox' :idtag="`frame${codeId}`" :code="codeData" />
+          <ApplyCode class='itembox' :idTag="`frame${codeId}`" :code="codeData" />
         </div>
         <div class="description-tag border-tag">Description</div>
         <div class="description border-tag">{{ codeDetail.description }}</div>

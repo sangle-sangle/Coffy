@@ -58,7 +58,7 @@
         </div>
       </div>
       <div id="applyform" class="rowapply">
-        <ApplyCode class='itembox' :idtag="`frame${editCodeId}`" :code="afterData" :colLayout="colLayout" />
+        <ApplyCode class='itembox' :idTag="`frame${editCodeId}`" :code="afterData" :colLayout="colLayout" />
       </div>
     </div>
   </div>
