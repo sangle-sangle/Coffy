@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <iframe :id="idtag" frameborder="0" class="code-apply" />
+    <iframe :id="idTag" frameborder="0" class="code-apply" />
   </div>
 </template>
 
@@ -9,7 +9,7 @@
     name: 'applycode',
     props: {
       code: Object,
-      idtag: String,
+      idTag: String,
       colLayout: {
         type: Boolean,
         default: false
@@ -33,10 +33,39 @@
     },
     methods: {
       applyCode() {
-        let doc = document.querySelector(`#${this.idtag}`).contentDocument
-        doc.open()
-        doc.write(this.vhtml)
-        doc.close()
+        const getGeneratedPageURL = ({ html, css, js }) => {
+          const getBlobURL = (code, type) => {
+            const blob = new Blob([code], { type })
+            return URL.createObjectURL(blob)
+          }
+
+          const cssURL = getBlobURL(css, 'text/css')
+          const jsURL = getBlobURL(js, 'text/javascript')
+          const source = 
+          `
+            <html>
+              <head>
+                ${css && `<link rel="stylesheet" type="text/css" href="${cssURL}" />`}
+              </head>
+              <body>
+                ${html || ''}
+              </body>
+              ${js && `<script src="${jsURL}"></s`+ `cript>`}
+            </html>
+          `
+
+          return getBlobURL(source, 'text/html')
+        }
+
+        const url = getGeneratedPageURL({
+          html: this.code.htmlText,
+          css: this.code.cssText,
+          js: this.code.jsText
+        })
+
+        const iframe = document.querySelector(`#${this.idTag}`)
+        iframe.src = url
+
       },
       adjustPreviewHeight() {
         this.windowWidth = window.innerWidth
