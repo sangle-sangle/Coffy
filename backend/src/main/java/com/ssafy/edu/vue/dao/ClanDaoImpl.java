@@ -42,7 +42,7 @@ public class ClanDaoImpl {
 	}
 	
 	public void quitClan(AccessClan accessclan) {
-		sqlSession.delete(ns+"quitClan", accessclan);
+		sqlSession.update(ns+"quitClan", accessclan);
 	}
 
 	public int isAccess(AccessClan accessclan) {
