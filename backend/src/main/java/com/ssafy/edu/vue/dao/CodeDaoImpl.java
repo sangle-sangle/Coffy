@@ -52,7 +52,13 @@ public class CodeDaoImpl {
 	public int isLike(LikeCode likecode) {
 		return sqlSession.selectOne(ns+"isLike", likecode);
 	}
-	
-	
+
+	public List<Code> getMyCodes(int memberid) {
+		return sqlSession.selectList(ns+"getMyCodes",memberid);
+	}
+
+	public List<Code> getMyLikes(int memberid) {
+		return sqlSession.selectList(ns+"getMyLikes",memberid);
+	}
 
 }

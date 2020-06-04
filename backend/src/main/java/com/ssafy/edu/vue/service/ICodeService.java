@@ -25,4 +25,8 @@ public interface ICodeService {
 
 	int isLike(LikeCode likecode);
 
+	List<Code> getMyCodes(int memberid);
+
+	List<Code> getMyLikes(int memberid);
+
 }
