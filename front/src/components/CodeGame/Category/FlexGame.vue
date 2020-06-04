@@ -3,13 +3,13 @@
     <Modal v-if="result">
       <div class="modal-wrapper">
         <div class="button-wrapper">
-          <button @click="toggleModal">CLOSE</button>
         </div>
         <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
         <div>
+          <i class="collecticon fab fa-angellist"></i><br>
           참잘했어요
-          <i class="collecticon fab fa-angellist"></i>
         </div>
+          <button v-if="game.id!==2" @click="goNext(game.id)">다음 문제로</button>
       </div>
     </Modal>
     <div>
@@ -21,7 +21,8 @@
           <span class="game-description">{{game.description}}</span>
         </div>
         <div>
-          <span class="game-hint">{{game.hint}}</span>
+          <span v-if="game.id===1" class="game-hint" @click="movetip(1)">설명 다시보기</span>
+          <span v-else class="game-hint" @click="movetip(7)">힌트보러가기</span>
         </div>
       </div>
       <div class="answer-board">
@@ -46,14 +47,18 @@
         </div>
       </div>
     </div>
+    <div v-if="game.id===1">
     <Modal id="tip1" v-if="tips===1">
       <div class="modal-wrapper">
         <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
         <div>
           <div class="tiptext">
-            CSS 조작을 통하여 해당 요소의 Display 에 Flex를 달아주세요            
+            <strong>Flex 를 한번 배워봅시다 !</strong><br><br>
+            Flex 는 크게 Container 와 Item 의 두가지 속성으로 나뉘게 됩니다<br>
+             Container는 Items를 감싸는 부모 요소입니다<br>  
+             이번 Flex 파트에서는 Container 의 속성값을 이용하여 Item 의 배치를 조정하는 방법을 배워보겠습니다 <br>     
           </div>
-          <button @click="nexttip">다음</button>
+          <button @click="movetip(2)">다음</button>
         </div>
       </div>
     </Modal>
@@ -62,12 +67,12 @@
         <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
         <div>
           <div class="tiptext">
-            위의 CSS 조작을 하게 되면 아래에 있는 조그마한 박스가 큰 박스안에 위치하게 됩니다
-            그렇게 만들어보세요
-            쉽지않죠? 
-            하하하
+            Container의 Style을 조작할 수 있는 CSS 화면입니다.<br>
+            기본적으로 display 를 flex 로 조절을 한 후<br>
+            justify-content 요소를 이용하여 위치의 변화를 알아봅시다<br>
           </div>
-          <button @click="nexttip">2다음 팁</button>
+          <button @click="movetip(1)">이전</button>
+          <button @click="movetip(3)">다음</button>
         </div>
       </div>
     </Modal>
@@ -76,9 +81,38 @@
         <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
         <div>
           <div class="tiptext">
-            3번째 팁ㅇ은바로asdfasdfkasdjfhaskdfjasldfkjasdflkjasdflkjasdflkj 
+            CSS중에서 Flex를 이용하여 색이 비슷한 박스에 맞춰서 넣어줘봅시다 <br>
+            힌트를 드리자면
+              {{game.hint}}
           </div>
-          <button @click="nexttip">3다음 팁</button>
+          <button @click="movetip(2)">이전</button>
+          <button @click="movetip(4)">다음</button>
+        </div>
+      </div>
+    </Modal>
+    <Modal id="tip4" v-if="tips===4">
+      <div class="modal-wrapper">
+        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
+        <div>
+          <div class="tiptext">
+              다음 단계부턴 설명이 없이 진행되니 스스로 혼자 성장해 봅시다 유후훗 구글을 잘 이용해보세요 ~ 후훗
+          </div>
+          <button @click="movetip(3)">이전</button>
+          <button @click="movetip(5)">이젠 도움이 필요없어요</button>
+        </div>
+      </div>
+    </Modal>
+  </div>
+    <Modal id="tip7" v-if="tips===7">
+      <div class="modal-wrapper">
+        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
+        <div>
+          <div class="tiptext">
+            CSS중에서 Flex를 이용하여 색이 비슷한 박스에 맞춰서 넣어줘봅시다 <br>
+            힌트를 드리자면
+              {{game.hint}}
+          </div>
+          <button @click="movetip(8)">가뿐하네</button>
         </div>
       </div>
     </Modal>
@@ -104,12 +138,12 @@ export default {
       result: false,
     }
   },
-  created(){
+  mounted(){
     this.getGamedata()
   },
   methods: {
-    nexttip(){
-      this.tips ++
+    movetip(i){
+      this.tips = i
     },
     getGamedata() {
       getGame(1,this.$route.params.id).then(response => {
@@ -136,16 +170,26 @@ export default {
     },
     toggleModal() {
       this.result = !this.result
+    },
+    goNext(id){
+      this.$router.push(`/game/flex/${id+1}/`)
     }
   },
   watch: {
+    '$route'() {
+      window.location.reload()
+   },
     tips() {
-      console.log(this.tips)
       let answerboard = document.querySelector('.answer-board');
       let itembox = document.querySelector('.itembox');
-      let modal = document.querySelector('#slot-modal')
-
-      if (this.tips===2){
+      let modal = document.querySelector('#slot-modal');
+      if (this.tips === 1){
+        answerboard.style['z-index'] = 0
+        itembox.style['position'] = 'sticky'
+        modal.style['transform'] = 'translate(200px,-300px)'
+      } else if (this.tips===2){
+        itembox.style['position'] = 'sticky'
+        itembox.style['z-index'] = 0
         answerboard.style['position'] = 'sticky'
         answerboard.style['z-index'] = 5
         modal.style['transform'] = 'translate(0px,0px)'
@@ -153,6 +197,8 @@ export default {
         answerboard.style['z-index'] = 0
         itembox.style['position'] = 'sticky'
         itembox.style['z-index'] = 5
+        modal.style['transform'] = 'translate(200px,-300px)'
+      } else if (this.tips ===4 ) {
         modal.style['transform'] = 'translate(200px,-300px)'
       }
     },
@@ -202,7 +248,7 @@ export default {
 <style scoped>
   .answer-board {
     padding: 1rem;
-    width: 30%;
+    width: 50%;
     background-color: #eee;
     margin-bottom: 2rem;
     color: #333;
@@ -218,7 +264,6 @@ export default {
     height: 700px;
     background-color: #eee;
   }
-
   .modal-select{
     opacity: 0;
   }
@@ -239,7 +284,9 @@ export default {
   .game-hint {
     font-size: 1rem;
   }
-
+  .game-hint:hover{
+    cursor: pointer;
+  }
   #user-ground {
     width: 700px;
     height: 700px;
