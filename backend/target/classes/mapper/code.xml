@@ -5,23 +5,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="ssafy.code">
 	<select id="getCodes" parameterType="java.lang.Integer"
 		resultType="com.ssafy.edu.vue.dto.Code">
-		select id, title, description, html, css, javascript, writerid, created_at 
+		select id, title, description, html, css, javascript,
+		writerid, created_at,
+		(select count(*) from likecode where
+		codeid=code.id) likes,
+		(select user.username from user where
+		code.writerid = user.id) writername
 		from code
-		order by id	desc
+		order by id desc
 	</select>
 
 	<select id="getCode" parameterType="java.lang.Integer"
 		resultType="com.ssafy.edu.vue.dto.Code">
-		select id, title, description, html, css, javascript, writerid, created_at
+		select code.id, title, description, html, css, javascript,
+		writerid, created_at,
+		(select count(*) from likecode where
+		codeid=code.id) likes,
+		(select user.username from user where
+		code.writerid = user.id) writername
 		from code
 		where id=#{id}
 	</select>
 
 	<insert id="addCode" parameterType="com.ssafy.edu.vue.dto.Code">
-		insert into code(title, description, html, css, javascript, writerid, created_at)
-		values(#{title}, #{description}, #{html}, #{css}, #{javascript}, #{writerid}, now())
+		insert into code(title,
+		description, html, css, javascript, writerid, created_at)
+		values(#{title}, #{description}, #{html}, #{css}, #{javascript},
+		#{writerid}, now())
 	</insert>
-	
+
 	<update id="updateCode"
 		parameterType="com.ssafy.edu.vue.dto.Code">
 		update code set
@@ -36,25 +48,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 
 	<delete id="deleteCode" parameterType="java.lang.Integer">
-		delete from code where id=#{id}
+		delete from code where
+		id=#{id}
 	</delete>
-	
-	<insert id="addLikeCode" parameterType="com.ssafy.edu.vue.dto.LikeCode">
+
+	<insert id="addLikeCode"
+		parameterType="com.ssafy.edu.vue.dto.LikeCode">
 		insert into
 		likecode(userid, codeid)
-		values(#{userid}, #{codeid})
+		values(#{userid},
+		#{codeid})
 	</insert>
-	
-	<delete id="deleteLikeCode" parameterType="com.ssafy.edu.vue.dto.LikeCode">
+
+	<delete id="deleteLikeCode"
+		parameterType="com.ssafy.edu.vue.dto.LikeCode">
 		delete
 		from likecode
-		where userid=#{userid} and codeid=#{codeid}		
+		where userid=#{userid} and
+		codeid=#{codeid}
 	</delete>
-	
-	<select id="getLikeCounts" parameterType="com.ssafy.edu.vue.dto.LikeCode" resultType="java.lang.Integer">
+
+	<select id="getLikeCounts"
+		parameterType="com.ssafy.edu.vue.dto.LikeCode"
+		resultType="java.lang.Integer">
 		select count(*)
 		from likecode
-		where codeid=#{codeid}		
+		where codeid=#{codeid}
 	</select>
-		
+	
 </mapper>

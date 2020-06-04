@@ -37,7 +37,7 @@
     </div>
     <Pagination :itemCount="this.$store.state.clan.clanData.length" @setNowPage="setNowPage" v-if="!loading"></Pagination>
     <SpinnerLoading v-else></SpinnerLoading>
-    <Modal :showModal="showClanRegisterModal">
+    <Modal v-if="showClanRegisterModal">
       <ClanRegisterModal :clanInfo="clanList[registerClanId - 1]" @closeModal="closeModal"></ClanRegisterModal>
     </Modal>
   </div>

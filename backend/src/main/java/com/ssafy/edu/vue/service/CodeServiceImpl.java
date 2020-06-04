@@ -62,4 +62,8 @@ public class CodeServiceImpl implements ICodeService {
 		return codedao.getLikeCounts(likecode);
 	}
 
+	@Override
+	public int isLike(LikeCode likecode) {
+		return codedao.isLike(likecode);
+	}
 }

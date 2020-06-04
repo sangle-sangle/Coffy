@@ -79,7 +79,7 @@ export default {
       userInfo: state => state.user.userInfo
     }),
     clanPageUrl() {
-      return Object.keys(this.userInfo).length && this.userInfo['access-Token'].clanid >= 1 ? `/clan/detail/${this.userInfo.clanid}` : '/clan'
+      return Object.keys(this.userInfo).length && this.userInfo['access-Token'].clanid >= 1 ? `/clan/detail/${this.userInfo['access-Token'].clanid}` : '/clan'
     }
   },
   data() {

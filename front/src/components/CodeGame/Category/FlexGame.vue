@@ -1,16 +1,15 @@
 <template>
   <div>
-    <Modal :showModal="result">
+    <Modal v-if="result">
       <div class="modal-wrapper">
         <div class="button-wrapper">
-          <button @click="toggleModal">CLOSE</button>
         </div>
         <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
         <div>
+          <i class="collecticon fab fa-angellist"></i><br>
           참잘했어요
-          <i v-if="result" class="collecticon fab fa-angellist"></i>
-          <i class="far fa-next" />
         </div>
+          <button v-if="game.id!==2" @click="goNext(game.id)">다음 문제로</button>
       </div>
     </Modal>
     <div>
@@ -22,7 +21,8 @@
           <span class="game-description">{{game.description}}</span>
         </div>
         <div>
-          <span class="game-hint">{{game.hint}}</span>
+          <span v-if="game.id===1" class="game-hint" @click="movetip(1)">설명 다시보기</span>
+          <span v-else class="game-hint" @click="movetip(7)">힌트보러가기</span>
         </div>
       </div>
       <div class="answer-board">
@@ -47,12 +47,81 @@
         </div>
       </div>
     </div>
+    <div v-if="game.id===1">
+    <Modal id="tip1" v-if="tips===1">
+      <div class="modal-wrapper">
+        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
+        <div>
+          <div class="tiptext">
+            <strong>Flex 를 한번 배워봅시다 !</strong><br><br>
+            Flex 는 크게 Container 와 Item 의 두가지 속성으로 나뉘게 됩니다<br>
+             Container는 Items를 감싸는 부모 요소입니다<br>  
+             이번 Flex 파트에서는 Container 의 속성값을 이용하여 Item 의 배치를 조정하는 방법을 배워보겠습니다 <br>     
+          </div>
+          <button @click="movetip(2)">다음</button>
+        </div>
+      </div>
+    </Modal>
+    <Modal id="tip2" v-if="tips===2">
+      <div class="modal-wrapper">
+        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
+        <div>
+          <div class="tiptext">
+            Container의 Style을 조작할 수 있는 CSS 화면입니다.<br>
+            기본적으로 display 를 flex 로 조절을 한 후<br>
+            justify-content 요소를 이용하여 위치의 변화를 알아봅시다<br>
+          </div>
+          <button @click="movetip(1)">이전</button>
+          <button @click="movetip(3)">다음</button>
+        </div>
+      </div>
+    </Modal>
+    <Modal id="tip3" v-if="tips===3">
+      <div class="modal-wrapper">
+        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
+        <div>
+          <div class="tiptext">
+            CSS중에서 Flex를 이용하여 색이 비슷한 박스에 맞춰서 넣어줘봅시다 <br>
+            힌트를 드리자면
+              {{game.hint}}
+          </div>
+          <button @click="movetip(2)">이전</button>
+          <button @click="movetip(4)">다음</button>
+        </div>
+      </div>
+    </Modal>
+    <Modal id="tip4" v-if="tips===4">
+      <div class="modal-wrapper">
+        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
+        <div>
+          <div class="tiptext">
+              다음 단계부턴 설명이 없이 진행되니 스스로 혼자 성장해 봅시다 유후훗 구글을 잘 이용해보세요 ~ 후훗
+          </div>
+          <button @click="movetip(3)">이전</button>
+          <button @click="movetip(5)">이젠 도움이 필요없어요</button>
+        </div>
+      </div>
+    </Modal>
+  </div>
+    <Modal id="tip7" v-if="tips===7">
+      <div class="modal-wrapper">
+        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
+        <div>
+          <div class="tiptext">
+            CSS중에서 Flex를 이용하여 색이 비슷한 박스에 맞춰서 넣어줘봅시다 <br>
+            힌트를 드리자면
+              {{game.hint}}
+          </div>
+          <button @click="movetip(8)">가뿐하네</button>
+        </div>
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script>
 import Modal from '@/components/common/Modal.vue';
-import { getGame } from '@/api/game'
+import { getGame, solvedProblem } from '@/api/game'
 
 export default {
   components: {
@@ -60,81 +129,24 @@ export default {
   },
   data() {
     return {
-      game: {
-        category : 1,
-        title : '',
-        base : {},
-        problem : {},
-        description : '',
-        hint: '',
-        item_cnt : 1,
-      },
-        // id: 1,
-        // category: 1,
-        // title: 'justify-content',
-        // base: {
-        //   'display': 'flex',
-        //   'justify-content': 'space-between'
-        // },
-        // problem: {
-        //   '': 'flex',
-        //   'justify-content': ''
-        // },
-        // description: "justify-content 의 종류에 대하여 알아보아요 ~",
-        // hint: "justify-content 에는 center, flex-end, space-around, space-between, space-even 등이 있어요",
-        // item_cnt: 2,
-        // },
-        // {
-        //     id : 2,
-        //     category : 1,
-        //     title: 'flex-direction',
-        //     base: {"display": "flex", "flex-direction": "column-reverse"},
-        //     problem: {"": "flex", "flex-direction": ""},
-        //     description: "flex-direction 사용법을 익혀보아요",
-        //     hint: "'flex-direction'은 가로 방향으로 배치하는 'row', 세로 방향으로 배치하는 'column'이 있고 이를 거꾸로 배치하고 싶으면 '-reverse'를 붙이면 돼요",
-        //     item_cnt : 2,
-        // },
-        // {
-        //     id : 3,
-        //     category : 1,
-        //     title: 'flex 속성을 이용한 정가운데 배치',
-        //     base: {"display": "flex", "justify-content": "center", "align-items": "center"},
-        //     problem: {"": "flex", "justify-content": "", "align-items": ""},
-        //     description: 'flex 속성을 이용해서 정가운데에 요소를 배치하는 방법을 익혀보아요',
-        //     hint: "'align-items' 속성은 수직축 방향으로 아이템들을 정렬하는 속성이에요. 'justify-content'를 기준으로 수직 방향이라고 생각하면 돼요.",
-        //     item_cnt : 3,
-        // },
-        // {
-        //     id : 4,
-        //     category : 1,
-        //     title: 'flex 속성 정리',
-        //     base: {'display': 'flex', 'flex-direction': 'row-reverse', 'justify-content': 'space-between', 'align-items': 'flex-end'},
-        //     problem: {'display': '', '': 'row-reverse', 'justify-content': 'space-between', 'align-items': ''},
-        //     description: 'flex 속성을 이용해서 요소들을 맨 아래에 거꾸로 배치해보아요',
-        //     hint: "No.1 ~ No.3 까지 익혔던 속성들을 이용하면 충분히 해결할 수 있어요~",
-        //     item_cnt : 3,
-        // },
-        // {
-        //     id : 5,
-        //     category : 1,   
-        //     title: 'flex 속성 정리',
-        //     base: {'display': 'flex', 'flex-direction': 'column', 'justify-content': 'space-between', 'align-items': 'center'},
-        //     problem: {'display': '', 'flex-direction': '', 'justify-content': '', 'align-items': ''},
-        //     description: 'flex 속성을 이용해서 요소들을 정가운데에 세로로 배치해보아요',
-        //     hint: "flex-direction 값에 따라서 justify-content와 align-items의 정렬 방향이 달라짐을 잊지마세요!",
-        //     item_cnt : 3,
+      tips : 1,
+      solved : false,
+      game: {},
       basecolor: ['basered', 'basegreen', 'baseblue'],
       color: ['red', 'green', 'blue'],
       answer: [],
       result: false,
     }
   },
-  created(){
+  mounted(){
     this.getGamedata()
   },
   methods: {
+    movetip(i){
+      this.tips = i
+    },
     getGamedata() {
-      getGame(this.$route.params.id).then(response => {
+      getGame(1,this.$route.params.id).then(response => {
         this.game = response.data
         this.game.base = JSON.parse(response.data.base.split(`'`).join(`"`))
         this.game.problem = JSON.parse(response.data.problem.split(`'`).join(`"`))
@@ -158,9 +170,38 @@ export default {
     },
     toggleModal() {
       this.result = !this.result
+    },
+    goNext(id){
+      this.$router.push(`/game/flex/${id+1}/`)
     }
   },
   watch: {
+    '$route'() {
+      window.location.reload()
+   },
+    tips() {
+      let answerboard = document.querySelector('.answer-board');
+      let itembox = document.querySelector('.itembox');
+      let modal = document.querySelector('#slot-modal');
+      if (this.tips === 1){
+        answerboard.style['z-index'] = 0
+        itembox.style['position'] = 'sticky'
+        modal.style['transform'] = 'translate(200px,-300px)'
+      } else if (this.tips===2){
+        itembox.style['position'] = 'sticky'
+        itembox.style['z-index'] = 0
+        answerboard.style['position'] = 'sticky'
+        answerboard.style['z-index'] = 5
+        modal.style['transform'] = 'translate(0px,0px)'
+      } else if (this.tips === 3){
+        answerboard.style['z-index'] = 0
+        itembox.style['position'] = 'sticky'
+        itembox.style['z-index'] = 5
+        modal.style['transform'] = 'translate(200px,-300px)'
+      } else if (this.tips ===4 ) {
+        modal.style['transform'] = 'translate(200px,-300px)'
+      }
+    },
     answer() {
       let idx = 0;
       let result = true;
@@ -186,6 +227,16 @@ export default {
       }
       if (result) {
         this.result = true
+          if (!(this.solved)) {
+            let data = {
+              category_id:1,
+              game_id:this.game.id,
+            }
+            solvedProblem(data).then(response=> {
+              console.log(response)
+            })
+            this.solved = true
+          }
       } else {
         this.result = false
       }
@@ -197,7 +248,7 @@ export default {
 <style scoped>
   .answer-board {
     padding: 1rem;
-    width: 30%;
+    width: 50%;
     background-color: #eee;
     margin-bottom: 2rem;
     color: #333;
@@ -213,7 +264,9 @@ export default {
     height: 700px;
     background-color: #eee;
   }
-
+  .modal-select{
+    opacity: 0;
+  }
   #base-ground {
     width: 700px;
     height: 700px;
@@ -231,7 +284,9 @@ export default {
   .game-hint {
     font-size: 1rem;
   }
-
+  .game-hint:hover{
+    cursor: pointer;
+  }
   #user-ground {
     width: 700px;
     height: 700px;

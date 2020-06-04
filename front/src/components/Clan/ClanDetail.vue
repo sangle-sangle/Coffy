@@ -14,8 +14,8 @@
           <div class="clan-master">Master : {{ clanInfo.leaderId }}</div>
           <div class="clan-btn-group">
             <div class="clan-master" @click="toggleMasterSection" v-if="this.userInfo['access-Token'].id === clanInfo.leaderId"><i class="fas fa-tools"></i> 관리자 모드</div>
-            <div class="clan-register" @click="toggleClanRegisterModal"><i class="fas fa-plus"></i> 클랜 가입</div>
-            <div class="clan-sign-out" @click="toggleClanSignOutModal"><i class="fas fa-minus"></i> 클랜 탈퇴</div>
+            <div class="clan-register" @click="toggleClanRegisterModal" v-if="this.userInfo['access-Token'].id !== clanInfo.leaderId"><i class="fas fa-plus"></i> 클랜 가입</div>
+            <div class="clan-sign-out" @click="toggleClanSignOutModal" v-if="this.userInfo['access-Token'].id !== clanInfo.leaderId"><i class="fas fa-minus"></i> 클랜 탈퇴</div>
           </div>
         </div>
       </div>
@@ -47,7 +47,7 @@
         {{ clanInfo.description !== '' ? clanInfo.description : '내용 없음' }}
       </div>
     </div>
-    <Modal :showModal="showModal">
+    <Modal v-if="showModal">
       <ClanRegisterModal v-if="showClanRegisterModal" :clanInfo="clanInfo" @closeModal="toggleClanRegisterModal"></ClanRegisterModal>
       <ClanSignOutModal v-if="showClanSignOutModal" :clanInfo="clanInfo" @closeModal="toggleClanSignOutModal"></ClanSignOutModal>
       <ClanDeleteModal v-if="showClanDeleteModal" :clanInfo="clanInfo" @closeModal="toggleClanDeleteModal"></ClanDeleteModal>

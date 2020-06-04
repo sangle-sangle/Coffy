@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.edu.vue.dao.ClanDaoImpl;
+import com.ssafy.edu.vue.dto.AccessClan;
 import com.ssafy.edu.vue.dto.Clan;
 
 @Service
@@ -45,4 +46,33 @@ public class ClanServiceImpl implements IClanService {
 		clandao.updateClan(clan);
 	}
 
+	@Override
+	@Transactional
+	public void joinClan(AccessClan accessclan) {
+		clandao.joinClan(accessclan);
+	}
+	
+	@Override
+	@Transactional
+	public void quitClan(AccessClan accessclan) {
+		clandao.quitClan(accessclan);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public int isAccess(AccessClan accessclan) {
+		return clandao.isAccess(accessclan);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public int isLock(int clan_id) {
+		return clandao.isLock(clan_id);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public String collectPwd(AccessClan accessclan) {
+		return clandao.collectPwd(accessclan);
+	}
 }

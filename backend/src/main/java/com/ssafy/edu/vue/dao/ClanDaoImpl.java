@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.ssafy.edu.vue.dto.AccessClan;
 import com.ssafy.edu.vue.dto.Clan;
 
 @Repository
@@ -34,6 +35,26 @@ public class ClanDaoImpl {
 
 	public void updateClan(Clan clan) {
 		sqlSession.delete(ns+"updateClan", clan);
+	}
+	
+	public void joinClan(AccessClan accessclan) {
+		sqlSession.insert(ns+"joinClan", accessclan);
+	}
+	
+	public void quitClan(AccessClan accessclan) {
+		sqlSession.delete(ns+"quitClan", accessclan);
+	}
+
+	public int isAccess(AccessClan accessclan) {
+		return sqlSession.selectOne(ns+"isAccess", accessclan);
+	}
+
+	public int isLock(int clan_id) {
+		return sqlSession.selectOne(ns+"isLock",clan_id);
+	}
+
+	public String collectPwd(AccessClan accessclan) {
+		return sqlSession.selectOne(ns+"collectPwd",accessclan);
 	}
 
 }
