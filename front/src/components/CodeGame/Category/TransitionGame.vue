@@ -9,7 +9,8 @@
           <i v-if="result" class="collecticon fab fa-angellist"></i>
           참잘했어요
         </div>
-        <button v-if="game.id!==5" @click="goNext(game.id)">다음 문제로</button>
+        <button v-if="game.id!==2" @click="goNext(game.id)">다음 문제로</button>
+        <button @click="toggleModal">닫기</button>
         
       </div>
     </Modal>
