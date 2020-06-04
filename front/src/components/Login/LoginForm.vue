@@ -55,7 +55,8 @@ export default {
   },
   computed: {
     ...mapState({
-      mode: state => state.common.mode
+      mode: state => state.common.mode,
+      nextPageUrl: state => state.common.goNextPage
     })
   },
   mounted() {
@@ -80,7 +81,7 @@ export default {
           return
         }
         this.initForm()
-        this.$router.push('/')
+        this.$router.push(this.nextPageUrl)
       } catch (error) {
         if(error.status === 500) {
           alert('등록되지 않은 아이디입니다.')

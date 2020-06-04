@@ -21,6 +21,9 @@ export default {
     })
   },
   mounted() {
+    if (!this.$route.path.split('/').includes('game')) {
+      document.querySelector('#slot-modal').style.transform = 'translate(0, 0)'
+    }
     this.changeColor(this.mode);
   },
   methods: {
