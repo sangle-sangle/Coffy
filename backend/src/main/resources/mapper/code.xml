@@ -76,4 +76,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where codeid=#{codeid}
 	</select>
 	
+	<select id="isLike" parameterType="com.ssafy.edu.vue.dto.LikeCode" resultType="java.lang.Integer">
+		select count(*) from likecode where codeid=#{codeid} and userid=#{userid}
+	</select>
+	
+	<select id="getMyCodes" parameterType="java.lang.Integer"
+		resultType="com.ssafy.edu.vue.dto.Code">
+		select id, title, description, html, css, javascript,
+		writerid, created_at,
+		(select count(*) from likecode where
+		codeid=code.id) likes,
+		(select user.username from user where
+		code.writerid = user.id) writername
+		from code
+		where writerid = #{memberid}
+		order by id desc
+	</select>
+	
+	<select id="getMyLikes" parameterType="java.lang.Integer"
+		resultType="com.ssafy.edu.vue.dto.Code">
+		select id, title, description, html, css, javascript,
+		writerid, created_at,
+		(select count(*) from likecode where
+		codeid=code.id) likes,
+		(select user.username from user where
+		code.writerid = user.id) writername
+		from code
+		where id in (select codeid from likecode where userid=#{memberid})
+		order by id desc
+	</select>
 </mapper>

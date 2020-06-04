@@ -56,22 +56,15 @@ public class CodeController {
 		if(rs.getAttribute("loginMember")!=null ) {
 			Member member = (Member) rs.getAttribute("loginMember");
 			memberid = member.getId();
+			likecode.setCodeid(id);
 			likecode.setUserid(memberid);
+			int flag = codeservice.isLike(likecode);
+			result.put("flag", flag);
 		}
-		
-		likecode.setCodeid(id);
 		
 		Code code = codeservice.getCode(id);
 		result.put("code", code);
-		
-		//	좋아요 눌렀는지 안눌렀는지 확인 flag(유저 아이디가 들어감)
-		int flag = 0;
-		if(memberid!=0) {
-			likecode.setUserid(memberid);
-			flag=codeservice.isLike(likecode);	
-		}
-		result.put("flag", flag);
-		
+
 		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 	}
 	
@@ -109,10 +102,18 @@ public class CodeController {
 	}
 	
 	@ApiOperation(value = "Code Like 추가 (like count up)", response = List.class)
-	@RequestMapping(value = "/likecode", method = RequestMethod.POST)
-	public ResponseEntity<BoolResult> addLikeCode(@RequestBody LikeCode likecode) throws Exception {
+	@RequestMapping(value = "/likecode/{id}", method = RequestMethod.POST)
+	public ResponseEntity<BoolResult> addLikeCode(@PathVariable int id, HttpServletRequest rs) throws Exception {
 		logger.info("1----------------addLikeCode------------------" + new Date());
-		codeservice.addLikeCode(likecode);
+		LikeCode likecode = new LikeCode();
+		int memberid = 0;
+		if(rs.getAttribute("loginMember")!=null ) {
+			Member member = (Member) rs.getAttribute("loginMember");
+			memberid = member.getId();
+			likecode.setCodeid(id);
+			likecode.setUserid(memberid);
+			codeservice.addLikeCode(likecode);
+		}
 		BoolResult nr = new BoolResult();
 		nr.setName("addLikeCode");
 		nr.setState("succ");
@@ -120,10 +121,18 @@ public class CodeController {
 	}
 	
 	@ApiOperation(value = "code Like 삭제 (like count down)", response = List.class)
-	@RequestMapping(value = "/likecode", method = RequestMethod.DELETE)
-	public ResponseEntity<BoolResult> deleteLikeCode(@RequestBody LikeCode likecode) throws Exception {
+	@RequestMapping(value = "/likecode/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<BoolResult> deleteLikeCode(@PathVariable int id, HttpServletRequest rs) throws Exception {
 		logger.info("1-----------deleteLikeCode------------" + new Date());
-		codeservice.deleteLikeCode(likecode);
+		LikeCode likecode = new LikeCode();
+		int memberid = 0;
+		if(rs.getAttribute("loginMember")!=null ) {
+			Member member = (Member) rs.getAttribute("loginMember");
+			memberid = member.getId();
+			likecode.setCodeid(id);
+			likecode.setUserid(memberid);
+			codeservice.deleteLikeCode(likecode);
+		}
 		BoolResult nr = new BoolResult();
 		nr.setName("deleteLikeCode");
 		nr.setState("succ");
@@ -146,4 +155,29 @@ public class CodeController {
 		return new ResponseEntity<Integer>(result, HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "내가 작성한 code 전체 보기", response = List.class)
+	@RequestMapping(value = "/mycodes", method = RequestMethod.GET)
+	public ResponseEntity<List<Code>> getMyCodes(HttpServletRequest rs) throws Exception {
+		logger.info("1-------------getMyCodes-----------------------------" + new Date());
+		int memberid = 0;
+		if(rs.getAttribute("loginMember")!=null ) {
+			Member member = (Member) rs.getAttribute("loginMember");
+			memberid = member.getId();
+		}
+		List<Code> codes = codeservice.getMyCodes(memberid);
+		return new ResponseEntity<List<Code>>(codes, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "내가 좋아요 누른 code 전체 보기", response = List.class)
+	@RequestMapping(value = "/mylikes", method = RequestMethod.GET)
+	public ResponseEntity<List<Code>> getMyLikes(HttpServletRequest rs) throws Exception {
+		logger.info("1-------------getMyLikes-----------------------------" + new Date());
+		int memberid = 0;
+		if(rs.getAttribute("loginMember")!=null ) {
+			Member member = (Member) rs.getAttribute("loginMember");
+			memberid = member.getId();
+		}
+		List<Code> codes = codeservice.getMyLikes(memberid);
+		return new ResponseEntity<List<Code>>(codes, HttpStatus.OK);
+	}
 }
