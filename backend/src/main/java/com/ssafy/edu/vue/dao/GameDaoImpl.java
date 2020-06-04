@@ -1,5 +1,7 @@
 package com.ssafy.edu.vue.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.ssafy.edu.vue.dto.Game;
 import com.ssafy.edu.vue.dto.GameInfo;
 import com.ssafy.edu.vue.dto.Solved;
+import com.ssafy.edu.vue.dto.SolvedCount;
 
 @Repository
 public class GameDaoImpl {
@@ -42,6 +45,10 @@ public class GameDaoImpl {
 
 	public int isSolve(Solved solved) {
 		return sqlSession.selectOne(ns+"isSolve",solved);
+	}
+
+	public List<SolvedCount> getSolvedCounts(int memberid) {
+		return sqlSession.selectList(ns+"getSolvedCounts",memberid);
 	}
 
 }
