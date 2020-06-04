@@ -14,6 +14,7 @@ public class Clan {
 	private String clanmark;
 	private String clanmarkdeletehash;
 	private String created_at;
+	private String mastername;
 	
 	public Clan() {
 		super();
@@ -21,7 +22,7 @@ public class Clan {
 	}
 
 		
-	public Clan(int id, String name, String description, int leaderId, int locked, String password, String clanmark, String clanmarkdeletehash, String created_at) {
+	public Clan(int id, String name, String description, int leaderId, int locked, String password, String clanmark, String clanmarkdeletehash, String created_at, String mastername) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -33,15 +34,17 @@ public class Clan {
 		this.clanmarkdeletehash = clanmarkdeletehash;
 		this.created_at = created_at;
 		this.clanmark = clanmark;
+		this.mastername = mastername;
 	}
 
 
 	@Override
 	public String toString() {
 		return "Clan [id=" + id + ", name=" + name + ", description=" + description + ", leaderId=" + leaderId
-				+ ", locked=" + locked + ", password=" + password + ", clanmark=" + clanmark
-				+ ", clanmarkdeletehash=" + clanmarkdeletehash + ", created_at=" + created_at + "]";
+				+ ", locked=" + locked + ", password=" + password + ", clanmark=" + clanmark + ", clanmarkdeletehash="
+				+ clanmarkdeletehash + ", created_at=" + created_at + ", mastername=" + mastername + "]";
 	}
+
 
 	public int getId() {
 		return id;
@@ -119,5 +122,25 @@ public class Clan {
 	public void setClanmark(String clanmark) {
 		this.clanmark = clanmark;
 	}
-		
+
+
+	public String getMastername() {
+		return mastername;
+	}
+
+
+	public void setMastername(String mastername) {
+		this.mastername = mastername;
+	}
+
+
+	public String getClanmarkdeletehash() {
+		return clanmarkdeletehash;
+	}
+
+
+	public void setClanmarkdeletehash(String clanmarkdeletehash) {
+		this.clanmarkdeletehash = clanmarkdeletehash;
+	}
+
 }

@@ -11,14 +11,17 @@ public class Code implements Serializable {
 	private String javascript;
 	private int writerid;
 	private String created_at;
+	private int likes;
+	private String writername;
 	
+
 	public Code() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
 	public Code(int id, String title, String description, String html, String css, String javascript, int writerid,
-			String created_at) {
+			String created_at, int likes, String writername) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -28,12 +31,15 @@ public class Code implements Serializable {
 		this.javascript = javascript;
 		this.writerid = writerid;
 		this.created_at = created_at;
+		this.likes = likes;
+		this.writername = writername;
 	}
 	
 	@Override
 	public String toString() {
 		return "Code [id=" + id + ", title=" + title + ", description=" + description + ", html=" + html + ", css="
-				+ css + ", javascript=" + javascript + ", writerid=" + writerid + ", created_at=" + created_at + "]";
+				+ css + ", javascript=" + javascript + ", writerid=" + writerid + ", created_at=" + created_at + ","
+						+ " likes=" + likes + ", writername=" + writername + "]";
 	}
 
 	public int getId() {
@@ -100,5 +106,20 @@ public class Code implements Serializable {
 		this.created_at = created_at;
 	}
 	
+	public int getLikes() {
+		return likes;
+	}
+
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+
+	public String getWritername() {
+		return writername;
+	}
+
+	public void setWritername(String writername) {
+		this.writername = writername;
+	}
 	
 }
