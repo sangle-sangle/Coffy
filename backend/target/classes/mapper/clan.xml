@@ -5,21 +5,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="ssafy.clan">
 	<select id="getClans" parameterType="java.lang.Integer"
         resultType="com.ssafy.edu.vue.dto.Clan">
-		select id, name, description, leaderId, locked, password, created_at, clanmark, clanmarkdeletehash
+		select id, name, description, leaderId, locked, password, created_at, clanmark, clanmarkdeletehash,
+		(select user.username from user where clan.leaderId = user.id) mastername,
+		(select count(*) from clanmember where user.clanid=clan.id) clanmembercount,
 		from clan
 		order by id	desc
 	</select>
 
 	<select id="getClan" parameterType="java.lang.Integer"
 		resultType="com.ssafy.edu.vue.dto.Clan">
-		select id, name, description, leaderId, locked, password, created_at, clanmark, clanmarkdeletehash
+		select id, name, description, leaderId, locked, password, created_at, clanmark, clanmarkdeletehash,
+		(select user.username from user where clan.leaderId = user.id) mastername
 		from clan
 		where id=#{id}
 	</select>
 
 	<insert id="addClan" parameterType="com.ssafy.edu.vue.dto.Clan">
 		insert into clan(name, description, leaderId, locked, password, created_at, clanmark, clanmarkdeletehash)
-		values(#{name}, #{description}, #{leaderId}, #{locked}, #{password}, now(), #{clanmark} #{clanmarkdeletehash})
+		values(#{name}, #{description}, #{leaderId}, #{locked}, #{password}, now(), #{clanmark}, #{clanmarkdeletehash})
 	</insert>
 	
 	<update id="updateClan"
@@ -38,5 +41,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="deleteClan" parameterType="java.lang.Integer">
 		delete from clan where id=#{id}
 	</delete>
+	
+	<update id="joinClan" parameterType="com.ssafy.edu.vue.dto.AccessClan">
+		update user
+		set clanid = #{clan_id}
+		where id = #{user_id}
+	</update>
+	
+	<update id="quitClan" parameterType="com.ssafy.edu.vue.dto.AccessClan">
+		update user
+		set clanid = 0
+		where id=#{user_id}
+	</update>
 
+	<select id="isAccess" parameterType="com.ssafy.edu.vue.dto.AccessClan" resultType="java.lang.Integer">
+		select clanid from user where id=#{user_id}
+	</select>
+	
+	<select id="isLock" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		select locked from user where clanid=#{clan_id}
+	</select>
+	
+	<select id="collectPwd" parameterType="com.ssafy.edu.vue.dto.AccessClan" resultType="java.lang.String">
+		select password from clan where id = #{clan_id}
+	</select>
 </mapper>
