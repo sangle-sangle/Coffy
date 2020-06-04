@@ -14,7 +14,7 @@
       <div class="game-category">{{ `${indexIcons[index]} ${category.title}` }}</div>
       <div class="description">📌{{ category.description }}</div>
       <div class="game-button-set">
-        <div class="game-button" v-for="gameNum in category.game_cnt" :key="gameNum" @click="goGamePage(category.title, gameNum)">
+        <div :class="{solved: gameNum<=$store.state.user.solved[index] }"  class="game-button" v-for="gameNum in category.game_cnt" :key="gameNum" @click="goGamePage(category.title, gameNum)">
           GAME {{ gameNum }}
         </div>
       </div>
@@ -28,6 +28,7 @@ import { getCategorys } from '@/api/game'
 export default {
   data() {
     return {
+      solved : [],
       categorys : [],
       indexIcons: ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'],
       categories: ['flex', 'text', 'grid', 'transition', 'animation', 'selector'],
@@ -82,6 +83,9 @@ export default {
   margin-bottom: 8px;
 }
 
+.solved{
+  background: linear-gradient(90deg,#9ff797,#a8ff8e 90%)!important;
+}
 .game-button-set {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
