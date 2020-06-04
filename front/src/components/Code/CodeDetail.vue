@@ -92,7 +92,7 @@
           </div>
         </div>
       </div>
-      <Modal :showModal="showDeleteCodeModal">
+      <Modal v-if="showDeleteCodeModal">
         <div class="modal-header">
           <div class="modal-title">코드 삭제</div>
           <div class="modal-close-btn" @click="toggleDeleteModal">CLOSE</div>

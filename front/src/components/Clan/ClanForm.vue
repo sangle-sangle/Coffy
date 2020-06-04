@@ -68,7 +68,7 @@
         클랜 {{ clanFormName }}
       </div>
     </div>
-    <Modal :showModal="completeModal">
+    <Modal v-if="completeModal">
       <div class="modal-header">Complete!</div>
       <div class="complete-message">클랜 {{ clanFormName }}이 완료되었습니다.</div>
       <div class="back-btn" @click="closeModal">CLOSE</div>
