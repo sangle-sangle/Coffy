@@ -19,7 +19,7 @@
         <div class="code-title">{{ code.title }}</div>
         <div class="code-preview">
           <div @click="goCodeDetail(code.id)" class="go-code-page"></div>
-          <ApplyCode class='itembox' :idtag="`frame${code.id}`" :code="codeData(code.html, code.css, code.javascript)" />
+          <ApplyCode class='itembox' :idTag="`frame${code.id}`" :code="codeData(code.html, code.css, code.javascript)" />
         </div>
         <div class="info-wrapper">
           <div class="code-info">
