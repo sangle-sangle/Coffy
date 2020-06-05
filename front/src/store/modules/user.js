@@ -9,7 +9,7 @@ const state = {
   isLoginError: false,
   userInfo : sessionStorage.getItem('token') === null ? {} : jwtDecode(sessionStorage.getItem('token')),
   isPasswordConfirmed: false,
-  solved : sessionStorage.getItem('solved').split(',') || new Array(10).fill(0)
+  solved : sessionStorage.getItem('solved') === null ? new Array(10).fill(0) : jwtDecode(sessionStorage.getItem('token')).split(',')
 };
 
 const mutations = {
