@@ -1,17 +1,16 @@
 <template>
-  <div v-if="!this.$store.state.user.isLogin">
+  <div v-if="!$store.state.user.isLogin">
     <Unauth text="로그인"/>
   </div>
-  <!-- <div v-else-if="this.$store.state.user.isLogin">
+  <div v-else-if="!beforesolved">
     <Unauth text="이전 문제를 푼"/>
-  </div> -->
+  </div>
   <div v-else>
   <!-- <div> -->
     <Modal v-if="result">
       <div class="modal-wrapper">
         <div class="button-wrapper">
         </div>
-        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
         <div>
           <i class="collecticon fab fa-angellist"></i><br>
           참잘했어요
@@ -25,6 +24,7 @@
       <div>
         <div>
           <span class="game-title">{{game.title}}</span>
+          <i style="margin-left:1rem" v-if="solved" class="fas fa-check"></i>
         </div>
         <div>
           <span class="game-description">{{game.description}}</span>
@@ -126,7 +126,7 @@
 <script>
 import Unauth from '@/components/common/Unauth.vue'
 import Modal from '@/components/common/Modal.vue';
-import { getGame, solvedProblem } from '@/api/game'
+import { getGame , solvedProblem } from '@/api/game'
 
 export default {
   components: {
@@ -135,6 +135,7 @@ export default {
   },
   data() {
     return {
+      beforesolved : true,
       tips : 1,
       solved : false,
       game: {},
@@ -160,6 +161,7 @@ export default {
       }).then(()=>{
         this.baseSetting()
         this.problemSetting()
+        this.beforesolved = this.game.id-1 <= this.$store.state.user.solved[0]
       })
     },
     baseSetting() {
@@ -235,13 +237,10 @@ export default {
       if (result) {
         this.result = true
           if (!(this.solved)) {
-            let data = {
-              category_id:1,
-              game_id:this.game.id,
-            }
-            solvedProblem(data).then(response=> {
-              console.log(response)
-            })
+            solvedProblem({category:1,id:this.game.id}).then(
+              response=>{
+                console.log(response)
+              })
             this.solved = true
           }
       } else {
