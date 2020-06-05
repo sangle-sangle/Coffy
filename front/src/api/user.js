@@ -24,17 +24,17 @@ function githubLogin() {
 }
 // 비밀번호 수정
 function changePassword(userData){
-  return instance.put('member/password', userData)
+  return instance.put('member/password/', userData)
 }
 
 // 내 정보 수정
 function updateMyInfo(userData) {
-  return instance.put('member', userData)
+  return instance.put('member/', userData)
 }
 
 // 회원탈퇴
 function deleteMyInfo(memberid) {
-  return instance.delete(`member/${memberid}`)
+  return instance.delete(`member/${memberid}/`)
 }
 
 // 유저 전체 목록 불러오기(관리자용)

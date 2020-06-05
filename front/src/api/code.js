@@ -43,6 +43,16 @@ function deleteLikeCode(codeid) {
   return instance.delete(`likecode/${codeid}`)
 }
 
+// 내가 작성한 코드 가져오기
+function getMyCode() {
+  return instance.get('mycodes')
+}
+
+// 내가 찜한 코드 가져오기
+function getLikedCode(){
+  return instance.get('mylikes')
+}
+
 
 export {
   fetchAllCode,
@@ -52,5 +62,7 @@ export {
   deleteCode,
   checkLikeCode,
   postLikeCode,
-  deleteLikeCode
+  deleteLikeCode,
+  getMyCode,
+  getLikedCode
 }

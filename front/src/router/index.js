@@ -75,7 +75,6 @@ export default new Router({
       beforeEnter: checkLoginUser,
       children: [
         { path: 'dashboard', name: 'DashBoard', component: loadComponent('MyPage', 'DashBoard') },
-        { path: 'profile', name: 'Profile', component: loadComponent('MyPage', 'Profile') },
         { path: 'passwordconfirm', name: 'PasswordConfirm', component: loadComponent('MyPage', 'PasswordConfirm') },
         { path: 'account', name: 'Account', component: loadComponent('MyPage', 'Account'), beforeEnter: checkPasswordConfirm }
       ]

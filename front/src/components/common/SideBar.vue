@@ -34,9 +34,6 @@
         <router-link to="/mypage/dashboard">Dashboard</router-link>
       </li>
       <li>
-        <router-link to="/mypage/profile">Profile</router-link>
-      </li>
-      <li>
         <router-link to="/mypage/passwordconfirm">Account</router-link>
       </li>
     </ul>

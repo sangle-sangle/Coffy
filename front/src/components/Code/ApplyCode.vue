@@ -64,7 +64,6 @@
         })
 
         const iframe = document.querySelector(`#${this.idTag}`)
-        console.log(iframe)
         iframe.src = url
 
       },
