@@ -9,13 +9,14 @@ const state = {
   isLoginError: false,
   userInfo : sessionStorage.getItem('token') === null ? {} : jwtDecode(sessionStorage.getItem('token')),
   isPasswordConfirmed: false,
-  solved : sessionStorage.getItem('solved') === null ? new Array(10).fill(0) : jwtDecode(sessionStorage.getItem('token')).split(',')
+  solved : sessionStorage.getItem('solved') === null ? new Array(10).fill(0) : sessionStorage.getItem('token').split(','),
 };
 
 const mutations = {
   setToken(state, token) {
     state.token = token
     sessionStorage.setItem('token', token)
+    sessionStorage.setItem('myClanId', jwtDecode(token)['access-Token'].clanid)
     state.isLogin = true
     state.isLoginError = false
     state.userInfo = jwtDecode(token)

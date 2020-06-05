@@ -11,17 +11,19 @@ function fetchClanInfo(clanId) { // 클랜 정보 가져오는 API
 }
 
 function registerClan(data) { // 클랜 가입 API
-  console.log(data)
-  return instance.post('')
+  return instance.post('joinclan', data)
+}
+
+function signOutClan(data) { // 클랜 탈퇴 API
+  return instance.delete('joinclan', data)
 }
 
 function addClan(data) { // 클랜 생성 API
-  return instance.put('clan', data)
+  return instance.post('clan', data)
 }
 
 function updateClan(data) { // 클랜 정보 수정 API
-  console.log(data)
-  return instance.put('')
+  return instance.put('clan', data)
 }
 
 function deleteClan(clanId) { // 클랜 삭제 API
@@ -32,6 +34,7 @@ export {
   fetchAllClans,
   fetchClanInfo,
   registerClan,
+  signOutClan,
   addClan,
   updateClan,
   deleteClan

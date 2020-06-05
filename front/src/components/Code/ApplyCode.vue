@@ -29,7 +29,11 @@
     mounted() {
       this.applyCode();
       this.adjustPreviewHeight();
-      window.addEventListener('resize', () => this.adjustPreviewHeight());
+      window.addEventListener('resize', () => {
+        if (this.$route.name.includes('Code')) {
+          this.adjustPreviewHeight()
+        }
+      }, { passive: true });
     },
     methods: {
       applyCode() {
@@ -64,13 +68,14 @@
         })
 
         const iframe = document.querySelector(`#${this.idTag}`)
-        console.log(iframe)
         iframe.src = url
 
       },
       adjustPreviewHeight() {
         this.windowWidth = window.innerWidth
-        if (this.$route.name !== 'CodeList' && !this.colLayout) {
+        if (this.$route.name === 'Main') {
+          document.querySelector('.wrapper').style.height = '100%'
+        } else if (this.$route.name !== 'CodeList' && !this.colLayout) {
           document.querySelector('.wrapper').style.height = '450px';
         } else if (this.colLayout && this.windowWidth < 600) {
           document.querySelector('.wrapper').style.height = '450px';
@@ -82,10 +87,16 @@
     watch: {
       code: {
         deep: true,
-        handler: 'applyCode'
+        handler() {
+          if (this.$route.name.includes('Code')) {
+            this.applyCode()
+          }
+        }
       },
       colLayout() {
-        this.adjustPreviewHeight();
+        if (this.$route.name.includes('Code')) {
+          this.adjustPreviewHeight();
+        }
       }
     }
   }
