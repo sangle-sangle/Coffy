@@ -14,8 +14,13 @@ function getCategorys(){
 function solvedProblem(data){
   return instance.post(`solve/`,data)
 }
+
+function solvedCount(){
+  return instance.get('solvedcounts/')
+}
 export {
   getGame,
   getCategorys,
   solvedProblem,
+  solvedCount
 }

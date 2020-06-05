@@ -3,19 +3,20 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ssafy.clan">
-	<select id="getClans" parameterType="java.lang.Integer"
-        resultType="com.ssafy.edu.vue.dto.Clan">
+	<select id="getClans" resultType="com.ssafy.edu.vue.dto.Clan">
 		select id, name, description, leaderId, locked, password, created_at, clanmark, clanmarkdeletehash,
 		(select user.username from user where clan.leaderId = user.id) mastername,
-		(select count(*) from clanmember where user.clanid=clan.id) clanmembercount
+		(select count(*) from user where user.clanid=clan.id) clanmembercount,
+		(select sum(point) from user where user.clanid = clan.id) clanpoint
 		from clan
-		order by id	desc
+		order by clanpoint desc
 	</select>
 
 	<select id="getClan" parameterType="java.lang.Integer"
 		resultType="com.ssafy.edu.vue.dto.Clan">
 		select id, name, description, leaderId, locked, password, created_at, clanmark, clanmarkdeletehash,
-		(select user.username from user where clan.leaderId = user.id) mastername
+		(select user.username from user where clan.leaderId = user.id) mastername,
+		(select sum(point) from user where user.clanid = clan.id) clanpoint
 		from clan
 		where id=#{id}
 	</select>

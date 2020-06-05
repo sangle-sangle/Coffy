@@ -73,7 +73,7 @@
               <button class="account-btn" type="submit">정보수정</button>
             </form>
             <button class="sign-out-btn" @click="signOutModal = true">탈퇴 하기</button>
-            <Modal :showModal="signOutModal">
+            <Modal v-if="signOutModal">
               <div class="modal-wrapper">
                 <div class="button-wrapper">
                   <button @click="signOutModal = false">CLOSE</button>

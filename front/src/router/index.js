@@ -88,6 +88,7 @@ export default new Router({
 })
 
 function checkNoLoginUser(to, from, next) {  // 로그인이 안 된 경우에 로그인창, 회원가입창 접근 가능
+  store.commit('setGoNextPage', from.path);
   store.state.user.isLogin ? next('/') : next()
 }
 

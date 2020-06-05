@@ -165,7 +165,7 @@ export default {
   methods : {
     async getCodeInfo(id) {
       const codeInfo = await fetchCodeInfo(id);
-      this.codeDetail = codeInfo.data;
+      this.codeDetail = codeInfo.data.code;
       this.title = this.codeDetail.title;
       this.description = this.codeDetail.description;
       this.codeData.htmlText = this.codeDetail.html;
