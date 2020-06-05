@@ -58,6 +58,13 @@ public class ClanController {
 			Member member = (Member) rs.getAttribute("loginMember");
 			memberid = member.getId();
 			accessclan.setUser_id(memberid);
+		} else {
+			// 로그인 안한 상태			
+			accessclan.setClan_id(id);
+			Clan clan = clanservice.getClan(id);
+			result.put("clan", clan);
+			result.put("clan_status", 2);
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 		}
 		accessclan.setClan_id(id);
 		Clan clan = clanservice.getClan(id);
