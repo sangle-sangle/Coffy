@@ -94,6 +94,10 @@ section {
   opacity: 0;
 }
 
+#page-view {
+  min-height: 798px;
+}
+
 @media (max-width: 900px) {
   nav {
     display: none;

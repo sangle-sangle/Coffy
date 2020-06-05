@@ -15,10 +15,12 @@
     <div class="title">
       <div class="title-wrapper">
         <label for="title" class="name-tag">제목</label>
-        <input v-model="title" type="text" name="title" id="title">
+        <input @input="typing" :value="title" type="text" name="title" id="title">
+        <div class="letter-cnt">({{ titleLetterCnt }}/30)</div>
       </div>
       <div class="submit-btn" @click="submitCode" v-if="Object.keys(userInfo).length">{{ pageTitle }}</div>
     </div>
+    <div class="title-alert">(제목은 30자 이내로 작성)</div>
     <label class="description name-tag" for="code-description">코드 설명</label>
     <textarea v-model="description" class="description-textarea" id="code-description" />
     <div id="codecreateform">
@@ -117,7 +119,8 @@ export default {
       afterData : {},
       expandCheck : [false,false,false],
       colLayout: false,
-      mobileSize: false
+      mobileSize: false,
+      titleLetterCnt: 0
     }
   },
   computed: {
@@ -139,7 +142,11 @@ export default {
     this.checkWindowWidth();
     this.theme = this.$store.state.common.mode === 'dark' ? 1: 0
     this.changeColor(this.mode);
-    window.addEventListener('resize', () => this.checkWindowWidth());
+    window.addEventListener('resize', () => {
+      if (this.$route.name.includes('Code')) {
+        this.checkWindowWidth()
+      }
+    }, { passive: true });
   },
   watch:{
     theme() {
@@ -160,6 +167,13 @@ export default {
       deep: true,
       immediate: true,
       handler: 'apply'
+    },
+    title() {
+      if (this.title.length > 30) {
+        alert('30자 이상 초과되었습니다. 자동으로 30자 까지 입력됩니다.');
+        this.title = this.title.slice(0, 30);
+      }
+      this.titleLetterCnt = this.title.length
     }
   },
   methods : {
@@ -240,6 +254,9 @@ export default {
         apply.className = "colapply"
         box.className = "flex"
       }
+    },
+    typing(e) {
+      this.title = e.target.value
     },
     expand(item,index) {
       if (!this.expandCheck[index]){
@@ -377,7 +394,7 @@ export default {
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  margin-bottom : 1rem;
+  margin-bottom : 0.5rem;
 }
 
 .title-wrapper {
@@ -393,11 +410,21 @@ export default {
 .title-wrapper > input {
   padding: 0 14px;
   max-width: 200px;
+  font-size: calc(0.7rem + 0.3vw);
+}
+
+.letter-cnt {
+  margin-left: 6px;
+  line-height: 3;
 }
 
 .title > .submit-btn {
   background-color: #ffdd40;
   color: black;
+}
+
+.title-alert {
+  margin-bottom: 1rem;
 }
 
 .description.name-tag {
@@ -412,6 +439,7 @@ export default {
   padding: 10px 14px;
   line-height: 1.6;
   margin-bottom: 16px;
+  font-size: calc(0.7rem + 0.3vw);
 }
 
 .flex { 

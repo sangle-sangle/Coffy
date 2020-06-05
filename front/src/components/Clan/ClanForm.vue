@@ -34,7 +34,7 @@
         </div>
         <div class="clan-master">
           <label class="form-title">클랜장 닉네임(자동 입력)</label>
-          <input type="text" id="master-name" v-model="clanInfo.leaderId" readonly>
+          <input type="text" id="master-name" v-model="clanInfo.mastername" readonly>
         </div>
         <div class="clan-description">
           <label for="description" class="form-title">클랜 설명</label>
@@ -120,7 +120,8 @@ export default {
       this.editClanID = Number(this.$route.path.split('/').reverse()[0])
       this.getClanInfo()
     } else {
-      this.clanInfo.leaderId = this.info['access-Token']['username']
+      this.clanInfo.leaderId = this.info['access-Token']['id']
+      this.clanInfo.mastername = this.info['access-Token']['username']
     }
   },
   mounted() {
@@ -129,17 +130,13 @@ export default {
     window.addEventListener('resize', () => this.mobileSize = window.innerWidth <= 600);
   },
   methods: {
-    async getClanInfo() { // 해당 클랜 정보 받아오는 로직 작성
+    async getClanInfo() {
       let getClanData = await fetchClanInfo(this.editClanID)
-      let clanData = getClanData.data
-      console.log(clanData)
-
-      // 우선 지금은 임시로 asset에 json 파일로 만든 데이터 사용
-      // let clanData = clanList[this.editClanID - 1]
-
+      let clanData = getClanData.data.clan
       this.clanInfo.name = clanData.name
       this.clanInfo.locked = clanData.locked
-      this.clanInfo.leaderId = this.info['access-Token']['username']
+      this.clanInfo.leaderId = this.info['access-Token']['id']
+      this.clanInfo.mastername = clanData.mastername
       this.clanInfo.password = clanData.password
       this.clanInfo.description = clanData.description
       this.clanInfo.clanmark = clanData.clanmark
@@ -160,24 +157,31 @@ export default {
         this.addClanBtnClick = true
         return
       }
+      let paramsData = {
+        id: this.editClanID,
+        name: this.clanInfo.name,
+        description: this.clanInfo.description,
+        leaderId: this.clanInfo.leaderId,
+        locked: this.clanInfo.locked,
+        password: this.clanInfo.password,
+        mastername: this.clanInfo.mastername
+      }
       if (this.fileName.length) {
-        await this.getImgurMarkUrl()
+        await this.getImgurMarkUrl(paramsData)
         return
       }
-      this.clanInfo.leaderId = this.info['access-Token']['id']
-      this.$route.name === 'ClanForm' ? addClan(this.clanInfo) : updateClan(this.clanInfo) // 백엔드와 연동 후 axios baseURL 정해지면 이 코드 주석 해제
+      this.$route.name === 'ClanForm' ? await addClan(paramsData) : await updateClan(paramsData)
       this.completeModal = true
     },
-    getImgurMarkUrl() {
+    getImgurMarkUrl(paramsData) {
       let formData = new FormData()
       formData.append('image', this.clanMark)
       axios.post('https://api.imgur.com/3/image', formData, { headers: { Authorization: `Client-ID ${process.env.VUE_APP_IMGUR_CLIENT_ID}` } })
         .then(response => {
           let getImgData = response.data.data
-          this.clanInfo.clanmark = getImgData.link
-          this.clanInfo.clanmarkdeletehash = getImgData.deletehash
-          this.clanInfo.leaderId = this.info['access-Token']['id']
-          this.$route.name === 'ClanForm' ? addClan(this.clanInfo) : updateClan(this.clanInfo) // 백엔드와 연동 후 axios baseURL 정해지면 이 코드 주석 해제
+          paramsData['clanmark'] = getImgData.link
+          paramsData['clanmarkdeletehash'] = getImgData.deletehash
+          this.$route.name === 'ClanForm' ? addClan(paramsData) : updateClan(paramsData)
           this.completeModal = true
         })
         .catch(error => {
@@ -237,6 +241,14 @@ export default {
     clanMark() {
       if (this.clanMark) {
         this.uploadImage();
+      }
+    },
+    clanInfo: {
+      deep: true,
+      handler(info) {
+        if (!info.locked) {
+          this.clanInfo.password = null;
+        }
       }
     },
     mode() {

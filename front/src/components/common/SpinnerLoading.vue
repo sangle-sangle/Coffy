@@ -9,7 +9,7 @@
 
 <style scoped>
 .loading-wrapper {
-  height: 100vh;
+  height: 50vh;
 }
 
 .ring {

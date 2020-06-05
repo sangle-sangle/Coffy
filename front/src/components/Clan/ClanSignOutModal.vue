@@ -18,7 +18,7 @@
 
 <script>
 import { mapState } from 'vuex'
-// import { signOutClan } from '@/api/clan.js'
+import { signOutClan } from '@/api/clan.js'
 
 export default {
   props: {
@@ -47,7 +47,12 @@ export default {
     },
     async clanSignOut() {
       // 하단에 await문으로 실제 클랜 탈퇴 로직 작성
-      console.log(this.clanInfo.id);
+      const paramsData = {
+        clan_id: this.clanInfo.id,
+        user_id: this.userInfo['access-Token'].id
+      }
+      let data = await signOutClan(paramsData);
+      console.log(data);
       this.$router.push('/clan');
     }
   },

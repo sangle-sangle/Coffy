@@ -1,5 +1,4 @@
 import { setInterceptors } from './config/interceptors'
-// import store from '@/store/index.js'
 
 const instance = setInterceptors()
 

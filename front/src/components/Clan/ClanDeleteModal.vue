@@ -19,7 +19,7 @@
 
 <script>
 import { mapState } from 'vuex'
-// import { deleteClan } from '@/api/clan.js'
+import { deleteClan } from '@/api/clan.js'
 
 export default {
   props: {
@@ -47,14 +47,13 @@ export default {
       }
     },
     async clanDelete() {
-      // 하단에 await문으로 실제 클랜 가입 신청 로직 작성
-      // await deleteClan(this.clanInfo.id);
+      await deleteClan(this.clanInfo.id);
       this.$router.push('/clan');
     }
   },
   watch: {
     mode() {
-      this.changeColor(this.mode)
+      this.changeColor(this.mode);
     }
   }
 }

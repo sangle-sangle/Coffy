@@ -47,9 +47,6 @@ export default {
         this.nowPage = pageNm;
         this.$emit('setNowPage', this.nowPage);
       }
-    },
-    setPageIndexes() {
-      
     }
   },
   watch: {
