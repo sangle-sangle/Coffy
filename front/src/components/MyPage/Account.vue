@@ -25,14 +25,14 @@
               <div class="username-form">
                 <label for="username">Username<i class="fas fa-star"></i></label>
                 <input type="text" id="username" v-model="userName">
-                <div class="log-message" v-if="!userName.length && clickSignupBtn">
+                <div class="log-message" v-if="!userName.length && clickButton">
                   1자 이상 작성해주세요.
                 </div>
               </div>
               <div class="email-form">
                 <label for="email">E-mail<i class="fas fa-star"></i></label>
-                <input type="text" id="email" v-model="email">
-                <div class="log-message" v-if="!isEmailValid && clickSignupBtn">
+                <input type="text" id="email" v-model="email" readonly>
+                <div class="log-message" v-if="!isEmailValid && clickButton">
                   이메일 양식으로 작성해주세요.
                 </div>
               </div>
@@ -100,7 +100,7 @@
                 <div class="guideline">
                   영어 소문자 4자 이상 + 숫자 4자 이상 조합해서 8자 이상으로 작성해주세요.
                 </div>
-                <div class="log-message" v-if="!isPasswordValid && clickSignupBtn">
+                <div class="log-message" v-if="!isPasswordValid && clickButton">
                   비밀번호 양식을 지켜서 작성해주세요.
                 </div>
               </div>
@@ -110,7 +110,7 @@
                 <div class="guideline">
                   비밀번호를 한 번 더 작성해주세요.
                 </div>
-                <div class="log-message" v-if="!isRePasswordValid && clickSignupBtn">
+                <div class="log-message" v-if="!isRePasswordValid && clickButton">
                   비밀번호가 일치하지 않거나 비밀번호 양식에 어긋납니다.
                 </div>
               </div>
@@ -147,12 +147,16 @@ export default {
       imgUrl: '',
       mobileSize: false,
       checkGithubAuth: false,
-      clickSignupBtn: false,
+      clickButton: false,
       noProfileImgUrl: 'https://user-images.githubusercontent.com/52685250/73902320-c72d6c00-48d8-11ea-82b4-eb9bfebfe9fb.png',
       currentTab: 0,
       tabs: ['회원정보 수정', '비밀번호 수정'],
       signOutModal: false,
-      passwordConfirm: false
+      passwordConfirm: false,
+      initial : {
+        userName: '',
+        email: '',
+      },
     }
   },
   computed: {
@@ -180,19 +184,18 @@ export default {
   methods: {
     changeTab(index){
       this.currentTab = index
-      this.clickSignupBtn = false
+      this.clickButton = false
       if (index == 1)
         document.getElementsByClassName('account-wrapper')[0].style.height = '100vh'
       else
         document.getElementsByClassName('account-wrapper')[0].style.height = ''
     },
     async submitUserInfoForm() { // 회원정보 수정 로직 구현
-      this.clickSignupBtn = true
+      this.clickButton = true
       if ( this.userName.length && this.isEmailValid ) {
         try {
           let changeInfoData = {
-            username: this.userName,
-            email: this.email,
+            username: this.userName == this.initial.username?"":this.userName
           };
           // githubid는 github 연동이 된 경우(this.checkGithubAuth === true인 경우에만 등록)
           if (this.checkGithubAuth) {
@@ -205,7 +208,7 @@ export default {
           console.log(checkExistData.data)
           // 수정 필요
           if (!checkExistData.data.signup) {
-            alert(checkExistData.data.message);
+            alert(checkExistData.data.state);
             return
           }
           alert('회원정보 수정 성공!')
@@ -217,7 +220,7 @@ export default {
       }
     },
     async submitPasswordForm() { // 비밀번호 변경 로직 구현
-      this.clickSignupBtn = true
+      this.clickButton = true
       if (this.isPasswordValid && this.isRePasswordValid) {
         try {
           let passwordData = {
@@ -225,6 +228,7 @@ export default {
           };
 
           const checkExistData = await changePassword(passwordData);
+          console.log(checkExistData)
           // 수정 필요
           if (!checkExistData.data.signup) {
             alert(checkExistData.data.message);
@@ -299,6 +303,7 @@ export default {
       this.imgUrl = '';
       this.checkGithubAuth = false;
       this.passwordConfirm = '';
+      this.initial = this.userInfo;
     },
     profileImgFileUpload() {
       this.profileImg = this.$refs.file.files[0];
