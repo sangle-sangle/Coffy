@@ -107,7 +107,9 @@
         </div>
       </Modal>
     </div>
-    <SpinnerLoading v-else></SpinnerLoading>
+    <div class="spinner-section" v-else>
+      <SpinnerLoading></SpinnerLoading>
+    </div>
   </div>
 </template>
 
@@ -609,6 +611,10 @@ export default {
 
 .delete-btn > span:hover {
   cursor: pointer;
+}
+
+.spinner-section {
+  position: relative;
 }
 
 @media (max-width: 600px) {

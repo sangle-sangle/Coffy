@@ -25,7 +25,7 @@
         <router-link to="/game">Game</router-link>
       </li>
       <li>
-        <router-link :to="clanPageUrl">Clan</router-link>
+        <router-link to="/clan">Clan</router-link>
       </li>
     </ul>
     <hr class="divider" v-if="this.isLogin">
@@ -63,9 +63,9 @@ export default {
       isLogin: state => state.user.isLogin,
       userInfo: state => state.user.userInfo
     }),
-    clanPageUrl() {
-      return Object.keys(this.userInfo).length && this.userInfo['access-Token'].clanid >= 1 ? `/clan/detail/${this.userInfo['access-Token'].clanid}` : '/clan'
-    }
+    // clanPageUrl() {
+    //   return Object.keys(this.userInfo).length && this.userInfo['access-Token'].clanid >= 1 ? `/clan/detail/${this.userInfo['access-Token'].clanid}` : '/clan'
+    // }
   },
   mounted() {
     this.changeMode = this.mode
