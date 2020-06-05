@@ -9,7 +9,7 @@ const state = {
   isLoginError: false,
   userInfo : sessionStorage.getItem('token') === null ? {} : jwtDecode(sessionStorage.getItem('token')),
   isPasswordConfirmed: false,
-  solved : sessionStorage.getItem('solved').split(',') || new Array(10).fill(0)
+  solved : sessionStorage.getItem('solved') === null ? new Array(10).fill(0) : sessionStorage.getItem('solved').split(','),
 };
 
 const mutations = {
@@ -36,9 +36,15 @@ const mutations = {
   enteredAccount(state){
     state.isPasswordConfirmed = false
   },
-  gamesolve(state, data){
-    state.solved = data
-    sessionStorage.setItem('solved', data)
+  gamesolve(state){
+    solvedCount().then(response=>{
+      let solved = new Array(10).fill(0)
+      for (let i in response.data){
+        solved[response.data[i].category_id-1]=response.data[i].count
+      }
+      state.solved = solved
+      sessionStorage.setItem('solved', solved)
+    })
   }
 }
 
@@ -47,16 +53,7 @@ const actions = {
     const result = await loginUser(userData)
     if (result.headers['access-token']) {
       commit('setToken', result.headers['access-token'])
-      solvedCount().then(response=>{
-        let solved = new Array(10).fill(0)
-        console.log(solved)
-        for (let i in response.data){
-          console.log(response.data[i])
-          solved[response.data[i].category_id-1]=response.data[i].count
-        }
-        commit('gamesolve',solved)
-
-      })
+      commit('gamesolve')
     } else {
       commit('loginError')
     }

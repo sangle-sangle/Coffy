@@ -1,5 +1,11 @@
 <template>
-  <div>
+  <div v-if="!$store.state.user.isLogin">
+    <Unauth text="로그인"/>
+  </div>
+  <div v-else-if="!beforesolved">
+    <Unauth text="이전 문제를 푼"/>
+  </div>
+  <div v-else>
     <Modal v-if="result">
       <div class="modal-wrapper">
         <div class="button-wrapper">
@@ -18,6 +24,7 @@
       <div>
         <div>
           <span class="game-title">{{game.title}}</span>
+          <i v-if="solved" class="fas fa-check"></i>
         </div>
         <div>
           <span class="game-description">{{game.description}}</span>
@@ -128,15 +135,18 @@
 </template>
 
 <script>
+import Unauth from '@/components/common/Unauth.vue'
 import Modal from '@/components/common/Modal.vue';
 import { getGame, solvedProblem } from '@/api/game'
 
 export default {
   components: {
-    Modal
+    Modal,
+    Unauth,
   },
   data() {
     return {
+      beforesolved : true,
       tips : 1,
       solved : false,
       game: {},
@@ -156,13 +166,15 @@ export default {
     },
     getGamedata() {
       getGame(5,this.$route.params.id).then(response => {
-        this.game = response.data
-        this.game.base = JSON.parse(response.data.base.split(`'`).join(`"`))
-        this.game.problem = JSON.parse(response.data.problem.split(`'`).join(`"`))
-        this.game.after = JSON.parse(response.data.after.split(`'`).join(`"`))
+        this.game = response.data.game
+        this.solved = response.data.count
+        this.game.base = JSON.parse(response.data.game.base.split(`'`).join(`"`))
+        this.game.problem = JSON.parse(response.data.game.problem.split(`'`).join(`"`))
+        this.game.after = JSON.parse(response.data.game.after.split(`'`).join(`"`))
       }).then(()=>{
         this.baseSetting()
         this.problemSetting()
+        this.beforesolved = this.game.id-1 <= this.$store.state.user.solved[4]
       })
     },
     baseSetting() {
@@ -231,8 +243,12 @@ export default {
         if (result) {
           this.result = true
           if (!(this.solved)) {
-            solvedProblem({category:5,id:this.game.id})
-          }
+            this.$store.commit('gamesolve')
+            solvedProblem({category:5,id:this.game.id}).then(
+              response=>{
+                console.log(response)
+              })
+            }
         } else {
           this.result = false
         }
