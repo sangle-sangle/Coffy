@@ -56,9 +56,10 @@ export default new Router({
     {
       path: '/clan',
       component: loadView('ClanPage'),
+      beforeEnter: checkRegisteredClan,
       children: [
-        { path: '', name: 'ClanList', component: loadComponent('Clan', 'ClanList'), beforeEnter: checkRegisteredClan }, // 백엔드와 user 관련 데이터 연동 후 beforeEnter: checkRegisteredClan 추가
-        { path: 'addform', name: 'ClanForm', component: loadComponent('Clan', 'ClanForm'), beforeEnter: checkRegisteredClan }, // 백엔드와 user 관련 데이터 연동 후 beforeEnter: checkRegisteredClan 추가
+        { path: '', name: 'ClanList', component: loadComponent('Clan', 'ClanList') },
+        { path: 'addform', name: 'ClanForm', component: loadComponent('Clan', 'ClanForm') },
         { path: 'detail/:id', name: 'ClanDetail', component: loadComponent('Clan', 'ClanDetail'), props: true },
         { path: 'edit/:id', name: 'ClanEdit', component: loadComponent('Clan', 'ClanForm'), props: true },
       ]
@@ -88,7 +89,6 @@ export default new Router({
 })
 
 function checkNoLoginUser(to, from, next) {  // 로그인이 안 된 경우에 로그인창, 회원가입창 접근 가능
-  store.commit('setGoNextPage', from.path);
   store.state.user.isLogin ? next('/') : next()
 }
 
@@ -104,7 +104,7 @@ function checkRegisteredClan(to, from, next) { // 로그인한 유저 중 가입
   if (!store.state.user.isLogin) { // 비로그인 상태이면 로그인을 먼저 하라는 문구 표시 후 로그인 페이지로 이동
     alert('로그인을 먼저 해주세요.')
     next('/login')
-    return
+  } else {
+    next()
   }
-  store.state.user.userInfo['access-Token'].clanid === 0 ? next() : next(`/clan/detail/${store.state.user.userInfo['access-Token'].clanid}`)
 }

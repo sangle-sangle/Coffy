@@ -81,7 +81,7 @@ export default {
           return
         }
         this.initForm()
-        this.$router.push(this.nextPageUrl)
+        this.$router.push('/');
       } catch (error) {
         if(error.status === 500) {
           alert('등록되지 않은 아이디입니다.')

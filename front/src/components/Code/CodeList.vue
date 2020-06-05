@@ -139,7 +139,7 @@ export default {
 
 .code-list-title {
   display: inline-block;
-  font-size: calc(2rem + 1vw);
+  font-size: calc(2rem + 0.5vw);
   font-family: 'Noto Sans KR';
   font-weight: 600;
   padding-bottom: 5px;
