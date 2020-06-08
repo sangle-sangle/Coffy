@@ -24,6 +24,7 @@ import com.ssafy.edu.vue.dto.Clan;
 import com.ssafy.edu.vue.dto.Member;
 import com.ssafy.edu.vue.help.BoolResult;
 import com.ssafy.edu.vue.service.IClanService;
+import com.ssafy.edu.vue.service.IMemberService;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -74,7 +75,7 @@ public class ClanController {
 		result.put("myclan", myclan);
 		
 		if (myclan == 0) {
-			// 가입한 클랜이 없음			
+			// 가입한 클랜이 없음
 			result.put("clan_status", 0);
 		}
 		else if (myclan == id) {
@@ -91,10 +92,19 @@ public class ClanController {
 	
 	@ApiOperation(value = "clan 추가", response = List.class)
 	@RequestMapping(value = "/clan", method = RequestMethod.POST)
-	public ResponseEntity<BoolResult> addClan(@RequestBody Clan clan) throws Exception {
+	public ResponseEntity<BoolResult> addClan(@RequestBody Clan clan, HttpServletRequest rs) throws Exception {
 		// 클랜 만들 때 locked 여부에 따라 password 입력할 수 있도록		
 		logger.info("1----------------addClan----------------" + new Date());	
+		int memberid = 0;
+		AccessClan accessclan = new AccessClan();
+		if(rs.getAttribute("loginMember")!=null ) {
+			Member member = (Member) rs.getAttribute("loginMember");
+			memberid = member.getId();
+			accessclan.setUser_id(memberid);
+		}
+		accessclan.setClan_id(clan.getId());
 		clanservice.addClan(clan);
+		clanservice.joinClan(accessclan);
 		BoolResult nr = new BoolResult();
 		nr.setName("addClan");
 		nr.setState("succ");
