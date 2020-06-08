@@ -16,29 +16,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		resultType="com.ssafy.edu.vue.dto.Clan">
 		select id, name, description, leaderId, locked, password, created_at, clanmark, clanmarkdeletehash,
 		(select user.username from user where clan.leaderId = user.id) mastername,
-		(select sum(point) from user where user.clanid = clan.id) clanpoint,
-		(select * from user where user.clanid = clan.id) clanmembers
+		(select sum(point) from user where user.clanid = clan.id) clanpoint
 		from clan
-		where id=#{id}
+		where clan.id=#{id}
 	</select>
 
 	<insert id="addClan" parameterType="com.ssafy.edu.vue.dto.Clan">
-		BEGIN TRAN;
-			insert into clan(name, description, leaderId, locked, password, created_at, clanmark, clanmarkdeletehash, clanpoint)
-			values(#{name}, #{description}, #{leaderId}, #{locked}, #{password}, now(), #{clanmark}, #{clanmarkdeletehash}, #{clanpoint})
-			from clan;
-			insert into user(clanid)
-			values(2)
-			from user;
-		COMMIT TRAN;		
+		insert into clan(name, description, leaderId, locked, password, created_at, clanmark, clanmarkdeletehash)
+		values(#{name}, #{description}, #{leaderId}, #{locked}, #{password}, now(), #{clanmark}, #{clanmarkdeletehash})
 	</insert>
+	
+	<select id="getLastClanId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		SELECT id FROM clan ORDER BY created_at DESC LIMIT 1 OFFSET 0;
+	</select>
 	
 	<update id="updateClan"
 		parameterType="com.ssafy.edu.vue.dto.Clan">
 		update clan set
 		name=#{name},
 		description=#{description},
-		leaderId=#{leaderId},
 		locked=#{locked},
 		password=#{password},
 		clanmark=#{clanmark},

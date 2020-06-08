@@ -57,4 +57,8 @@ public class ClanDaoImpl {
 		return sqlSession.selectOne(ns+"collectPwd",accessclan);
 	}
 
+	public int getLastClanId() {
+		return sqlSession.selectOne(ns+"getLastClanId");
+	}
+
 }

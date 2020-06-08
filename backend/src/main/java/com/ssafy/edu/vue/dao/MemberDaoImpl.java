@@ -67,4 +67,8 @@ public class MemberDaoImpl {
 		return sqlSession.selectOne(ns+"checkUsers");
 	}
 
+	public void deleteClanMember(int id) {
+		sqlSession.update(ns+"deleteClanMember", id);
+	}
+
 }
