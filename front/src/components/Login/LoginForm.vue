@@ -4,7 +4,7 @@
       <div class="login-title">
         Login
       </div>
-      <form class="login-form" @submit.prevent="submitForm">
+      <div class="login-form">
         <div class="email-form">
           <label for="email"></label>
           <input id="email" v-model="userName" type="text" placeholder="ID">
@@ -17,10 +17,10 @@
           <input id="password" v-model="password" type="password" placeholder="Password">
         </div>
         <div class="btn-group">
-          <button type="submit" class="log-btn">로그인</button>
+          <button type="submit" class="log-btn" @click="submitForm">로그인</button>
           <button class="find-pw-btn" @click="goFindAccount">비밀번호 찾기</button>
         </div>
-      </form>
+      </div>
       <div class="social-login-box">
         <div class="social-message">Github 계정만 있어도 이용 가능합니다.</div>
         <div class="social-btn-group">
@@ -28,14 +28,6 @@
             <i class="fab fa-github"></i>
             <p>Github 로그인</p>
           </button>
-          <!-- <button class="kakao">
-            <img src="../../assets/images/social_icon/kakao-talk.png" alt="kakao-btn">
-            <p>카카오톡 로그인</p>
-          </button>
-          <button class="google">
-            <img src="../../assets/images/social_icon/google.png" alt="google">
-            <p>구글 로그인</p>
-          </button> -->
         </div>
       </div>
     </div>
@@ -65,7 +57,7 @@ export default {
   methods: {
     async submitForm() {
       if (!this.userName) {
-        alert('ID를 작성하세요.')
+        alert('ID(E-mail)를 작성하세요.')
         return
       } else if (!this.password) {
         alert('패스워드를 작성하세요.')
@@ -88,8 +80,8 @@ export default {
         }
       }
     },
-    socialLogin() {
-      githubLogin()
+    async socialLogin() {
+      await githubLogin()
     },
     initForm() {
       this.userName = ''

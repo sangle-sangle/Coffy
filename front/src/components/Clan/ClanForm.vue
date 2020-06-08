@@ -80,7 +80,7 @@
 import { mapState } from 'vuex';
 import Modal from '@/components/common/Modal.vue'
 import axios from 'axios'
-import { addClan, updateClan, fetchClanInfo } from '@/api/clan.js'
+import { fetchClanInfo } from '@/api/clan.js'
 
 export default {
   components: {
@@ -109,7 +109,8 @@ export default {
   computed: {
     ...mapState({
       mode: state => state.common.mode,
-      info : state => state.user.userInfo
+      info : state => state.user.userInfo,
+      showModal : state => state.clan.clanModal
     }),
     noMarkImage() {
       return (this.editClanID && !this.clanInfo.clanmark && !this.clanMark) || (!this.editClanID && !this.clanMark)
@@ -158,7 +159,6 @@ export default {
         return
       }
       let paramsData = {
-        id: this.editClanID,
         name: this.clanInfo.name,
         description: this.clanInfo.description,
         leaderId: this.clanInfo.leaderId,
@@ -170,8 +170,13 @@ export default {
         await this.getImgurMarkUrl(paramsData)
         return
       }
-      this.$route.name === 'ClanForm' ? await addClan(paramsData) : await updateClan(paramsData)
-      this.completeModal = true
+      if (this.$route.name === 'ClanForm') {
+        this.$store.dispatch('addClanData', paramsData)
+      } else {
+        paramsData['id'] = this.editClanID
+        this.$store.dispatch('updateClanData', paramsData)
+      }
+      setTimeout(() => this.completeModal = this.clanModal, 500);
     },
     getImgurMarkUrl(paramsData) {
       let formData = new FormData()
@@ -181,15 +186,20 @@ export default {
           let getImgData = response.data.data
           paramsData['clanmark'] = getImgData.link
           paramsData['clanmarkdeletehash'] = getImgData.deletehash
-          this.$route.name === 'ClanForm' ? addClan(paramsData) : updateClan(paramsData)
-          this.completeModal = true
+          if (this.$route.name === 'ClanForm') {
+            this.$store.dispatch('addClanData', paramsData)
+          } else {
+            paramsData['id'] = this.editClanID
+            this.$store.dispatch('updateClanData', paramsData)
+          }
+          setTimeout(() => this.completeModal = this.clanModal, 500);
         })
         .catch(error => {
           console.log(error)
         })
     },
     closeModal() {
-      this.completeModal = false
+      this.$store.commit('toggleModal');
       if (this.$route.name === 'ClanForm') {
         this.$router.push('/clan')
       } else {

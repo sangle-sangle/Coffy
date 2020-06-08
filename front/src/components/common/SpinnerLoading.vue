@@ -7,6 +7,30 @@
   </div>
 </template>
 
+<script>
+import { mapState } from 'vuex'
+
+export default {
+  computed: {
+    ...mapState({
+      mode: state => state.common.mode
+    })
+  },
+  mounted() {
+    this.changeColor(this.mode);
+  },
+  methods: {
+    changeColor(mode) {
+      if (mode === 'white') {
+        document.querySelector('.ring').style.borderColor = '#999';
+      } else {
+        document.querySelector('.ring').style.borderColor = '#3c3c3c';
+      }
+    }
+  }
+}
+</script>
+
 <style scoped>
 .loading-wrapper {
   height: 50vh;

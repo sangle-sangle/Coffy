@@ -42,6 +42,31 @@ function deleteLikeCode(codeid) {
   return instance.delete(`likecode/${codeid}`)
 }
 
+// 코드 댓글 리스트 보기
+function fetchCodeComments(codeid) {
+  return instance.get(`commentcode/${codeid}`)
+}
+
+// 코드 댓글 수 가져오기
+function fetchCodeCommentsCount(codeid) {
+  return instance.get(`commentcounts/${codeid}`)
+}
+
+// 코드 댓글 등록
+function addCodeComment(params) {
+  return instance.post('commentcode', params)
+}
+
+// 코드 댓글 수정
+function updateCodeComment(params) {
+  return instance.put('commentcode', params)
+}
+
+// 코드 댓글 삭제
+function deleteComment(commentId) {
+  return instance.delete(`commentcode/${commentId}`)
+}
+
 // 내가 작성한 코드 가져오기
 function getMyCode() {
   return instance.get('mycodes')
@@ -62,6 +87,11 @@ export {
   checkLikeCode,
   postLikeCode,
   deleteLikeCode,
+  fetchCodeComments,
+  fetchCodeCommentsCount,
+  addCodeComment,
+  updateCodeComment,
+  deleteComment,
   getMyCode,
   getLikedCode
 }
