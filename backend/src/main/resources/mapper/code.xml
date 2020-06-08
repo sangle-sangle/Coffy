@@ -105,4 +105,36 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where id in (select codeid from likecode where userid=#{memberid})
 		order by id desc
 	</select>
+	
+	<select id="getCommentPost" parameterType="com.ssafy.edu.vue.dto.CommentInfo" resultType="com.ssafy.edu.vue.dto.CodeComment">
+		select id,codeid,userid,created_at,content, select user.username from user where code.userid = user.id) writername
+		from code_comment
+		where codeid=#{codeid}
+		order by id desc
+	</select>
+	
+	<insert id="addCommentPost" parameterType="com.ssafy.edu.vue.dto.CodeComment">
+		insert into
+		code_comment(id,codeid,userid,created_at,content)
+		values(#{id},#{codeid},#{userid},now(), #{content})
+	</insert>
+	
+	<update id="updateCommentPost" parameterType="com.ssafy.edu.vue.dto.CodeComment">
+		update code_comment set
+		content=#{content}
+		where id=#{id}
+	</update>
+	
+	<delete id="deleteCommentPost" parameterType="java.lang.Integer">
+		delete from code_comment where id = #{id}
+	</delete>
+	
+	<select id="findCodeId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		select codeid from code_comment where id=#{id}
+	</select>
+	
+	<select id="getCommentCounts" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		select count(*) from code_comment
+		where codeid=#{codeid}
+	</select>
 </mapper>
