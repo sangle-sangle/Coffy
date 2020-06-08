@@ -3,5 +3,4 @@ RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} app.jar
-ADD /etc/letsencrypt/live/www.example.com/keystore.p12 /etc/letsencrypt/live/www.example.com/keystore.p12
 ENTRYPOINT ["java","-jar","/app.jar"]
