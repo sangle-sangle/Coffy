@@ -81,6 +81,7 @@ export default {
   methods: {
     async getAllCode() {
       const { data } = await fetchAllCode();
+      console.log(data);
       this.$store.commit('saveCodeData', data);
       this.setNowPage(1);
     },
