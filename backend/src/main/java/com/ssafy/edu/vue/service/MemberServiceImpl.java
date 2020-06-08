@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.edu.vue.dao.MemberDaoImpl;
+import com.ssafy.edu.vue.dto.AccessClan;
 import com.ssafy.edu.vue.dto.Member;
 
 @Service
@@ -25,6 +26,12 @@ public class MemberServiceImpl implements IMemberService {
 	@Transactional(readOnly = true)
 	public Member getMember(int memberid) {
 		return memberdao.getMember(memberid);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<Member> getClanMembers(int clanid) {
+		return memberdao.getClanMembers(clanid);
 	}
 
 	@Override

@@ -55,6 +55,14 @@ public class MemberController {
 		Member member = memberservice.getMember(memberid);
 		return new ResponseEntity<Member>(member, HttpStatus.OK);
 	}
+	
+	@ApiOperation(value = "clan별 member 전체보기", response = List.class)
+	@RequestMapping(value = "/clanmember/{clanid}", method = RequestMethod.GET)
+	public ResponseEntity<List<Member>> getClanMembers(@PathVariable int clanid) throws Exception {
+		List<Member> members = memberservice.getClanMembers(clanid);
+		return new ResponseEntity<List<Member>>(members, HttpStatus.OK);
+	}
+	
 
 	@ApiOperation(value = "member 로그인", response = List.class)
 	@RequestMapping(value = "/login", method = RequestMethod.POST)

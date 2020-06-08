@@ -36,17 +36,6 @@
                   이메일 양식으로 작성해주세요.
                 </div>
               </div>
-              <div class="github-form">
-                <label for="github">Github 계정 연동</label>
-                <div class="github-auth">
-                  <input type="text" id="github" v-model="githubid">
-                  <div class="auth-btn no-valid-github" @click="getGithubAuth" v-if="!checkGithubAuth">연동</div>
-                  <div class="auth-btn valid-github" @click="getGithubAuth" v-else>확인</div>
-                </div>
-                <div class="guideline github-guideline">
-                  [주의!]github ID를 작성한 후 우측 '연동' 버튼을 눌러야 github ID가 등록됩니다!
-                </div>
-              </div>
               <div class="profile-img-form">
                 <label for="profile-image" class="form-title">프로필 이미지<small>(150[px]x150[px] 권장)</small></label>
                 <div class="profile-input-box">
@@ -174,12 +163,14 @@ export default {
       return validatePassword(this.rePassword) && this.password === this.rePassword
     },
   },
+  created() {
+    this.setUserInfo();
+    this.$store.commit('enteredAccount');
+  },
   mounted() {
     this.changeColor(this.mode);
     this.mobileSize = window.innerWidth <= 600;
     window.addEventListener('resize', () => this.mobileSize = window.innerWidth <= 600);
-    this.setUserInfo()
-    this.$store.commit('enteredAccount')
   },
   methods: {
     changeTab(index){
@@ -272,13 +263,6 @@ export default {
           alert('잘못된 접근입니다.')
         }
       }
-      
-
-    },
-    getGithubAuth() { // github 계정 인증 (인증되면 checkGithubAuth 값이 false => true로 변경)
-      // (1) 우선 DB에 입력한 github id가 있는지 확인(이미 DB에 있으면 다른 ID로 연동하라는 메세지 띄우기)
-      // (2) 새롭게 등록하는 github id면 github에 해당 id 계정이 있는지 확인(없으면 해당 github 계정이 없다는 메세지 띄우기)
-      // (3) 인증 거친 후 성공하면 checkGithubAuth 값을 false => true로 변경
     },
     getImgurProfileUrl() {
       let formData = new FormData()
@@ -335,13 +319,11 @@ export default {
           inputTag.style.backgroundColor = '#eee'
           inputTag.style.color = 'black'
         });
-        document.querySelector('.github-guideline').style.color = 'crimson';
       } else {
         document.querySelectorAll('input').forEach(inputTag => {
           inputTag.style.backgroundColor = '#252830'
           inputTag.style.color = 'white'
         });
-        document.querySelector('.github-guideline').style.color = 'yellow';
       }
     }
   },

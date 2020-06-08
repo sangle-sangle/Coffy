@@ -30,4 +30,6 @@ public interface IMemberService {
 
 	int checkUsers();
 
+	List<Member> getClanMembers(int clanid);
+
 }

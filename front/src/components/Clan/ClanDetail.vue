@@ -20,8 +20,8 @@
             </div>
             <div class="clan-btn-group">
               <div class="clan-master" @click="toggleMasterSection" v-if="this.userInfo['access-Token'].id === clanInfo.leaderId"><i class="fas fa-tools"></i> 관리자 모드</div>
-              <div class="clan-register" @click="toggleClanRegisterModal" v-if="this.userInfo['access-Token'].id !== clanInfo.leaderId && !checkMyClan"><i class="fas fa-plus"></i> 클랜 가입</div>
-              <div class="clan-sign-out" @click="toggleClanSignOutModal" v-if="this.userInfo['access-Token'].id !== clanInfo.leaderId && checkMyClan"><i class="fas fa-minus"></i> 클랜 탈퇴</div>
+              <div class="clan-register" @click="toggleClanRegisterModal" v-if="this.userInfo['access-Token'].id !== clanInfo.leaderId && checkMyClan === 0"><i class="fas fa-plus"></i> 클랜 가입</div>
+              <div class="clan-sign-out" @click="toggleClanSignOutModal" v-if="this.userInfo['access-Token'].id !== clanInfo.leaderId && checkMyClan === clanId"><i class="fas fa-minus"></i> 클랜 탈퇴</div>
             </div>
           </div>
         </div>
