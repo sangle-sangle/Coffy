@@ -1,35 +1,36 @@
 <template>
-  <div v-if="!this.$store.state.user.isLogin">
+  <div v-if="!$store.state.user.isLogin">
     <Unauth text="로그인"/>
   </div>
-  <!-- <div v-else-if="this.$store.state.user.isLogin && solved">
+  <div v-else-if="!beforesolved">
     <Unauth text="이전 문제를 푼"/>
-  </div> -->
+  </div>
   <div v-else>
   <!-- <div> -->
     <Modal v-if="result">
       <div class="modal-wrapper">
         <div class="button-wrapper">
-          <button @click="toggleModal">CLOSE</button>
         </div>
-        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
         <div>
+          <i class="collecticon fab fa-angellist"></i><br>
           참잘했어요
-          <i v-if="result" class="collecticon fab fa-angellist"></i>
-          <i class="far fa-next" />
         </div>
+          <button v-if="game.id!==3" @click="goNext(game.id)">다음 문제로</button>
+          <button @click="toggleModal">닫기</button>
       </div>
     </Modal>
     <div>
       <div>
         <div>
           <span class="game-title">{{game.title}}</span>
+          <i style="margin-left:1rem" v-if="solved" class="fas fa-check"></i>
         </div>
         <div>
           <span class="game-description">{{game.description}}</span>
         </div>
         <div>
-          <span class="game-hint">{{game.hint}}</span>
+          <span v-if="game.id===1" class="game-hint" @click="movetip(1)">설명 다시보기</span>
+          <span v-else class="game-hint" @click="movetip(3)">힌트보러가기</span>
         </div>
       </div>
       <div class="answer-board">
@@ -50,7 +51,7 @@
       <p id="user-ground" v-text="game.text">
       </p>
     </div>
-        <div v-if="game.id===1">
+    <div v-if="game.id===1">
     <Modal id="tip1" v-if="tips===1">
       <div class="modal-wrapper">
         <div>
@@ -80,7 +81,8 @@
       <div class="modal-wrapper">
         <div>
           <div class="tiptext">
-            CSS중에서 word-wrap 을 이용하여 아래 두개의 텍스트의 형태를 <br> 똑같은 방식으로 맞춰줍니다
+            아래의 두 텍스트가 같은 형태로 나타나도록 CSS를 조작해 보세요 ~ <br>
+            힌트를 드리자면
             {{game.hint}}
           </div>
           <button @click="movetip(2)">이전</button>
@@ -106,7 +108,7 @@
           <div class="tiptext">
             아래의 두 텍스트가 같은 형태로 나타나도록 CSS를 조작해 보세요 ~ <br>
             힌트를 드리자면
-              {{game.hint}}
+            {{game.hint}}
           </div>
           <button @click="movetip(8)">가뿐하네</button>
         </div>
@@ -118,6 +120,7 @@
 <script>
 import Unauth from '@/components/common/Unauth.vue'
 import Modal from '@/components/common/Modal.vue';
+import { getGame , solvedProblem } from '@/api/game'
 
 export default {
   components: {
@@ -126,23 +129,10 @@ export default {
   },
   data() {
     return {
+      beforesolved : true,
       tips : 1,
-      game: {
-        id: 1,
-        category: 1,
-        title: 'text',
-        text: "This is the first time I've seen the word Pneumonoultramicroscopicsilicovolcanoconiosis. It's a long one",
-        base: {
-          'word-wrap': 'break-word',
-          'hyphens': 'auto'
-        },
-        problem: {
-          'word-wrap': '',
-          'hyphens': 'auto'
-        },
-        description: "text-wrap",
-        hint: "힌트는 없다",
-      },
+      solved : false,
+      game: { },
       basecolor: ['basered', 'basegreen', 'baseblue'],
       color: ['red', 'green', 'blue'],
       answer: [],
@@ -150,13 +140,28 @@ export default {
     }
   },
   mounted() {
-    this.baseSetting();
-    this.problemSetting();
+    this.getGamedata();
     document.querySelector('#slot-modal').style['transform'] = 'translate(0px,-100px)'
   },
   methods: {
     movetip(i){
       this.tips = i
+    },
+    goNext(id){
+      this.$router.push(`/game/text/${id+1}/`)
+    },
+    getGamedata() {
+      getGame(2,this.$route.params.id).then(response => {
+        this.game = response.data.game
+        this.solved  = response.data.count
+        console.log(response.data.count)
+        this.game.base = JSON.parse(response.data.game.base.split(`'`).join(`"`))
+        this.game.problem = JSON.parse(response.data.game.problem.split(`'`).join(`"`))
+      }).then(()=>{
+        this.baseSetting()
+        this.problemSetting()
+        this.beforesolved = this.game.id-1 <= this.$store.state.user.solved[0]
+      })
     },
     baseSetting() {
       this.answer = new Array(Object.keys(this.game.base).length)
@@ -186,6 +191,7 @@ export default {
       if (this.tips === 1){
         answerboard.style['z-index'] = 0
         itembox.style['position'] = 'sticky'
+        itembox.style['z-index'] = 0
       } else if (this.tips===2){
         itembox.style['position'] = 'sticky'
         itembox.style['z-index'] = 0
@@ -226,6 +232,14 @@ export default {
       }
       if (result) {
         this.result = true
+        if (!(this.solved)) {
+            this.$store.commit('gamesolve')
+            solvedProblem({category_id:2,game_id:this.game.id}).then(
+            response=>{
+              console.log(response)
+            })
+          this.solved = true
+        }
       } else {
         this.result = false
       }
@@ -257,8 +271,7 @@ export default {
     color: black;
     font-size: 2rem;
     margin: 0 auto;
-    max-width: 200px;
-    border: solid 2px #ccc;
+    width : 60%;
     padding: 12px;
   }
 
@@ -267,8 +280,8 @@ export default {
     color: black;
     font-size: 2rem;
     margin: 0 auto;
-    max-width: 200px;
-    border: solid 2px #ccc;
+    margin-top : 2rem;
+    width : 60%;
     padding: 12px;
   }
 
