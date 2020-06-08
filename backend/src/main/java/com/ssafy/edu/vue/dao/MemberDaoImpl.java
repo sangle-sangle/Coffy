@@ -22,6 +22,10 @@ public class MemberDaoImpl {
 	public Member getMember(int memberid) {
 		return sqlSession.selectOne(ns+"getMember", memberid);
 	}
+	
+	public List<Member> getClanMembers(int clanid) {
+		return sqlSession.selectList(ns+"getClanMembers",clanid);
+	}
 
 	public void addMember(Member member) {
 		sqlSession.insert(ns+"addMember", member);
