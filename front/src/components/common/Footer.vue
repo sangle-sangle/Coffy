@@ -1,8 +1,8 @@
 <template>
   <div class="footer-wrapper">
     <div class="left-footer">
-      <span>Service Introduction</span>
-      <span>Team Introduction</span>
+      <span @click="goIntroPage('service-intro')">Service Introduction</span>
+      <span @click="goIntroPage('team-intro')">Team Introduction</span>
     </div>
     <div class="right-footer">☕Coffy</div>
   </div>
@@ -21,6 +21,12 @@ export default {
     setTimeout(() => this.changeColor(this.mode), 250);
   },
   methods: {
+    goIntroPage(idVal) {
+      this.$router.push(`/about#${idVal}`);
+      if (idVal === 'service-intro') {
+        window.scrollTo(0, 0);
+      }
+    },
     changeColor(mode) {
       if (mode === 'white') {
         document.querySelector('.footer-wrapper').style.backgroundColor = '#eee';
@@ -49,6 +55,11 @@ export default {
   font-size: 14px;
   padding-right: 10px;
   margin-right: 10px;
+}
+
+.left-footer > span:hover {
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .right-footer {

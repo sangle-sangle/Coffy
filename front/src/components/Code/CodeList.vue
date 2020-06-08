@@ -31,14 +31,16 @@
               <div class="like-info"><i class="fas fa-heart"></i> {{ code.likes }}</div>
             </div>
           </div>
-          <div class="detail-btn" @click="goCodeEditPage(code.id)">
+          <div class="detail-btn" @click="goCodeEditPage(code.id)" v-if="isLogin && code.writerid === userInfo['access-Token'].id">
             <i class="fas fa-edit"></i> 코드 수정
           </div>
         </div>
       </div>
     </div>
     <Pagination :itemCount="this.$store.state.code.codeData.length" @setNowPage="setNowPage" v-if="!loading"></Pagination>
-    <SpinnerLoading v-else></SpinnerLoading>
+    <div class="spinner-section" v-else>
+      <SpinnerLoading></SpinnerLoading>
+    </div>
   </div>
 </template>
 
@@ -139,7 +141,7 @@ export default {
 
 .code-list-title {
   display: inline-block;
-  font-size: calc(2rem + 1vw);
+  font-size: calc(2rem + 0.5vw);
   font-family: 'Noto Sans KR';
   font-weight: 600;
   padding-bottom: 5px;
@@ -195,13 +197,20 @@ export default {
 }
 
 .code-card .code-title {
-  display: inline-block;
+  display: -webkit-box;
   font-size: calc(1.3rem + 0.3vw);
   font-weight: 600;
   font-family: 'Gothic A1';
   padding-bottom: 4px;
   margin-bottom: 10px;
   border-bottom: 1px solid silver;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+  line-height: 1.5em;
+  height: 1.5em;
 }
 
 .code-preview {
@@ -219,10 +228,10 @@ export default {
   cursor: pointer;
 }
 
-.info-wrapper {
+.code-info {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
 }
 
 .writer-info {
@@ -257,6 +266,7 @@ export default {
 }
 
 .detail-btn {
+  float: right;
   font-size: calc(0.7rem + 0.3vw);
   font-weight: 600;
   font-family: 'Gothic A1';
@@ -272,6 +282,10 @@ export default {
 
 .itembox {
   background-color : #eee;
+}
+
+.spinner-section {
+  position: relative;
 }
 
 @media (min-width: 600px) and (max-width: 960px) {

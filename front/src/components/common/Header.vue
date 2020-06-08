@@ -44,7 +44,7 @@
           <router-link to="/game">Game</router-link>
         </li>
         <li>
-          <router-link :to="clanPageUrl">Clan</router-link>
+          <router-link to="/clan">Clan</router-link>
         </li>
       </ul>
       <hr class="divider" v-if="this.isLogin">
@@ -78,9 +78,9 @@ export default {
       isLogin: state => state.user.isLogin,
       userInfo: state => state.user.userInfo
     }),
-    clanPageUrl() {
-      return Object.keys(this.userInfo).length && this.userInfo['access-Token'].clanid >= 1 ? `/clan/detail/${this.userInfo['access-Token'].clanid}` : '/clan'
-    }
+    // clanPageUrl() {
+    //   return Object.keys(this.userInfo).length && this.userInfo['access-Token'].clanid >= 1 ? `/clan/detail/${this.userInfo['access-Token'].clanid}` : '/clan'
+    // }
   },
   data() {
     return {
@@ -152,7 +152,6 @@ export default {
   align-items: center;
   width: 100%;
   padding: 15px 0 15px 15px;
-  /* background-color: rgb(30, 30, 34); */
   font-family: 'Gothic A1';
 }
 
@@ -173,7 +172,6 @@ export default {
   padding: 5px;
   border: transparent;
   border-radius: 10px;
-  /* background-color: rgb(37, 40, 48); */
   color: #eee;
   margin-right: 8px;
 }

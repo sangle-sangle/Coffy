@@ -3,6 +3,8 @@ package com.ssafy.edu.vue.service;
 import java.util.List;
 
 import com.ssafy.edu.vue.dto.Code;
+import com.ssafy.edu.vue.dto.CodeComment;
+import com.ssafy.edu.vue.dto.CommentInfo;
 import com.ssafy.edu.vue.dto.LikeCode;
 
 public interface ICodeService {
@@ -28,5 +30,17 @@ public interface ICodeService {
 	List<Code> getMyCodes(int memberid);
 
 	List<Code> getMyLikes(int memberid);
+
+	List<CodeComment> getCommentPost(CommentInfo commentinfo);
+
+	void addCommentPost(CodeComment codecomment);
+
+	void updateCommentPost(CodeComment codecomment);
+
+	void deleteCommentPost(int id);
+
+	int findCodeId(int id);
+
+	int getCommentCounts(int codeid);
 
 }

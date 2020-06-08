@@ -13,7 +13,7 @@
     <div class="dashboard-main">
       <div class="dashboard-main-header">
         <ul class="dashboard-tab-menu">
-          <li :class="currentTab === index ? mode === 'white'?'active-tab-white':'active-tab':''" class="dashboard-tab-item" v-for="(tab, index) in tabs" :key="tab" @click="currentTab = index">
+          <li :class="sortProperty.currentTab === index ? mode === 'white'?'active-tab-white':'active-tab':''" class="dashboard-tab-item" v-for="(tab, index) in tabs" :key="tab" @click="sortProperty.currentTab = index">
             {{tab}}
           </li>
         </ul>
@@ -21,7 +21,7 @@
           <div class="filter-left">
             <div class="filter-item filter-search">
               <div class="filter-search-bar">
-                <input type="text" class="filter-search-input" placeholder="Search keyword" v-model="keyword">
+                <input type="text" class="filter-search-input" placeholder="Search keyword" v-model="sortProperty.keyword">
               </div>
               <button class="filter-search-button"><i class="fas fa-search"></i></button>
             </div>
@@ -30,19 +30,19 @@
             <div class="filter-item filter-menu">
               <span class="filter-sort-method span-items">정렬 방식</span>
               <div class="dropdown-menu">
-                <span class="filter-drop-button">{{menuItems[menuIndex]}}</span>
+                <span class="filter-drop-button">{{menuItems[sortProperty.menuIndex]}}</span>
                 <div class="dropdown-contents">
-                  <li class="d" v-for="(item, index) in menuItems" :key="index" @click="menuIndex=index">{{item}}</li>
+                  <li class="d" v-for="(item, index) in menuItems" :key="index" @click="sortProperty.menuIndex=index">{{item}}</li>
                 </div>
               </div>
             </div>
             <div class="filter-item filter-sort">
               <span class="filter-sort-direction span-items">정렬 방향</span>
               <div class="sort_button_group">
-                <button class="filter-sort-button" :class="filterButton === false ? 'active-sort' : ''" @click="filterButton = false">
+                <button class="filter-sort-button" :class="sortProperty.filterButton === false ? 'active-sort' : ''" @click="sortProperty.filterButton = false">
                   <i class="fas fa-chevron-up"></i>
                 </button>
-                <button class="filter-sort-button" :class="filterButton === true ? 'active-sort' : ''" @click="filterButton = true">
+                <button class="filter-sort-button" :class="sortProperty.filterButton === true ? 'active-sort' : ''" @click="sortProperty.filterButton = true">
                   <i class="fas fa-chevron-down"></i>
                 </button>
               </div>
@@ -53,23 +53,20 @@
     </div>
     <div class="dash-board-tab-contents">
       <div class="tab-content">
-        <div v-if="currentTab == 0">
-          좋아연
-        </div>
-        <div v-if="currentTab == 1">
-          싫어연
-        </div>
+        <CodeList :codeList = sortedData />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import CodeList from '@/components/MyPage/CodeList.vue'
 import { mapState } from 'vuex'
+import { getMyCode, getLikedCode } from '@/api/code.js'
 
 export default {
   components:{
-    
+    CodeList,
   },
   computed: {
     ...mapState({
@@ -78,14 +75,20 @@ export default {
   },
   data() {
 		return {
-			currentTab: 0, // 현재 탭 위치
+      sortProperty:{
+        currentTab: 0, // 현재 탭 위치
+        keyword: '', // 검색 키워드
+        filterButton: false, // 오름차순/내림차순
+        menuIndex: 0, // 정렬방식
+      },
       tabs: ['찜한 템플릿', '내가 만든 템플릿'], // 탭 아이템 내용
-      keyword: '',
-      filterButton: false,
-      filterMenu: false,
       menuItems: ['작성일자순', '이름순', '인기순', ],
-      menuIndex: 0
+      initMyCode: [],
+      sortedData: [],
 		}
+  },
+  created() {
+    this.getCodeData();
   },
   mounted() {
     this.changeColor(this.mode);
@@ -99,7 +102,7 @@ export default {
           dropDown.classList.remove('active-dropdown');
         }
       }
-    }
+    };
   },
   methods: {
     changeColor(mode) {
@@ -136,11 +139,44 @@ export default {
         spanItems.forEach(span=> {span.style.color = '#717790'})
       }
     },
+    async getCodeData(){
+      const myCode = await getMyCode()
+      const likedCode = await getLikedCode()
+      this.initMyCode = [likedCode.data, myCode.data, ]
+      this.setFilter()
+    },
+    setFilter(){
+      this.sortedData = []
+      if (this.initMyCode.length === 0)
+        return
+      const sortingIndex = ["created_at", "title", "likes"]
+      const notFilteredItems = this.initMyCode[this.sortProperty.currentTab]
+      const idx = sortingIndex[this.sortProperty.menuIndex]
+      const acending = this.sortProperty.filterButton
+      if (notFilteredItems.length > 1){
+        notFilteredItems.sort(function(a,b) {
+          if (acending)
+            return a[idx] < b[idx] ? -1 : a[idx] > b[idx] ? 1 : 0;
+          else
+            return a[idx] > b[idx] ? -1 : a[idx] < b[idx] ? 1 : 0;
+        })
+      }
+      const keyword = this.sortProperty.keyword.toLowerCase()
+      for (var i=0; i<notFilteredItems.length;i++){
+        if (notFilteredItems[i].description.includes(keyword) || notFilteredItems[i].title.includes(keyword) || notFilteredItems[i].writername.includes(keyword) )
+          this.sortedData.push(notFilteredItems[i])
+      }
+    },
   },
   watch: {
     mode() {
       this.changeColor(this.mode)
-    }
+    },
+    sortProperty:{
+      deep:true,
+      immediate:true,
+      handler:"setFilter"
+    },
   }
 }
 </script>

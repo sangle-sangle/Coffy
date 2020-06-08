@@ -9,36 +9,48 @@
           ☕Coffy 사이트의 클랜 리스트를 볼 수 있습니다.
         </div>
       </div>
+      <div class="clan-main-header-right">
+        <div class="my-clan-btn" v-if="myClanId !== '0'" @click="goMyClan">내 클랜 페이지로 이동</div>
+        <div class="add-clan-btn" v-if="myClanId === '0'" @click="goAddForm"><i class="fas fa-plus"></i> 클랜 생성</div>
+      </div>
     </div>
     <div class="clan-search">
       <form class="search-box" @submit.prevent="searchClan">
         <input type="text" id="search-clan" placeholder="Search Clan Name" v-model="keyword">
         <label for="search-clan" @click="searchClan"><i class="fas fa-search"></i></label>
       </form>
-      <div class="clan-main-header-right" v-if="this.userInfo['access-Token'].clanid === 0">
-        <div class="add-clan-btn" @click="goAddForm"><i class="fas fa-plus"></i> 클랜 생성</div>
-      </div> 
     </div>
     <div class="clan-list" v-if="!loading">
-      <div v-for="clan in clanList" :key="clan.id" class="clan-card">
+      <div v-for="(clan, idx) in clanList" :key="idx" class="clan-card">
         <div class="clan-header">
           <div v-if="!clan.locked" class="clan-private open"><i class="fas fa-lock-open"></i>공개</div>
           <div v-else class="clan-private private"><i class="fas fa-lock"></i>비공개</div>
-          <div class="clan-master">Master: {{ clan.leaderId }}</div>
+          <div class="clan-master">Master: {{ clan.mastername }}</div>
         </div>
-        <div class="clan-name">
-          {{ clan.name }}
-        </div>
-        <div class="clan-footer">
-          <div class="clan-register-btn" @click="showClanRegister(clan.id)"><i class="fas fa-plus"></i> 클랜 가입</div>
-          <div class="clan-detail-btn" @click="goClanDetail(clan.id)"><i class="fas fa-info"></i> 상세보기</div>
+        <div class="clan-card-info">
+          <div class="clan-mark">
+            <img src="../../assets/images/clan/clan_mark_no_image.png" alt="clan_no_mark" v-if="!clan.clanmark">
+            <img :src="clan.clanmark" alt="clan_no_mark" v-else>
+          </div>
+          <div class="clan-info">
+            <div class="clan-name">
+              <span>{{ clan.name }}</span>
+              <span v-if="clan.id === Number(myClanId)" class="my-clan-sign">My Clan</span>
+            </div>
+            <div class="clan-footer">
+              <div class="clan-detail-btn" @click="goClanDetail(clan.id)"><i class="fas fa-info"></i> 상세보기</div>
+              <div class="clan-register-btn" @click="showClanRegister(idx)" v-if="myClanId === '0'"><i class="fas fa-plus"></i> 클랜 가입</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
     <Pagination :itemCount="this.$store.state.clan.clanData.length" @setNowPage="setNowPage" v-if="!loading"></Pagination>
-    <SpinnerLoading v-else></SpinnerLoading>
+    <div class="spinner-section" v-else>
+      <SpinnerLoading></SpinnerLoading>
+    </div>
     <Modal v-if="showClanRegisterModal">
-      <ClanRegisterModal :clanInfo="clanList[registerClanId - 1]" @closeModal="closeModal"></ClanRegisterModal>
+      <ClanRegisterModal :clanInfo="clanList[registerClanId]" @closeModal="closeModal"></ClanRegisterModal>
     </Modal>
   </div>
 </template>
@@ -46,17 +58,17 @@
 <script>
 import { mapState } from 'vuex'
 import { fetchAllClans } from '@/api/clan.js'
-import ClanRegisterModal from '@/components/Clan/ClanRegisterModal.vue'
 import Modal from '@/components/common/Modal.vue';
 import SpinnerLoading from '@/components/common/SpinnerLoading.vue'
 import Pagination from '@/components/common/Pagination.vue'
+import ClanRegisterModal from '@/components/Clan/ClanRegisterModal.vue'
 
 export default {
   components: {
-    ClanRegisterModal,
     Modal,
     SpinnerLoading,
-    Pagination
+    Pagination,
+    ClanRegisterModal,
   },
   data() {
     return {
@@ -65,7 +77,8 @@ export default {
       showClanRegisterModal: false,
       registerClanId: null,
       loading: false,
-      nowPage: 1
+      nowPage: 1,
+      myClanId: sessionStorage.getItem('myClanId')
     }
   },
   computed: {
@@ -100,8 +113,8 @@ export default {
     goClanDetail(clanId) {
       this.$router.push(`/clan/detail/${clanId}`);
     },
-    showClanRegister(clanId) {
-      this.registerClanId = clanId;
+    showClanRegister(idx) {
+      this.registerClanId = idx;
       this.showClanRegisterModal = true;
     },
     closeModal() {
@@ -112,6 +125,9 @@ export default {
       this.nowPage = pageNm;
       this.clanList = allClans.slice(12 * (this.nowPage - 1), 12 * this.nowPage);
       this.loading = false;
+    },
+    goMyClan() {
+      this.$router.push(`/clan/detail/${this.myClanId}`);
     },
     changeColor(mode) {
       if (mode === 'white') { // 화이트 모드일 때
@@ -144,6 +160,18 @@ export default {
   margin-bottom: 40px;
 }
 
+.my-clan-btn {
+  font-size: calc(0.7rem + 0.3vw);
+  font-family: 'Gothic A1';
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: black;
+  text-align: center;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #47cf73;
+}
+
 .clan-main-title {
   display: inline-block;
   font-size: calc( 2rem + 0.5vw );
@@ -158,10 +186,20 @@ export default {
   font-size: calc(0.7rem + 0.3vw);
 }
 
-.clan-search {
+.clan-search,
+.clan-name {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
+}
+
+.clan-name > span.my-clan-sign {
+  font-size: 12px;
+  background-color: antiquewhite;
+  color: black;
+  padding: 4px;
+  border-radius: 10px;
 }
 
 .search-box {
@@ -182,7 +220,7 @@ export default {
   margin-right: 8px;
 }
 
-.clan-main-header-right{
+.clan-main-header-right {
   margin-top: auto;
   margin-bottom: auto;
 }
@@ -200,6 +238,7 @@ export default {
   margin-left:8px;
 }
 
+.my-clan-btn:hover,
 .add-clan-btn:hover {
   cursor: pointer;
 }
@@ -230,7 +269,7 @@ export default {
 
 .clan-private {
   display: inline-block;
-  font-size: calc(0.3rem + 0.3vw);
+  font-size: calc(0.6rem + 0.3vw);
   font-weight: 600;
   padding: 6px;
   border-radius: 8px;
@@ -248,8 +287,8 @@ export default {
   font-size: calc(1.3rem + 0.3vw);
   font-weight: 600;
   font-family: 'Gothic A1';
-  padding-bottom: 10px;
-  margin: 20px 0 10px;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
   border-bottom: 1px solid silver;
 }
 
@@ -259,20 +298,42 @@ export default {
   align-items: center;
 }
 
+.clan-card-info {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.clan-card-info .clan-mark {
+  display: flex;
+  align-items: center;
+  margin-right: 5px;
+}
+
+.clan-info {
+  flex-grow: 1;
+}
+
+.clan-card-info img {
+  width: 65px;
+  height: 65px;
+  vertical-align: top;
+}
+
 .clan-footer {
   display: flex;
-  flex-direction: row-reverse;
 }
 
 .clan-footer > .clan-register-btn,
 .clan-footer > .clan-detail-btn {
-  font-size: calc(0.5rem + 0.3vw);
+  font-size: calc(0.6rem + 0.3vw);
   font-family: 'Gothic A1';
   font-weight: 600;
   padding: 6px;
   color: black;
   border-radius: 8px;
   margin-left: 4px;
+  letter-spacing: -1px;
 }
 
 .clan-register-btn {
@@ -288,6 +349,10 @@ export default {
   cursor: pointer;
 }
 
+.spinner-section {
+  position: relative;
+}
+
 @media (min-width: 600px) and (max-width: 960px) {
   .clan-list {
     display: grid;
@@ -296,14 +361,13 @@ export default {
 }
 
 @media (max-width: 600px) {
+  .clan-main-header-right {
+    margin-top: 10px;
+  }
+
   .clan-list {
     display: grid;
     grid-template-columns: 1fr;
-  }
-
-  .clan-private,
-  .clan-master {
-    font-size: calc(0.3rem + 0.3vw);
   }
 
   .clan-search {

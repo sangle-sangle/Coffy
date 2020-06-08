@@ -4,7 +4,7 @@
       <div class="login-title">
         Login
       </div>
-      <div class="login-form">
+      <form class="login-form" @submit.prevent="submitForm">
         <div class="email-form">
           <label for="email"></label>
           <input id="email" v-model="userName" type="text" placeholder="ID">
@@ -17,10 +17,10 @@
           <input id="password" v-model="password" type="password" placeholder="Password">
         </div>
         <div class="btn-group">
-          <button class="log-btn" @click="submitForm">로그인</button>
+          <button type="submit" class="log-btn">로그인</button>
           <button class="find-pw-btn" @click="goFindAccount">비밀번호 찾기</button>
         </div>
-      </div>
+      </form>
       <div class="social-login-box">
         <div class="social-message">Github 계정만 있어도 이용 가능합니다.</div>
         <div class="social-btn-group">
@@ -81,10 +81,10 @@ export default {
           return
         }
         this.initForm()
-        this.$router.push(this.nextPageUrl)
+        this.$router.push('/');
       } catch (error) {
         if(error.status === 500) {
-          alert('등록되지 않은 아이디입니다.')
+          alert('등록되지 않은 계정입니다.')
         }
       }
     },

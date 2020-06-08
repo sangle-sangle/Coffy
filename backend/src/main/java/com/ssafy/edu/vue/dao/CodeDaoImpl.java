@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ssafy.edu.vue.dto.Code;
+import com.ssafy.edu.vue.dto.CodeComment;
+import com.ssafy.edu.vue.dto.CommentInfo;
 import com.ssafy.edu.vue.dto.LikeCode;
 
 @Repository
@@ -59,6 +61,30 @@ public class CodeDaoImpl {
 
 	public List<Code> getMyLikes(int memberid) {
 		return sqlSession.selectList(ns+"getMyLikes",memberid);
+	}
+
+	public List<CodeComment> getCommentPost(CommentInfo commentinfo) {
+		return sqlSession.selectList(ns+"getCommentPost",commentinfo);
+	}
+
+	public void addCommentPost(CodeComment codecomment) {
+		sqlSession.insert(ns+"addCommentPost", codecomment);
+	}
+
+	public void updateCommentPost(CodeComment codecomment) {
+		sqlSession.update(ns+"updateCommentPost",codecomment);
+	}
+
+	public void deleteCommentPost(int id) {
+		sqlSession.delete(ns+"deleteCommentPost", id);
+	}
+
+	public int findCodeId(int id) {
+		return sqlSession.selectOne(ns+"findCodeId", id);
+	}
+
+	public int getCommentCounts(int codeid) {
+		return sqlSession.selectOne(ns+"getCommentCounts", codeid);
 	}
 
 }
