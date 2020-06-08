@@ -10,8 +10,7 @@
       <input v-if="this.clanInfo.locked" type="password" id="clan-pwd" v-model="password" placeholder="클랜 비밀번호를 입력하세요.">
     </div>
     <div v-else class="message private-clan">
-      <p class="register-message" v-if="!this.clanInfo.locked">{{ this.clanInfo.name }} 클랜에 가입되었습니다.</p>
-      <p class="register-message" v-else>{{ this.clanInfo.name }} 클랜 가입 신청되었습니다.<br>클랜장의 승인을 기다려주세요.</p>
+      <p class="register-message">{{ this.clanInfo.name }} 클랜에 가입되었습니다.</p>
     </div>
     <div class="register-btn-wrapper">
       <div class="register-btn">
