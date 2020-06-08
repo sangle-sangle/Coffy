@@ -63,6 +63,7 @@
         </div>
       </div>
       <div id="applyform" class="rowapply">
+        <ApplyCode class='itembox' :idTag="`beforeframe${editCodeId}`" :code="beforeData" :colLayout="colLayout" />  
         <ApplyCode class='itembox' :idTag="`frame${editCodeId}`" :code="afterData" :colLayout="colLayout" />
       </div>
     </div>
@@ -141,7 +142,7 @@ export default {
       this.getCodeInfo(this.editCodeId);
     }
   },
-  mounted() {
+  mounted(){
     this.checkWindowWidth();
     this.theme = this.$store.state.common.mode === 'dark' ? 1: 0
     this.changeColor(this.mode);
@@ -188,7 +189,7 @@ export default {
       this.codeData.htmlText = this.codeDetail.html;
       this.codeData.cssText = this.codeDetail.css;
       this.codeData.jsText = this.codeDetail.javascript;
-      this.beforeData = this.codeData;
+      this.beforeData = JSON.parse(JSON.stringify(this.codeData));
     },
     async submitCode(){
       if (!this.title) {
@@ -457,6 +458,12 @@ export default {
 .flex { 
   display: flex;
   margin-bottom: 15px;
+}
+
+.copycon{
+  float: right;
+  margin-right:2px;
+  position: relative;
 }
 
 .expandicon {
