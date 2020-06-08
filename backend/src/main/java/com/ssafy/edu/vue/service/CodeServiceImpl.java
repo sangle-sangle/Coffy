@@ -110,12 +110,6 @@ public class CodeServiceImpl implements ICodeService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public int findCodeId(int id) {
-		return codedao.findCodeId(id);
-	}
-
-	@Override
-	@Transactional(readOnly = true)
 	public int getCommentCounts(int codeid) {
 		return codedao.getCommentCounts(codeid);
 	}

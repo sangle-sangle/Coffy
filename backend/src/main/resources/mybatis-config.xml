@@ -16,5 +16,6 @@
 		<mapper resource="mapper/clan.xml" />
 		<mapper resource="mapper/game.xml" />
 		<mapper resource="mapper/gamecategory.xml" />
+		<mapper resource="mapper/post.xml" />
 	</mappers>
 </configuration>
