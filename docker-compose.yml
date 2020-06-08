@@ -4,6 +4,9 @@ services:
     build: "./front"
     ports:
       - "80:80"
+      - "443:443"
+    volumes: 
+      - ./etc/letsencrypt:/etc/letsencrypt
 
   db:
     restart: always
