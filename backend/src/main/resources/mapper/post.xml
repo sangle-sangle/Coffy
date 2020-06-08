@@ -22,8 +22,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<insert id="addPost" parameterType="com.ssafy.edu.vue.dto.ClanPost">
-		insert into clan_post(postid, clanid, title, content, created_at, writerid)
-		values(#{postid}, #{clanid}, #{title}, #{content}, now(), #{writerid})
+		insert into clan_post(clanid, title, content, created_at, writerid)
+		values(#{clanid}, #{title}, #{content}, now(), #{writerid})
 	</insert>
 
 	<update id="updatePost"
