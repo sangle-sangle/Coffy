@@ -34,32 +34,50 @@
         </div>
       </div>
       <div class="answer-board">
-        <div class="css" v-for="(key,value,index) in game.problem" :key="value">
-          <div v-if="value"><span> {{value}} : </span></div>
-          <div v-else><input v-model="answer[index]" type="text"> : </div>
+        <span>.container {{this.game.text}} {</span>
+            <div class="css" v-for="(key,value,index) in game.problem" :key="value">
+            <div v-if="value"><span> {{value}} : </span></div>
+            <div v-else><input v-model="answer[index]" type="text"> : </div>
 
-          <div v-if="key"> {{key}}</div>
-          <div v-else><input v-model="answer[index]" type="text"></div>
-        </div>
+            <div v-if="key"> {{key}}</div>
+            <div v-else><input v-model="answer[index]" type="text"></div>
+            </div>
+        <span>}</span>
+
       </div>
     </div>
     <div>
     </div>
     <div class="itembox">
-      <p id="base-ground" v-text="game.text">
-      </p>
-      <p id="user-ground" v-text="game.text">
-      </p>
+        <div id="base-ground" class="grid-container">
+            <div class="grid-div item1">1</div>
+            <div class="grid-div">2</div>
+            <div class="grid-div">3</div>  
+            <div class="grid-div">4</div>
+            <div class="grid-div">5</div>
+            <div class="grid-div">6</div>
+            <div class="grid-div">7</div>
+            <div class="grid-div">8</div>  
+        </div>
+        <div id="user-ground" class="grid-container">
+            <div class="grid-div item1">1</div>
+            <div class="grid-div">2</div>
+            <div class="grid-div">3</div>  
+            <div class="grid-div">4</div>
+            <div class="grid-div">5</div>
+            <div class="grid-div">6</div>
+            <div class="grid-div">7</div>
+            <div class="grid-div">8</div>  
+        </div>
     </div>
     <div v-if="game.id===1">
     <Modal id="tip1" v-if="tips===1">
       <div class="modal-wrapper">
         <div>
           <div class="tiptext">
-            <strong>TEXT 를 한번 배워봅시다 !</strong><br><br>
-            <img src="@/assets/images/codegame/cssisawesome.jpg" alt=""><br>
-            CSS를 구성하시다가 이런식으로 TEXT가 생각처럼 나오지 않는 경우를 많이 경험하셨을 것 같은데요<br>
-            더 이상은 div에서 탈출하지 않도록 TEXT 구성 요소들을 배워봅시다
+            <strong>Grid 를 한번 배워봅시다 !</strong><br><br>
+            Container에 여러 개의 div 를 정렬해야할 때 깔끔하게 넣고 싶으신가요?<br>
+            깔끔한 Grid 를 위하여 여러 가지 속성들을 배워봅시다
           </div>
           <button @click="movetip(2)">다음</button>
         </div>
@@ -69,8 +87,8 @@
       <div class="modal-wrapper">
         <div>
           <div class="tiptext">
-            TEXT 조작할 수 있는 CSS 화면입니다.<br>
-            word-wrap 을 이용하여 단어의 길이와 상관없이<br>부모 요소의 width를 유지 시켜줍니다<br>
+            Grid 조작할 수 있는 CSS 화면입니다.<br>
+            Grid 속성을 이용하여 두 개의 Grid Container를 <br>똑같이 나타내도록 CSS설정을 해봅시다<br>
           </div>
           <button @click="movetip(1)">이전</button>
           <button @click="movetip(3)">다음</button>
@@ -81,7 +99,7 @@
       <div class="modal-wrapper">
         <div>
           <div class="tiptext">
-            아래의 두 텍스트가 같은 형태로 나타나도록 CSS를 조작해 보세요 ~ <br>
+            아래의 두 컨테이너가 같은 형태로 나타나도록 CSS를 조작해 보세요 ~ <br>
             힌트를 드리자면
             {{game.hint}}
           </div>
@@ -132,7 +150,47 @@ export default {
       beforesolved : true,
       tips : 1,
       solved : false,
-      game: { },
+      game: {
+        id: 1,
+        category: 3,
+        item_cnt : 0,
+        title: 'grid 시스템의 이해',
+        text: "",
+        base: {'display':'grid','grid-template-columns': '1fr 2fr 1fr','grid-gap': '10px'},
+        problem: {'display':'grid','grid-template-columns': '','grid-gap': ''},
+        description: "columns 사이의 값을 1:2:1 비율로 맞추고 grid 사이의 값은 10px로 맞춰주세요",
+        hint: "grid-template-columns의 값으로는 자동으로 분배해주는 auto와, 비율에 맞게 px이나 fr 단위등을 사용 할 수 있어요",
+
+        // id : 2,
+        // category : 3,
+        // title : 'column에 repeat 을 이용하여 나타내 봅시다',
+        // item_cnt : 1,
+        // text : '',
+        // base: {'display':'grid','grid-template-columns': 'repeat(5,auto)','grid-gap': '10px'},
+        // problem: {'display':'grid','grid-template-columns': '','grid-gap': '10px'},
+        // description: "repeat을 사용해서 5등분의 그리드가 적용된 컨테이너를 만들어 봅시다",
+        // hint: "repeat(num, value) 함수는 value 값을 만큼 반복하여 사용하게 해줍니다. 정확한 등분으로 나누려면 auto값을 이용하는게 좋아보이네요",
+
+        // id : 3,
+        // category : 3,
+        // title : 'grid의 column과 row를 조절하여 위치와 크기를 바꿔봅시다',
+        // item_cnt : 1,
+        // text : ' .item1',
+        // base : {'grid-column' : '2 / 4', 'grid-row-start': 1,'grid-row-end': '3'},
+        // problem : {'':'2 / 4','grid-row-start' : 1,'grid-row-end': ''},
+        // description: "grid container 안의 item1 요소의 column과 row를 조절해 봅시다",
+        // hint: "grid-row-start 와 grid-row-end 를 grid-row 로 한번에 표시할 수 있습니다. end의 지점은 해당 칸의 전까지 들어가게 됩니다",
+
+        // id : 4,
+        // category : 3,
+        // title : 'grid의 column과 row를 조절하여 위치와 크기를 바꿔봅시다',
+        // item_cnt : 0,
+        // text : '',
+        // base : {'display':'grid', 'grid-template-columns': 'repeat(auto-fit, minmax(33%,auto)', 'width': '800px'},
+        // problem :  {'display':'grid', 'grid-template-columns': '', 'width': '800px'},
+        // description: "grid container 안의 item1 요소의 column과 row를 조절해 봅시다",
+        // hint: "grid-row-start 와 grid-row-end 를 grid-row 로 한번에 표시할 수 있습니다. end의 지점은 해당 칸의 전까지 들어가게 됩니다",
+      },
       basecolor: ['basered', 'basegreen', 'baseblue'],
       color: ['red', 'green', 'blue'],
       answer: [],
@@ -147,16 +205,13 @@ export default {
     movetip(i){
       this.tips = i
     },
-    goNext(id){
-      this.$router.push(`/game/text/${id+1}/`)
-    },
     getGamedata() {
-      getGame(2,this.$route.params.id).then(response => {
-        this.game = response.data.game
+      getGame(3,this.$route.params.id).then(response => {
+          this.game = response.data.game
         this.solved  = response.data.count
-        console.log(response.data.count)
         this.game.base = JSON.parse(response.data.game.base.split(`'`).join(`"`))
         this.game.problem = JSON.parse(response.data.game.problem.split(`'`).join(`"`))
+          console.log(this.game)
       }).then(()=>{
         this.baseSetting()
         this.problemSetting()
@@ -164,17 +219,29 @@ export default {
       })
     },
     baseSetting() {
-      this.answer = new Array(Object.keys(this.game.base).length)
-      let baseGround = document.querySelector('#base-ground');
+    this.answer = new Array(Object.keys(this.game.base).length)
+    let baseGround = document.querySelector('#base-ground')
+    let base = document.querySelector(`#base-ground${this.game.text}`);
+      if (this.game.item_cnt){
+          baseGround.classList.add('basesetting')
+      }
       for (let i in this.game.base) {
-        baseGround.style[i] = this.game.base[i]
+        base.style[i] = this.game.base[i]
       }
     },
     problemSetting() {
-      let userGround = document.querySelector('#user-ground');
+      let userGround = document.querySelector('#user-ground ');
+      let user = document.querySelector(`#user-ground${this.game.text}`)
+        if (this.game.item_cnt){
+            userGround.classList.add('basesetting')
+        }
       for (let i in this.game.problem) {
-        userGround.style[i] = this.game.problem[i]
+        user.style[i] = this.game.problem[i]
       }
+
+    },
+    goNext(id){
+      this.$router.push(`/game/grid/${id+1}/`)
     },
     toggleModal() {
       this.result = !this.result
@@ -210,30 +277,30 @@ export default {
     answer() {
       let idx = 0;
       let result = true;
-      let userGround = document.querySelector('#user-ground');
-      let baseGround = document.querySelector('#base-ground');
+      let userGround = document.querySelector(`#user-ground${this.game.text}`);
       for (let [key, value] of Object.entries(this.game.problem)) {
         if (!(key)) {
-          userGround.style[this.answer[idx]] = value
-          if (baseGround.style[this.answer[idx]] !== value) {
-            result = false
+            userGround.style[this.answer[idx]] = value
+          if (this.game.base[this.answer[idx]] !== value) {
+              console.log(this.game.base[this.answer[idx]],value)
+              result = false
           }
         }
         if (!(value)) {
           userGround.style[key] = this.answer[idx]
-          if (this.answer[idx] !== baseGround.style[key]) {
+          if (this.answer[idx] !== this.game.base[key]) {
             result = false
           }
         }
         if (key && value) {
-          userGround.style[key] = value
+            userGround.style[key] = value
         }
         idx++
       }
       if (result) {
         this.result = true
         if (!(this.solved)) {
-          solvedProblem({category_id:2,game_id:this.game.id}).then(
+          solvedProblem({category_id:3,game_id:this.game.id}).then(
             response=>{
               console.log(response)
             this.$store.commit('gamesolve')
@@ -251,7 +318,7 @@ export default {
 <style scoped>
   .answer-board {
     padding: 1rem;
-    width: 30%;
+    width: 60%;
     background-color: #eee;
     margin-bottom: 2rem;
     color: #333;
@@ -262,28 +329,29 @@ export default {
     margin: 0.5rem;
   }
 
-  .itembox {
-    background-color: #eee;
-  }
+.grid-container {
+  color : black;
+  background-color: #2196F3;
+  padding: 10px;
+}
 
-  #base-ground {
-    word-wrap: normal;
-    color: black;
-    font-size: 2rem;
-    margin: 0 auto;
-    width : 60%;
-    padding: 12px;
-  }
+.basesetting {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-gap: 10px;
+}
 
-  #user-ground {
-    word-wrap: normal;
-    color: black;
-    font-size: 2rem;
-    margin: 0 auto;
-    margin-top : 2rem;
-    width : 60%;
-    padding: 12px;
-  }
+#base-ground {
+    margin-bottom : 2rem;
+}
+
+.grid-div {
+  color : black;
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding: 20px 0;
+  font-size: 30px;
+}
 
   .game-title {
     font-size: 2rem;
@@ -297,51 +365,8 @@ export default {
     font-size: 1rem;
   }
 
-
   .collecticon {
     font-size: 100px;
-  }
-
-  .park {
-    width: 100px;
-    height: 100px;
-  }
-
-  .carbox {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100px;
-    height: 100px;
-  }
-
-  .car {
-    width: 50px;
-    height: 50px;
-  }
-
-  .basered {
-    background-color: rgb(252, 115, 115)
-  }
-
-  .basegreen {
-    background-color: rgb(147, 252, 115)
-  }
-
-  .baseblue {
-    background-color: rgb(132, 130, 248)
-  }
-
-  .car.red {
-    background-color: red;
-  }
-
-  .car.green {
-    background-color: green;
-  }
-
-  .car.blue {
-    background-color: blue;
   }
 
   .modal-wrapper .button-wrapper {

@@ -1,19 +1,14 @@
 version: '3'
 services:
-  certbot:
-    image: certbot/certbot
-    volumes: 
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
-
   front:
     build: "./front"
     ports:
       - "80:80"
       - "443:443"
     volumes: 
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /var/lib/letsencrypt:/var/lib/letsencrypt
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
 
   db:
     restart: always
@@ -37,5 +32,7 @@ services:
       - 8197:8197
     environment: 
       WAIT_HOSTS: mysql:3306
+    volumes: 
+      - /etc/letsencrypt:/etc/letsencrypt
     depends_on: 
       - db
