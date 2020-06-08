@@ -133,4 +133,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select count(*) from code_comment
 		where codeid=#{codeid}
 	</select>
+
+	<select id="getSearchCodes" parameterType="java.lang.String" resultType="com.ssafy.edu.vue.dto.Code">
+		select id, title, description, html, css, javascript,
+		writerid, created_at,
+		(select count(*) from likecode where
+		codeid=code.id) likes,
+		(select user.username from user where
+		code.writerid = user.id) writername
+		from code
+		where
+		<if test="keyword!=null">title like #{keyword} or description like #{keyword} or (select user.username from user where
+		code.writerid = user.id) like #{keyword}</if>
+		order by id	desc
+	</select>
+
 </mapper>

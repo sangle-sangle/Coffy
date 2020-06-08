@@ -41,4 +41,7 @@ public interface ICodeService {
 
 	int getCommentCounts(int codeid);
 
+	List<Code> getSearchCodes(String keyword);
+
+
 }

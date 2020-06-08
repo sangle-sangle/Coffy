@@ -113,4 +113,11 @@ public class CodeServiceImpl implements ICodeService {
 	public int getCommentCounts(int codeid) {
 		return codedao.getCommentCounts(codeid);
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Code> getSearchCodes(String keyword) {
+		return codedao.getSearchCodes(keyword);
+	}
+
 }

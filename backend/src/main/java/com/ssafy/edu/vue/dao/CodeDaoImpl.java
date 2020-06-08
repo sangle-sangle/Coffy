@@ -87,4 +87,9 @@ public class CodeDaoImpl {
 		return sqlSession.selectOne(ns+"getCommentCounts", codeid);
 	}
 
+ 	public List<Code> getSearchCodes(String keyword) {
+		return sqlSession.selectList(ns+"getSearchCodes", keyword);
+	}
+
+
 }
