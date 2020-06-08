@@ -17,6 +17,8 @@ services:
       MYSQL_DATABASE: sangle
       MYSQL_ROOT_HOST: '%'
       MYSQL_ROOT_PASSWORD: ssafy
+    volumes: 
+      - /etc/letsencrypt:/etc/letsencrypt
     command:
       --default-authentication-plugin=mysql_native_password
       --character-set-server=utf8mb4
