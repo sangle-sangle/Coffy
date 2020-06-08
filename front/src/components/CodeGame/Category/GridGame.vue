@@ -300,10 +300,10 @@ export default {
       if (result) {
         this.result = true
         if (!(this.solved)) {
-            this.$store.commit('gamesolve')
-            solvedProblem({category_id:3,game_id:this.game.id}).then(
+          solvedProblem({category_id:3,game_id:this.game.id}).then(
             response=>{
               console.log(response)
+            this.$store.commit('gamesolve')
             })
           this.solved = true
         }
