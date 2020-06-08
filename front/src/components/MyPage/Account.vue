@@ -194,9 +194,9 @@ export default {
           }
           // 프로필 이미지를 등록한 경우 imgur api와 연동된 url 주소도 같이 보내기
           changeInfoData['img'] = this.imgUrl || this.noProfileImgUrl
-
+          console.log(changeInfoData)
           const checkExistData = await updateMyInfo(changeInfoData);
-          console.log(checkExistData.data)
+            console.log(checkExistData)
           // 수정 필요
           if (!checkExistData.data.signup) {
             alert(checkExistData.data.state);
@@ -252,12 +252,13 @@ export default {
         
         const checkExistData = await deleteMyInfo(this.userInfo.id);
         // 수정 필요
-        if (!checkExistData.data.signup) {
-            alert(checkExistData.data.message);
-            return
+        if (!checkExistData.data.count) {
+          let flag = confirm('탈퇴가 완료 되었습니다.\n이용해주셔서 감사합니다.')
+          if (flag){
+            this.$store.commit('logout')
+            this.$router.push('/');
+          }
         }
-        alert('탈퇴가 완료 되었습니다.\n 이용해주셔서 감사합니다.')
-        this.$router.push('');
       } catch (error) {
         if(error.status === 500) {
           alert('잘못된 접근입니다.')
