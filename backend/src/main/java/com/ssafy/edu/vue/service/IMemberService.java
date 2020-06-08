@@ -32,4 +32,6 @@ public interface IMemberService {
 
 	List<Member> getClanMembers(int clanid);
 
+	void deleteClanMember(int id);
+
 }

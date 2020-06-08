@@ -64,7 +64,7 @@ export default {
 
 .game-list-title {
   display: inline-block;
-  font-size: 2em;
+  font-size: calc(2rem + 0.5vw);
   font-family: 'Noto Sans KR';
   font-weight: 600;
   padding-bottom: 5px;
@@ -73,7 +73,7 @@ export default {
 }
 
 .game-list-description {
-  font-size: 13.5px;
+  font-size: calc(0.7rem + 0.3vw);
 }
 
 .game-set {

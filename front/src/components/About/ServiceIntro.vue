@@ -21,7 +21,7 @@
         <div class="content">
           <div>
             <h2>Code Game</h2>
-            <p>간단한 게임을 통해서 HTML, CSS 관련 지식을 학습할 수 있습니다.</p>
+            <p>간단한 게임을 통해서 CSS 관련 지식을 학습할 수 있습니다.</p>
             <div class="link-tag" @click="goPage('/game')">Show More</div>
           </div>
         </div>
@@ -33,7 +33,7 @@
         <div class="content">
           <div>
             <h2>Clan</h2>
-            <p>클랜 기능을 통해서 클랜원들과 함께 템플릿을 만들거나 게임을 만들어서 함께 즐길 수 있습니다.</p>
+            <p>마음이 맞는 사람들끼리 클랜을 구성해서 정보를 공유할 수 있습니다.</p>
             <div class="link-tag" @click="goPage('/clan')">Show More</div>
           </div>
         </div>
@@ -77,7 +77,7 @@ export default {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  margin-bottom: 50px;
+  margin-bottom: 150px;
 }
 
 .container .card {

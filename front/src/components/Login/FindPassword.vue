@@ -38,7 +38,6 @@ export default {
     })
   },
   mounted() {
-    // this.$store.commit('toggleMode');
     this.changeColor(this.mode);
   },
   methods: {

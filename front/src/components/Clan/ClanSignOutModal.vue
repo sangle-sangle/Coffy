@@ -29,6 +29,7 @@ export default {
   computed: {
     ...mapState({
       mode: state => state.common.mode,
+      userInfo: state => state.user.userInfo
     })
   },
   mounted() {
@@ -46,13 +47,12 @@ export default {
       }
     },
     async clanSignOut() {
-      // 하단에 await문으로 실제 클랜 탈퇴 로직 작성
       const paramsData = {
         clan_id: this.clanInfo.id,
         user_id: this.userInfo['access-Token'].id
       }
-      let data = await signOutClan(paramsData);
-      console.log(data);
+      await signOutClan(paramsData);
+      sessionStorage.setItem('myClanId', 0);
       this.$router.push('/clan');
     }
   },

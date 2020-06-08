@@ -153,7 +153,6 @@ export default {
       }, 0)
     },
     async postClan() {
-      // 필수 입력 사항 작성했는지 확인
       if (!this.clanInfo.name || this.clanInfo.locked === null || (this.clanInfo.locked === 1 && (this.clanInfo.password === null || this.clanInfo.password.length < 6))) {
         this.addClanBtnClick = true
         return
@@ -176,7 +175,7 @@ export default {
         paramsData['id'] = this.editClanID
         this.$store.dispatch('updateClanData', paramsData)
       }
-      setTimeout(() => this.completeModal = this.clanModal, 500);
+      setTimeout(() => this.completeModal = this.showModal, 500);
     },
     getImgurMarkUrl(paramsData) {
       let formData = new FormData()

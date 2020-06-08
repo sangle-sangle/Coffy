@@ -94,4 +94,10 @@ public class MemberServiceImpl implements IMemberService {
 		return memberdao.checkUsers();
 	}
 
+	@Override
+	@Transactional
+	public void deleteClanMember(int id) {
+		memberdao.deleteClanMember(id);
+	}
+
 }

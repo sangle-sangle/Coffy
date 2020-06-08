@@ -226,8 +226,8 @@ public class CodeController {
 	}
 	
 	@ApiOperation(value = "code Comment 삭제", response = BoolResult.class)
-	@RequestMapping(value = "/commentcode/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<List<CodeComment>> deleteCommentPost(@PathVariable int id, HttpServletRequest rs) throws Exception {
+	@RequestMapping(value = "/commentcode/{id}/{codeid}", method = RequestMethod.DELETE)
+	public ResponseEntity<List<CodeComment>> deleteCommentPost(@PathVariable int id, @PathVariable int codeid, HttpServletRequest rs) throws Exception {
 		logger.info("1-------------deleteCommentPost-----------------------------" + new Date());
 		int memberid = 0;
 		if(rs.getAttribute("loginMember")!=null) {
@@ -235,7 +235,6 @@ public class CodeController {
 			memberid = member.getId();
 		}
 		codeservice.deleteCommentPost(id);
-		int codeid = codeservice.findCodeId(id);
 		CommentInfo commentinfo = new CommentInfo(codeid,memberid);
 		List<CodeComment> comments;
 		comments = codeservice.getCommentPost(commentinfo);

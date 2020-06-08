@@ -1,8 +1,8 @@
 <template>
   <div class="about">
-    <div class="about-title">☕Coffy Introduction</div>
-    <ServiceIntro></ServiceIntro>
-    <TeamIntro></TeamIntro>
+    <div class="about-title" data-aos="zoom-in">☕Coffy Introduction</div>
+    <ServiceIntro data-aos="fade-right" data-aos-offset="500" data-aos-once="true"></ServiceIntro>
+    <TeamIntro data-aos="fade-right" data-aos-offset="500" data-aos-once="true"></TeamIntro>
   </div>
 </template>
 

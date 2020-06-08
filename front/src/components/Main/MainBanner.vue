@@ -73,6 +73,8 @@ p {
 
   p {
     font-size: 1.2rem;
+    width: 90%;
+    margin: 0 auto;
   }
 }
 </style>

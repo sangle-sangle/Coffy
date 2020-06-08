@@ -4,6 +4,7 @@ C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\contro
 C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\dto\CodeComment.java
 C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\TestController.java
 C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\controller\UnauthorizedException.java
+C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\dto\ClanPost.java
 C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\dto\GameCategory.java
 C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\dto\GameInfo.java
 C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\help\BoolResult.java
@@ -15,11 +16,13 @@ C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\contro
 C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\dto\CheckSignUp.java
 C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\service\IClanService.java
 C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\dto\Clan.java
+C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\controller\PostController.java
 C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\service\GameServiceImpl.java
 C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\SwaggerConfig.java
 C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\dto\AccessClan.java
 C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\dao\GameDaoImpl.java
 C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\dto\Code.java
+C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\service\PostServiceImpl.java
 C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\dao\GameCategoryDaoImpl.java
 C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\service\IGameService.java
 C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\SangleApplication.java
@@ -28,6 +31,8 @@ C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\servic
 C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\dto\Solved.java
 C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\service\ClanServiceImpl.java
 C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\service\IMemberService.java
+C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\service\IPostService.java
+C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\dao\PostDaoImpl.java
 C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\service\JwtServiceImpl.java
 C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\service\MemberServiceImpl.java
 C:\Users\multicampus\Desktop\심화\backend\src\main\java\com\ssafy\edu\vue\dto\Game.java

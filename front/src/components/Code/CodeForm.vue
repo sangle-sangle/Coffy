@@ -29,6 +29,7 @@
           <div class="coltitle"> 
             <span><i class="fab fa-html5" style="color: orange;"></i> HTML</span>
           </div>
+          <button class="copycon" @click="clickCopy(codeData.htmlText)">copy</button>
           <i class="fas fa-expand expandicon" @click="expand($event,0)" v-if="!mobileSize"></i>
           <CodeMirror 
             :value="codeData.htmlText"
@@ -40,6 +41,7 @@
           <div class="coltitle"> 
             <span><i class="fab fa-css3-alt" style="color: skyblue;"></i> CSS</span>
           </div>
+          <button class="copycon" @click="clickCopy(codeData.cssText)">copy</button>
           <i class="fas fa-expand expandicon" @click="expand($event,1)" v-if="!mobileSize"></i>
           <CodeMirror 
             :value="codeData.cssText"
@@ -51,6 +53,7 @@
           <div class="coltitle"> 
             <span><i class="fab fa-js" style="color: gold;"></i> JS</span>
           </div>
+          <button class="copycon" @click="clickCopy(codeData.jsText)">copy</button>
           <i class="fas fa-expand expandicon" @click="expand($event, 2)" v-if="!mobileSize"></i>
           <CodeMirror 
             :value="codeData.jsText"
@@ -138,7 +141,7 @@ export default {
       this.getCodeInfo(this.editCodeId);
     }
   },
-  mounted(){
+  mounted() {
     this.checkWindowWidth();
     this.theme = this.$store.state.common.mode === 'dark' ? 1: 0
     this.changeColor(this.mode);
@@ -286,6 +289,15 @@ export default {
           }
         }
       }
+    },
+    clickCopy(text){
+      var tempElem = document.createElement('textarea');
+      tempElem.value = text?text:'';  
+      document.body.appendChild(tempElem);
+      tempElem.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempElem);
+      alert('복사가 완료되었습니다.')
     },
     apply() {
       this.afterData = {

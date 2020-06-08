@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssafy.post">
+	<select id="getPosts" parameterType="java.lang.Integer"
+		resultType="com.ssafy.edu.vue.dto.ClanPost">
+		select postid, clanid, title, content, created_at, writerid,
+		(select user.username from user where
+		clan_post.writerid = user.id) writername
+		from clan_post
+		order by id desc
+	</select>
+
+	<select id="getPost" parameterType="java.lang.Integer"
+		resultType="com.ssafy.edu.vue.dto.ClanPost">
+		select postid, clanid, title, content, created_at, writerid,
+		(select user.username from user where
+		clan_post.writerid = user.id) writername
+		from clan_post
+		where postid=#{id}
+	</select>
+
+	<insert id="addPost" parameterType="com.ssafy.edu.vue.dto.ClanPost">
+		insert into clan_post(postid, clanid, title, content, created_at, writerid)
+		values(#{postid}, #{clanid}, #{title}, #{content}, now(), #{writerid})
+	</insert>
+
+	<update id="updatePost"
+		parameterType="com.ssafy.edu.vue.dto.ClanPost">
+		update clan_post set
+		title=#{title},
+		content=#{content}
+		where id=#{id}
+	</update>
+
+	<delete id="deletePost" parameterType="java.lang.Integer">
+		delete from clan_post where
+		id=#{id}
+	</delete>
+</mapper>

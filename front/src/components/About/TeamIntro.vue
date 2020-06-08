@@ -107,7 +107,7 @@ export default {
   font-size: calc(0.9rem + 0.3vw);
   font-weight: 600;
   font-family: 'Gothic A1';
-  margin-bottom: 10px;
+  margin-bottom: 30px;
 }
 
 .team-intro {
@@ -115,6 +115,7 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(18%, auto));
   grid-gap: 20px;
+  margin-bottom: 150px;
 }
 
 .team-intro .team-card {
@@ -164,6 +165,11 @@ export default {
   overflow: hidden;
   border: 4px solid #fff;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transition: border .2s;
+}
+
+.team-intro .team-card .content .image:hover {
+  border: 4px solid rgb(248, 241, 198);
 }
 
 .team-intro .team-card .content .details h2 {

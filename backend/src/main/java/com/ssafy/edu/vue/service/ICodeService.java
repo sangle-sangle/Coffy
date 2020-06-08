@@ -39,8 +39,6 @@ public interface ICodeService {
 
 	void deleteCommentPost(int id);
 
-	int findCodeId(int id);
-
 	int getCommentCounts(int codeid);
 
 }
