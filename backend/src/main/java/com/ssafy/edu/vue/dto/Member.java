@@ -33,6 +33,21 @@ public class Member implements Serializable {
 		this.signupdate = signupdate;
 		this.img = img;
 	}
+	
+	public Member(int id, String email, String username, String githubid, int clanid, int point,
+			int auth, String signupdate, String img) {
+		super();
+		this.id = id;
+		this.email = email;
+		this.username = username;
+		this.githubid = githubid;
+		this.clanid = clanid;
+		this.point = point;
+		this.auth = auth;
+		this.signupdate = signupdate;
+		this.img = img;
+	}
+	
 	public Member(int id, String email, String username, String password, String githubid, String signupdate) {
 		super();
 		this.id = id;
@@ -55,6 +70,17 @@ public class Member implements Serializable {
 		this.signupdate = string;
 		this.img = img;
 	}
+	
+	
+	public Member(int id, String username, int clanid, int point, String img) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.clanid = clanid;
+		this.point = point;
+		this.img = img;
+	}
+	
 	@Override
 	public String toString() {
 		return "Member [id=" + id + ", email=" + email + ", username=" + username + ", password=" + password

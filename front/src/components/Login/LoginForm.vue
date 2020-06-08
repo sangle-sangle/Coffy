@@ -17,7 +17,7 @@
           <input id="password" v-model="password" type="password" placeholder="Password">
         </div>
         <div class="btn-group">
-          <button class="log-btn" @click="submitForm">로그인</button>
+          <button type="submit" class="log-btn" @click="submitForm">로그인</button>
           <button class="find-pw-btn" @click="goFindAccount">비밀번호 찾기</button>
         </div>
       </div>
@@ -28,14 +28,6 @@
             <i class="fab fa-github"></i>
             <p>Github 로그인</p>
           </button>
-          <!-- <button class="kakao">
-            <img src="../../assets/images/social_icon/kakao-talk.png" alt="kakao-btn">
-            <p>카카오톡 로그인</p>
-          </button>
-          <button class="google">
-            <img src="../../assets/images/social_icon/google.png" alt="google">
-            <p>구글 로그인</p>
-          </button> -->
         </div>
       </div>
     </div>
@@ -65,7 +57,7 @@ export default {
   methods: {
     async submitForm() {
       if (!this.userName) {
-        alert('ID를 작성하세요.')
+        alert('ID(E-mail)를 작성하세요.')
         return
       } else if (!this.password) {
         alert('패스워드를 작성하세요.')
@@ -84,12 +76,12 @@ export default {
         this.$router.push('/');
       } catch (error) {
         if(error.status === 500) {
-          alert('등록되지 않은 아이디입니다.')
+          alert('등록되지 않은 계정입니다.')
         }
       }
     },
-    socialLogin() {
-      githubLogin()
+    async socialLogin() {
+      await githubLogin()
     },
     initForm() {
       this.userName = ''

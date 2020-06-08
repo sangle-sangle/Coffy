@@ -16,6 +16,7 @@
         <div class="mini-info">
           <div class="code-date-info"><i class="fas fa-calendar-day"></i> {{ codeDetail.created_at }}</div>
           <div class="like-info" @click="toggleLikeCode" :style="{ 'color': likeCode ? '#f9462a' : '#fff' }"><i class="fas fa-heart"></i> {{ likeCount }}</div>
+          <div class="comment-count-info"><i class="far fa-comments"></i> {{ commentCount }}</div>
         </div>
       </div>
       <div class="code-section">
@@ -66,11 +67,11 @@
         <div class="description border-tag">{{ codeDetail.description }}</div>
         <div class="comment-tag border-tag">Comments</div>
         <div class="comment-section border-tag">
-          <form @submit.prevent="submitComment" class="border-bottom-tag">
+          <form @submit.prevent="submitComment" class="border-bottom-tag" v-if="isLogin">
             <textarea v-model="comment"></textarea>
             <button type="submit" class="submit-comment-btn">작성</button>
           </form>
-          <div class="comments" v-if="comments">
+          <div class="comments" v-if="comments.length">
             <div class="comment-item border-bottom-tag" v-for="(comment, idx) in comments" :key="idx">
               <div class="comment-info">
                 <div class="left">{{ comment.username }}</div>
@@ -107,7 +108,9 @@
         </div>
       </Modal>
     </div>
-    <SpinnerLoading v-else></SpinnerLoading>
+    <div class="spinner-section" v-else>
+      <SpinnerLoading></SpinnerLoading>
+    </div>
   </div>
 </template>
 
@@ -115,6 +118,7 @@
 import { mapState } from 'vuex'
 import { fetchCodeInfo, deleteCode, postLikeCode, deleteLikeCode } from '@/api/code.js'
 import { fetchMyInfo } from '@/api/user.js'
+import { fetchCodeComments, fetchCodeCommentsCount, addCodeComment } from '@/api/code.js'
 import { codemirror as CodeMirror } from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/base16-dark.css'
@@ -172,18 +176,8 @@ export default {
       cssShowCode: false,
       jsShowCode: false,
       comment: '',
-      comments: [
-        {
-          username: 'user1',
-          comment: 'comment1',
-          created_at: '2020-06-02 14:00:00'
-        },
-        {
-          username: 'user2',
-          comment: 'comment2',
-          created_at: '2020-06-02 15:00:00'
-        },
-      ],
+      comments: [],
+      commentCount: 0,
       checkMobileSize: false,
       likeCode: false,
       likeCount: 0,
@@ -204,6 +198,7 @@ export default {
   created() {
     this.loading = true;
     this.getCodeInfo();
+    this.getCodeComments();
   },
   mounted() {
     this.theme = this.mode === 'dark' ? 1 : 0;
@@ -229,6 +224,24 @@ export default {
       this.writerName = writerData.data.username;
       this.loading = false;
       setTimeout(() => this.changeColor(this.mode), 500)
+    },
+    async getCodeComments() {
+      const commentsInfo = await fetchCodeComments(this.codeId);
+      const commentCount = await fetchCodeCommentsCount(this.codeId);
+      this.comments = commentsInfo.data;
+      this.commentCount = commentCount.data;
+    },
+    async submitComment() {
+      const paramsData = {
+        codeid: this.codeId,
+        content: this.comment,
+        userid: this.userInfo['access-Token'].id,
+        writername : this.userInfo['access-Token'].username
+      }
+      await addCodeComment(paramsData);
+      this.commentCount += 1;
+      this.comment = '';
+      setTimeout(() => this.getCodeComments(), 500);
     },
     async toggleLikeCode() {
       if (!this.isLogin) {
@@ -609,6 +622,10 @@ export default {
 
 .delete-btn > span:hover {
   cursor: pointer;
+}
+
+.spinner-section {
+  position: relative;
 }
 
 @media (max-width: 600px) {

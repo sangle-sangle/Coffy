@@ -3,49 +3,65 @@
     <div class="clan-detail-title">
       Clan Information
     </div>
-    <div class="clan-detail-header">
-      <div class="clan-header-left">
-        <div class="clan-mark">
-          <img src="../../assets/images/clan/clan_mark_no_image.png" alt="clan_no_mark" v-if="!clanInfo.clanmark">
-          <img :src="clanInfo.clanmark" alt="clan_no_mark" v-else>
-        </div>
-        <div class="clan-short-info">
-          <div class="clan-name">{{ clanInfo.name }}</div>
-          <div class="clan-master">Master : {{ clanInfo.leaderId }}</div>
-          <div class="clan-btn-group">
-            <div class="clan-master" @click="toggleMasterSection" v-if="this.userInfo['access-Token'].id === clanInfo.leaderId"><i class="fas fa-tools"></i> 관리자 모드</div>
-            <div class="clan-register" @click="toggleClanRegisterModal" v-if="this.userInfo['access-Token'].id !== clanInfo.leaderId"><i class="fas fa-plus"></i> 클랜 가입</div>
-            <div class="clan-sign-out" @click="toggleClanSignOutModal" v-if="this.userInfo['access-Token'].id !== clanInfo.leaderId"><i class="fas fa-minus"></i> 클랜 탈퇴</div>
+    <div v-if="!loading">
+      <div class="clan-detail-header">
+        <div class="clan-header-left">
+          <div class="clan-mark">
+            <img src="../../assets/images/clan/clan_mark_no_image.png" alt="clan_no_mark" v-if="!clanInfo.clanmark">
+            <img :src="clanInfo.clanmark" alt="clan_no_mark" v-else>
           </div>
+          <div class="clan-short-info">
+            <div class="clan-name">{{ clanInfo.name }}</div>
+            <div class="clan-info-tab">
+              <span class="clan-master-tag">Master</span>
+              <span class="clan-master">{{ clanInfo.mastername }}</span>
+              <span class="clan-point-tag">Points</span>
+              <span class="clan-point">{{ clanInfo.clanpoint }}</span>
+            </div>
+            <div class="clan-btn-group">
+              <div class="clan-master" @click="toggleMasterSection" v-if="this.userInfo['access-Token'].id === clanInfo.leaderId"><i class="fas fa-tools"></i> 관리자 모드</div>
+              <div class="clan-register" @click="toggleClanRegisterModal" v-if="this.userInfo['access-Token'].id !== clanInfo.leaderId && checkMyClan === 0"><i class="fas fa-plus"></i> 클랜 가입</div>
+              <div class="clan-sign-out" @click="toggleClanSignOutModal" v-if="this.userInfo['access-Token'].id !== clanInfo.leaderId && checkMyClan === clanId"><i class="fas fa-minus"></i> 클랜 탈퇴</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="clan-master-section" v-show="showClanMaster">
+        <span class="clan-master-tab" @click="toggleMasterTab(0)">클랜 관리</span>
+        <span class="clan-master-tab" @click="toggleMasterTab(1)">유저 리스트</span>
+        <div class="clan-info-edit">
+          <div v-show="masterTab === 0" class="edit-clan-info">
+            <div>
+              <div class="edit-clan-info-title">클랜 정보 수정</div>
+              <small>하단 버튼을 클릭하면 클랜 정보를 수정할 수 있습니다.</small>
+              <button @click="goEditPage(clanId)">수정 페이지로 이동</button>
+            </div>
+            <div>
+              <div class="edit-clan-info-title">클랜 삭제</div>
+              <small>하단 버튼을 클릭하면 클랜을 삭제할 수 있습니다.</small>
+              <button @click="toggleClanDeleteModal">클랜 삭제</button>
+            </div>
+          </div>
+          <div v-show="masterTab === 1">
+            이 곳에 유저 리스트 보여줄 계획
+          </div>
+        </div>
+      </div>
+      <div class="clan-notice" v-if="checkMyClan">
+        <div class="notice-icon"><i class="fas fa-list"></i> 게시판</div>
+        <div class="notice">
+          {{ clanInfo.name }} 클랜의 게시판 영역
+        </div>
+      </div>
+      <div class="clan-description">
+        <div class="description-icon"><i class="fas fa-list"></i> 설명</div>
+        <div class="description">
+          {{ clanInfo.description !== '' ? clanInfo.description : '내용 없음' }}
         </div>
       </div>
     </div>
-    <div class="clan-master-section" v-show="showClanMaster">
-      <span class="clan-master-tab" @click="toggleMasterTab(0)">클랜 관리</span>
-      <span class="clan-master-tab" @click="toggleMasterTab(1)" v-if="clanInfo.private">회원 신청 리스트</span>
-      <div class="clan-info-edit">
-        <div v-show="masterTab === 0" class="edit-clan-info">
-          <div>
-            <div class="edit-clan-info-title">클랜 정보 수정</div>
-            <small>하단 버튼을 클릭하면 클랜 정보를 수정할 수 있습니다.</small>
-            <button @click="goEditPage(clanId)">수정 페이지로 이동</button>
-          </div>
-          <div>
-            <div class="edit-clan-info-title">클랜 삭제</div>
-            <small>하단 버튼을 클릭하면 클랜을 삭제할 수 있습니다.</small>
-            <button @click="toggleClanDeleteModal">클랜 삭제</button>
-          </div>
-        </div>
-        <div v-show="masterTab === 1">
-          이 곳에 비공개 클랜에 신청한 회원 리스트 보여줄 예정
-        </div>
-      </div>
-    </div>
-    <div class="clan-description">
-      <div class="description-icon"><i class="fas fa-list"></i> 설명</div>
-      <div class="description">
-        {{ clanInfo.description !== '' ? clanInfo.description : '내용 없음' }}
-      </div>
+    <div class="spinner-section" v-else>
+      <SpinnerLoading></SpinnerLoading>
     </div>
     <Modal v-if="showModal">
       <ClanRegisterModal v-if="showClanRegisterModal" :clanInfo="clanInfo" @closeModal="toggleClanRegisterModal"></ClanRegisterModal>
@@ -57,15 +73,17 @@
 
 <script>
 import { mapState } from 'vuex'
+import { fetchClanInfo } from '@/api/clan.js'
 import Modal from '@/components/common/Modal.vue'
+import SpinnerLoading from '@/components/common/SpinnerLoading.vue'
 import ClanRegisterModal from '@/components/Clan/ClanRegisterModal.vue'
 import ClanSignOutModal from '@/components/Clan/ClanSignOutModal.vue'
 import ClanDeleteModal from '@/components/Clan/ClanDeleteModal.vue'
-import { fetchClanInfo } from '@/api/clan.js'
 
 export default {
   components: {
     Modal,
+    SpinnerLoading,
     ClanRegisterModal,
     ClanSignOutModal,
     ClanDeleteModal
@@ -80,6 +98,8 @@ export default {
       showClanSignOutModal: false,
       showClanDeleteModal: false,
       masterTab: 0,
+      checkMyClan: false,
+      loading: false,
     }
   },
   computed: {
@@ -95,12 +115,12 @@ export default {
     this.fixButtonTextColor()
   },
   methods: {
-    async getClanInfo() { // 해당 클랜 정보 받아오는 로직 작성
-      let getClanData = await fetchClanInfo(this.clanId)
-      this.clanInfo = getClanData.data
-
-      // 우선 지금은 임시로 asset에 json 파일로 만든 데이터 사용
-      // this.clanInfo = clanList[this.clanId - 1]
+    async getClanInfo() {
+      this.loading = true;
+      let getClanData = await fetchClanInfo(this.clanId);
+      this.clanInfo = getClanData.data.clan;
+      this.checkMyClan = getClanData.data.myclan;
+      this.loading = false;
     },
     toggleMasterSection() {
       this.showClanMaster = !this.showClanMaster
@@ -171,12 +191,31 @@ export default {
 .clan-name {
   font-size: calc(1.3rem + 0.3vw);
   font-weight: 600;
-  margin-bottom: 10px;
+  margin: 10px 0 15px;
 }
 
-.clan-header-left .clan-master {
-  font-size: calc(0.6rem + 0.3vw);
-  margin-bottom: 10px;
+.clan-info-tab {
+  font-size: calc(0.75rem + 0.3vw);
+  margin-bottom: 16px;
+}
+
+.clan-info-tab > span {
+  background-color: #777;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.1);
+  color: #eee;
+}
+
+.clan-info-tab span[class$='-tag'] {
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  padding: 6px 3px 6px 10px;
+}
+
+.clan-info-tab span:not([class$='-tag']) {
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  margin-right: 10px;
+  padding: 6px 10px 6px 3px;
 }
 
 .clan-btn-group > .clan-master,
@@ -184,7 +223,7 @@ export default {
 .clan-btn-group > .clan-sign-out {
   display: inline-block;
   margin-right: 6px;
-  font-size: calc(0.5rem + 0.3vw);
+  font-size: calc(0.6rem + 0.3vw);
   font-family: 'Gothic A1';
   font-weight: 600;
   padding: 6px;
@@ -272,17 +311,29 @@ export default {
   background: #cb2431;
 }
 
-.clan-description > .description-icon {
+.clan-description,
+.clan-notice {
+  margin-bottom: 20px;
+}
+
+.clan-description > .description-icon,
+.clan-notice > .notice-icon {
   display: inline-block;
   border: 1px solid silver;
   border-bottom: transparent;
   padding: 10px 14px;
 }
 
-.clan-description > .description {
+.clan-description > .description,
+.clan-notice > .notice {
   border: 1px solid silver;
   padding: 10px 14px;
   font-size: calc(0.6rem + 0.3vw);
+  line-height: 1.7;
+}
+
+.spinner-section {
+  position: relative;
 }
 
 @media (max-width: 600px) {
@@ -306,7 +357,13 @@ export default {
   .clan-btn-group > .clan-sign-out {
     display: block;
     margin: 0 auto 10px;
+    padding: 10px 6px;
+    font-size: 12px;
     width: 100%;
+  }
+
+  .clan-description .description {
+    font-size: 11.5px;
   }
 
   .edit-clan-info {

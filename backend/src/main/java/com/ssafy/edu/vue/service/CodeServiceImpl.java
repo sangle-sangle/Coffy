@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.edu.vue.dao.CodeDaoImpl;
 import com.ssafy.edu.vue.dto.Code;
+import com.ssafy.edu.vue.dto.CodeComment;
+import com.ssafy.edu.vue.dto.CommentInfo;
 import com.ssafy.edu.vue.dto.LikeCode;
 
 @Service
@@ -80,5 +82,41 @@ public class CodeServiceImpl implements ICodeService {
 	@Transactional(readOnly = true)
 	public List<Code> getMyLikes(int memberid) {
 		return codedao.getMyLikes(memberid);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<CodeComment> getCommentPost(CommentInfo commentinfo) {
+		return codedao.getCommentPost(commentinfo);
+	}
+
+	@Override
+	@Transactional
+	public void addCommentPost(CodeComment codecomment) {
+		codedao.addCommentPost(codecomment);
+	}
+
+	@Override
+	@Transactional
+	public void updateCommentPost(CodeComment codecomment) {
+		codedao.updateCommentPost(codecomment);
+	}
+
+	@Override
+	@Transactional
+	public void deleteCommentPost(int id) {
+		codedao.deleteCommentPost(id);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public int findCodeId(int id) {
+		return codedao.findCodeId(id);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public int getCommentCounts(int codeid) {
+		return codedao.getCommentCounts(codeid);
 	}
 }

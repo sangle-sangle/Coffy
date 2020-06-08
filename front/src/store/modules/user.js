@@ -16,6 +16,7 @@ const mutations = {
   setToken(state, token) {
     state.token = token
     sessionStorage.setItem('token', token)
+    sessionStorage.setItem('myClanId', jwtDecode(token)['access-Token'].clanid)
     state.isLogin = true
     state.isLoginError = false
     state.userInfo = jwtDecode(token)

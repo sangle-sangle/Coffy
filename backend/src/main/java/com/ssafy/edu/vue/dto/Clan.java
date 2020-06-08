@@ -5,7 +5,6 @@ import org.springframework.data.annotation.Id;
 public class Clan {
 	@Id
 	private int id;
-	
 	private String name;
 	private String description;
 	private int leaderId;
@@ -34,11 +33,28 @@ public class Clan {
 		this.clanmark = clanmark;
 		this.clanmarkdeletehash = clanmarkdeletehash;
 		this.created_at = created_at;
-		this.clanmark = clanmark;
 		this.mastername = mastername;
 		this.clanpoint = clanpoint;
 	}
+	
+	public Clan(String name, String description, int leaderId, int locked, String password, String clanmark, String clanmarkdeletehash, String created_at, int clanpoint) {
+		super();
+		this.name = name;
+		this.description = description;
+		this.leaderId = leaderId;
+		this.locked = locked;
+		this.password = password;
+		this.clanmark = clanmark;
+		this.clanmarkdeletehash = clanmarkdeletehash;
+		this.created_at = created_at;
+		this.clanpoint = clanpoint;
+	}
 
+	public Clan(int id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
 
 	@Override
 	public String toString() {

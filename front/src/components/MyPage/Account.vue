@@ -25,26 +25,15 @@
               <div class="username-form">
                 <label for="username">Username<i class="fas fa-star"></i></label>
                 <input type="text" id="username" v-model="userName">
-                <div class="log-message" v-if="!userName.length && clickSignupBtn">
+                <div class="log-message" v-if="!userName.length && clickButton">
                   1자 이상 작성해주세요.
                 </div>
               </div>
               <div class="email-form">
                 <label for="email">E-mail<i class="fas fa-star"></i></label>
-                <input type="text" id="email" v-model="email">
-                <div class="log-message" v-if="!isEmailValid && clickSignupBtn">
+                <input type="text" id="email" v-model="email" readonly>
+                <div class="log-message" v-if="!isEmailValid && clickButton">
                   이메일 양식으로 작성해주세요.
-                </div>
-              </div>
-              <div class="github-form">
-                <label for="github">Github 계정 연동</label>
-                <div class="github-auth">
-                  <input type="text" id="github" v-model="githubid">
-                  <div class="auth-btn no-valid-github" @click="getGithubAuth" v-if="!checkGithubAuth">연동</div>
-                  <div class="auth-btn valid-github" @click="getGithubAuth" v-else>확인</div>
-                </div>
-                <div class="guideline github-guideline">
-                  [주의!]github ID를 작성한 후 우측 '연동' 버튼을 눌러야 github ID가 등록됩니다!
                 </div>
               </div>
               <div class="profile-img-form">
@@ -100,7 +89,7 @@
                 <div class="guideline">
                   영어 소문자 4자 이상 + 숫자 4자 이상 조합해서 8자 이상으로 작성해주세요.
                 </div>
-                <div class="log-message" v-if="!isPasswordValid && clickSignupBtn">
+                <div class="log-message" v-if="!isPasswordValid && clickButton">
                   비밀번호 양식을 지켜서 작성해주세요.
                 </div>
               </div>
@@ -110,7 +99,7 @@
                 <div class="guideline">
                   비밀번호를 한 번 더 작성해주세요.
                 </div>
-                <div class="log-message" v-if="!isRePasswordValid && clickSignupBtn">
+                <div class="log-message" v-if="!isRePasswordValid && clickButton">
                   비밀번호가 일치하지 않거나 비밀번호 양식에 어긋납니다.
                 </div>
               </div>
@@ -147,12 +136,16 @@ export default {
       imgUrl: '',
       mobileSize: false,
       checkGithubAuth: false,
-      clickSignupBtn: false,
+      clickButton: false,
       noProfileImgUrl: 'https://user-images.githubusercontent.com/52685250/73902320-c72d6c00-48d8-11ea-82b4-eb9bfebfe9fb.png',
       currentTab: 0,
       tabs: ['회원정보 수정', '비밀번호 수정'],
       signOutModal: false,
-      passwordConfirm: false
+      passwordConfirm: false,
+      initial : {
+        userName: '',
+        email: '',
+      },
     }
   },
   computed: {
@@ -170,29 +163,30 @@ export default {
       return validatePassword(this.rePassword) && this.password === this.rePassword
     },
   },
+  created() {
+    this.setUserInfo();
+    this.$store.commit('enteredAccount');
+  },
   mounted() {
     this.changeColor(this.mode);
     this.mobileSize = window.innerWidth <= 600;
     window.addEventListener('resize', () => this.mobileSize = window.innerWidth <= 600);
-    this.setUserInfo()
-    this.$store.commit('enteredAccount')
   },
   methods: {
     changeTab(index){
       this.currentTab = index
-      this.clickSignupBtn = false
+      this.clickButton = false
       if (index == 1)
         document.getElementsByClassName('account-wrapper')[0].style.height = '100vh'
       else
         document.getElementsByClassName('account-wrapper')[0].style.height = ''
     },
     async submitUserInfoForm() { // 회원정보 수정 로직 구현
-      this.clickSignupBtn = true
+      this.clickButton = true
       if ( this.userName.length && this.isEmailValid ) {
         try {
           let changeInfoData = {
-            username: this.userName,
-            email: this.email,
+            username: this.userName == this.initial.username?"":this.userName
           };
           // githubid는 github 연동이 된 경우(this.checkGithubAuth === true인 경우에만 등록)
           if (this.checkGithubAuth) {
@@ -205,7 +199,7 @@ export default {
           console.log(checkExistData.data)
           // 수정 필요
           if (!checkExistData.data.signup) {
-            alert(checkExistData.data.message);
+            alert(checkExistData.data.state);
             return
           }
           alert('회원정보 수정 성공!')
@@ -217,7 +211,7 @@ export default {
       }
     },
     async submitPasswordForm() { // 비밀번호 변경 로직 구현
-      this.clickSignupBtn = true
+      this.clickButton = true
       if (this.isPasswordValid && this.isRePasswordValid) {
         try {
           let passwordData = {
@@ -225,6 +219,7 @@ export default {
           };
 
           const checkExistData = await changePassword(passwordData);
+          console.log(checkExistData)
           // 수정 필요
           if (!checkExistData.data.signup) {
             alert(checkExistData.data.message);
@@ -268,13 +263,6 @@ export default {
           alert('잘못된 접근입니다.')
         }
       }
-      
-
-    },
-    getGithubAuth() { // github 계정 인증 (인증되면 checkGithubAuth 값이 false => true로 변경)
-      // (1) 우선 DB에 입력한 github id가 있는지 확인(이미 DB에 있으면 다른 ID로 연동하라는 메세지 띄우기)
-      // (2) 새롭게 등록하는 github id면 github에 해당 id 계정이 있는지 확인(없으면 해당 github 계정이 없다는 메세지 띄우기)
-      // (3) 인증 거친 후 성공하면 checkGithubAuth 값을 false => true로 변경
     },
     getImgurProfileUrl() {
       let formData = new FormData()
@@ -299,6 +287,7 @@ export default {
       this.imgUrl = '';
       this.checkGithubAuth = false;
       this.passwordConfirm = '';
+      this.initial = this.userInfo;
     },
     profileImgFileUpload() {
       this.profileImg = this.$refs.file.files[0];
@@ -330,13 +319,11 @@ export default {
           inputTag.style.backgroundColor = '#eee'
           inputTag.style.color = 'black'
         });
-        document.querySelector('.github-guideline').style.color = 'crimson';
       } else {
         document.querySelectorAll('input').forEach(inputTag => {
           inputTag.style.backgroundColor = '#252830'
           inputTag.style.color = 'white'
         });
-        document.querySelector('.github-guideline').style.color = 'yellow';
       }
     }
   },
