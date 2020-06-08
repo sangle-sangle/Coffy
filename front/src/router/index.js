@@ -16,6 +16,7 @@ export default new Router({
     },
     {
       path: '/about',
+      name: 'AboutPage',
       component: loadView('AboutPage'),
     },
     {
@@ -67,7 +68,7 @@ export default new Router({
     {
       path: '*',
       name: 'NotFound',
-      component: loadView('NotFoundPage'),  // 등록된 URL 주소가 아닌 곳으로 접근할 때 Not Found Page
+      component: loadView('NotFoundPage'),
     },
     {
       path: '/mypage',

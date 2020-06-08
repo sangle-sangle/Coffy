@@ -12,8 +12,7 @@ function registerUser(userData) {
   return instance.post('member/', userData)
 }
 
-// 로그인
-// 비밀번호 재 확인
+// 로그인 및 비밀번호 재 확인
 function loginUser(userData) {
   return instance.post('login/', userData)
 }

@@ -11,7 +11,7 @@
             <div class="writer-info">
               <img
                 src="https://user-images.githubusercontent.com/52685250/73902320-c72d6c00-48d8-11ea-82b4-eb9bfebfe9fb.png"
-                alt="">
+                alt="no-image">
               <span>{{ code.writername }}</span>
             </div>
             <div class="code-like">

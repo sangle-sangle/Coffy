@@ -54,7 +54,8 @@ export default {
       this.$emit('closeModal');
       if (this.registerStatus) {
         sessionStorage.setItem('myClanId', this.clanInfo.id);
-        this.$router.push(`/clan/detail/${this.clanInfo.id}`);
+        this.$router.push(`/clan/detail/${this.clanInfo.id}`)
+        .catch(()=>{})
       }
     },
     changeColor(mode) {

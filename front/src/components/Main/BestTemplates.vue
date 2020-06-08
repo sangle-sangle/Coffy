@@ -1,10 +1,9 @@
 <template>
   <div class="best-templates-wrapper">
     <div class="best-templates-intro">
-      <div style="font-size:calc( 1rem + 1vw)">BEST Template TOP 12</div>
+      <div style="font-size:calc( 1rem + 1vw)">BEST Template TOP 6</div>
       <small style="font-size:calc(0.8rem + 0.1vw)">Coffy에서 인기 있는 BEST Template을 소개해드립니다.</small>
     </div>
-    <!-- template card component 생성 후 구성 예정 -->
     <div class="best-templates-section" v-if="!loading">
       <div v-for="code in bestCodes" :key="code.id" class="code-card">
         <div class="code-title">{{ code.title }}</div>
@@ -22,8 +21,11 @@
               <div class="like-info"><i class="fas fa-heart"></i> {{ code.likes }}</div>
             </div>
           </div>
-        </div>
+        </div> 
       </div>
+    </div>
+    <div class="more-btn-wrapper" v-if="!loading">
+      <div class="more-btn" @click="goCodeListPage">Show More</div>
     </div>
     <div class="spinner-section" v-else>
       <SpinnerLoading></SpinnerLoading>
@@ -63,11 +65,14 @@ export default {
   methods: {
     async getAllCodes() {
       const { data } = await fetchAllCode();
-      this.bestCodes = data.sort((a, b) => b.likes - a.likes).slice(0, 12);
+      this.bestCodes = data.sort((a, b) => b.likes - a.likes).slice(0, 6);
       this.loading = false;
     },
     goCodeDetail(id) {
       this.$router.push(`/code/detail/${id}`);
+    },
+    goCodeListPage() {
+      this.$router.push('/code');
     },
     codeData(html, css, js) {
       let code = {
@@ -114,13 +119,16 @@ export default {
 
 .best-templates-intro > small {
   display: block;
-  margin-bottom: 20px;
+  width: 90%;
+  margin: 0 auto 20px;
 }
 
 .best-templates-section {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
+  margin: 0 auto;
+  width: 90%;
 }
 
 .code-card {
@@ -196,6 +204,27 @@ export default {
   background-color : #eee;
 }
 
+.more-btn-wrapper {
+  text-align: center;
+  color: black;
+}
+
+.more-btn {
+  display: inline-block;
+  font-size: calc(0.9rem + 0.3vw);
+  font-family: 'Gothic A1';
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  padding: 10px 20px;
+  margin-top: 10px;
+  border-radius: 8px;
+  background-color: #47cf73;
+}
+
+.more-btn:hover {
+  cursor: pointer;
+}
+
 .spinner-section {
   position: relative;
 }
@@ -203,6 +232,12 @@ export default {
 @media (min-width: 600px) and (max-width: 960px) {
   .best-templates-section {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .best-templates-section {
+    grid-template-columns: 1fr;
   }
 }
 </style>

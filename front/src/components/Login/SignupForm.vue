@@ -115,7 +115,7 @@ export default {
     window.addEventListener('resize', () => this.mobileSize = window.innerWidth <= 600);
   },
   methods: {
-    async submitForm() { // 회원가입 로직 구현
+    async submitForm() {
       this.clickSignupBtn = true
       if (this.userName.length && this.isEmailValid && this.isPasswordValid && this.isRePasswordValid) {
         try {
@@ -124,20 +124,13 @@ export default {
             email: this.email,
             password: this.password,
           };
-          // githubid는 github 연동이 된 경우(this.checkGithubAuth === true인 경우에만 등록)
-          if (this.checkGithubAuth) {
-            signUpData['githubid'] = this.githubid
-          }
-          // 프로필 이미지를 등록한 경우 imgur api와 연동된 url 주소도 같이 보내기
           signUpData['img'] = this.imgUrl || this.noProfileImgUrl
-
           const checkExistData = await registerUser(signUpData);
           if (!checkExistData.data.signup) {
             alert(checkExistData.data.message);
             return
           }
-          alert('회원가입 성공!')
-          // 회원가입 성공 후 자동으로 로그인
+          alert('회원가입 성공!');
           await this.$store.dispatch('LOGIN', {
             email: this.email,
             password: this.password

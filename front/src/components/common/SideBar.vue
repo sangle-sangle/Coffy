@@ -59,10 +59,7 @@ export default {
       mode: state => state.common.mode,
       isLogin: state => state.user.isLogin,
       userInfo: state => state.user.userInfo
-    }),
-    // clanPageUrl() {
-    //   return Object.keys(this.userInfo).length && this.userInfo['access-Token'].clanid >= 1 ? `/clan/detail/${this.userInfo['access-Token'].clanid}` : '/clan'
-    // }
+    })
   },
   mounted() {
     this.changeMode = this.mode
@@ -91,7 +88,6 @@ export default {
 <style scoped>
 .sidebar-wrapper {
   padding: 15px;
-  /* background-color:#2c303a; */
   height: 100vh;
 }
 

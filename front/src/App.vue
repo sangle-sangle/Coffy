@@ -50,7 +50,9 @@ export default {
   },
   watch: {
     '$route'() {
-      this.goTop();
+      if (this.$route.name !== 'AboutPage') {
+        this.goTop();
+      }
     }
   }
 }

@@ -4,8 +4,9 @@ import store from '@/store/index.js'
 
 export function setInterceptors() {
   let instance = axios.create({
-    baseURL: 'http://k02b2021.p.ssafy.io:8197/api/'
-    // baseURL : 'http://172.30.1.59:8198/api/',
+    // baseURL: 'https://k02b2021.p.ssafy.io:8197/api/'
+    // baseURL : 'http://172.30.1.21:8197/api/',
+    baseURL : 'http://172.30.1.26:8198/api/',
   })
   instance.interceptors.request.use(
     config => {

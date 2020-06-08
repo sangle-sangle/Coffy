@@ -1,9 +1,9 @@
 <template>
   <div>
-    <MainBanner></MainBanner>
-    <PreviewIntro class="main-component"></PreviewIntro>
-    <BestTemplates class="main-component"></BestTemplates>
-    <ProvideLang class="main-component"></ProvideLang>
+    <MainBanner data-aos="fade-down" data-aos-duration="1000" data-aos-once="true"></MainBanner>
+    <PreviewIntro data-aos="fade-down" data-aos-duration="1000" data-aos-once="true" class="main-component"></PreviewIntro>
+    <BestTemplates data-aos="fade-down" data-aos-duration="1000" data-aos-once="true" class="main-component"></BestTemplates>
+    <ProvideLang data-aos="fade-down" data-aos-duration="1000" data-aos-once="true" class="main-component"></ProvideLang>
   </div>
 </template>
 

@@ -100,6 +100,7 @@ export default {
       masterTab: 0,
       checkMyClan: false,
       loading: false,
+      myClanId: 0
     }
   },
   computed: {
