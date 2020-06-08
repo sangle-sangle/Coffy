@@ -248,4 +248,14 @@ public class CodeController {
 		int counts = codeservice.getCommentCounts(codeid);
 		return new ResponseEntity<Integer>(counts, HttpStatus.OK);
 	}
+
+	@ApiOperation(value = "code 전체 검색", response = List.class)
+	@RequestMapping(value = "/codes/{keyword}", method = RequestMethod.GET)
+	public ResponseEntity<List<Code>> getSearchCodes(@PathVariable String keyword) throws Exception {
+		logger.info("1-------------getSearchCodes-----------------------------" + new Date());
+		String kw = "%"+keyword+"%";
+		List<Code> codes = codeservice.getSearchCodes(kw);
+		return new ResponseEntity<List<Code>>(codes, HttpStatus.OK);
+	}
+
 }
