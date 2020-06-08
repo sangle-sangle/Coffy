@@ -75,4 +75,10 @@ public class ClanServiceImpl implements IClanService {
 	public String collectPwd(AccessClan accessclan) {
 		return clandao.collectPwd(accessclan);
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public int getLastClanId() {
+		return clandao.getLastClanId();
+	}
 }

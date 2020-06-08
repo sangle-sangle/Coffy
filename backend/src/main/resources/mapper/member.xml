@@ -18,13 +18,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getClanMembers" parameterType="java.lang.Integer" resultType="com.ssafy.edu.vue.dto.Member">
 		select id, email, username, githubid, clanid, point, auth, signupdate, img
 		from user
-		where clanid=#{clanid} and delflag=0 order by id
+		where clanid=#{clanid} and delflag=0 order by point
 	</select>
 	
 	<insert id="addMember" parameterType="com.ssafy.edu.vue.dto.Member">
 		insert into
-		user(email, password, username, githubid, signupdate)
-		values(#{email},hex(aes_encrypt(#{password}, 'key')),#{username},#{githubid},now())
+		user(email, password, username, githubid, signupdate, img)
+		values(#{email},hex(aes_encrypt(#{password}, 'key')),#{username},#{githubid},now(), #{img})
 	</insert>
 	
 	<update id="updateMember"
@@ -74,5 +74,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="checkUsers" resultType="java.lang.Integer">
 		select count(*) from user where delflag=0
 	</select>
+	
+	<update id="deleteClanMember" parameterType="java.lang.Integer">
+		update user
+		set clanid = 0
+		where clanid = #{id}
+	</update>
 	
 </mapper>
