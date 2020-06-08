@@ -4,15 +4,14 @@
       <div style="font-size:calc( 1rem + 1vw )">실시간 미리보기</div>
       <small style="font-size:calc(0.8rem + 0.1vw)">현재까지 작성된 코드의 결과물을 실시간으로 미리볼 수 있습니다.</small>
     </div>
-    <!-- 아래 이미지들을 추후 서비스 완성 후 우리 서비스 화면으로 대체 예정 -->
     <div class="preview-image-section">
       <div class="code-img">
-        <img src="../../assets/images/mainpage/preview_html.jpg" alt="code-img-1">
-        <img src="../../assets/images/mainpage/preview_css.jpg" alt="code-img-2">
-        <img src="../../assets/images/mainpage/preview_js.jpg" alt="code-img-3">
+        <img src="../../assets/images/mainpage/preview_html.jpg" alt="code-img-1" data-aos="fade-down" data-aos-duration="1000" data-aos-once="true" data-aos-delay="700">
+        <img src="../../assets/images/mainpage/preview_css.jpg" alt="code-img-2" data-aos="fade-down" data-aos-duration="1000" data-aos-once="true" data-aos-delay="1400">
+        <img src="../../assets/images/mainpage/preview_js.jpg" alt="code-img-3" data-aos="fade-down" data-aos-duration="1000" data-aos-once="true" data-aos-delay="2100">
         <img src="../../assets/images/mainpage/preview.jpg" alt="preview-img">
       </div>
-      <div class="preview-img">
+      <div class="preview-img" data-aos="flip-left" data-aos-duration="1000" data-aos-once="true" data-aos-delay="2800">
         <img src="../../assets/images/mainpage/preview.jpg" alt="preview-img">
       </div>
     </div>
@@ -86,7 +85,8 @@ export default {
 
 .preview-intro > small {
   display: block;
-  margin-bottom: 20px;
+  width: 90%;
+  margin: 0 auto 20px;
 }
 
 .preview-image-section {
@@ -105,19 +105,28 @@ export default {
 .code-img > img:first-child {
   position: absolute;
   top: 0;
-  left: 12%;
+  left: 0;
+  width: 38%;
+  max-width: 490px;
+  max-height: 370px;
 }
 
 .code-img > img:nth-child(2) {
   position: absolute;
-  top: 23%;
-  left: 7%;
+  top: 10%;
+  left: 6%;
+  width: 38%;
+  max-width: 490px;
+  max-height: 370px;
 }
 
 .code-img > img:nth-child(3) {
   position: absolute;
-  top: 62%;
-  left: 15%;
+  top: 20%;
+  left: 12%;
+  width: 38%;
+  max-width: 490px;
+  max-height: 370px;
 }
 
 .code-img > img:nth-child(n+4) {

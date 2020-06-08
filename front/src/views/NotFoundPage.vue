@@ -17,7 +17,7 @@ export default {
   name: 'NotFound',
   methods: {
     goMain() {
-      this.$router.push('/')
+      this.$router.push('/');
     }
   }
 }

@@ -73,15 +73,8 @@ const actions = {
   
 };
 
-const getters = {
-  // info(state) {
-  //   return state.token ? jwtDecode(state.token) : {}
-  // }
-}
-
 export default {
   state,
   mutations,
-  actions,
-  getters
+  actions
 }

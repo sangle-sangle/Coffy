@@ -67,24 +67,34 @@
         <div class="description border-tag">{{ codeDetail.description }}</div>
         <div class="comment-tag border-tag">Comments</div>
         <div class="comment-section border-tag">
-          <form @submit.prevent="submitComment" class="border-bottom-tag" v-if="isLogin">
+          <form @submit.prevent="submitComment" class="border-bottom-tag" v-if="isLogin && !editCommentStatus">
             <textarea v-model="comment"></textarea>
             <button type="submit" class="submit-comment-btn">작성</button>
           </form>
+          <div class="border-bottom-tag login-message" v-else-if="!isLogin">
+            <i class="fas fa-sign-in-alt"></i>
+            <span>댓글을 작성하기 위해서는 로그인이 필요합니다.</span>
+          </div>
           <div class="comments" v-if="comments.length">
-            <div class="comment-item border-bottom-tag" v-for="(comment, idx) in comments" :key="idx">
+            <div class="comment-item border-bottom-tag" v-for="comment in comments" :key="comment.id">
               <div class="comment-info">
-                <div class="left">{{ comment.username }}</div>
+                <div class="left">{{ comment.writername }}</div>
                 <div class="right">
-                  <div class="comment-btn">
-                    <i class="fas fa-edit"></i>
-                    <i class="fas fa-trash-alt"></i>
+                  <div class="comment-btn" v-if="comment.userid === userInfo['access-Token'].id && !editCommentStatus">
+                    <i class="fas fa-edit" @click="changeEditMode(comment.id, comment.content)"></i>
+                    <i class="fas fa-trash-alt" @click="deleteComment(comment.id)"></i>
                   </div>
                   <div class="comment-date">{{ comment.created_at }}</div>
                 </div>
               </div>
-              <div class="comment-contents">{{ comment.comment }}</div>
+              <div class="comment-contents" v-if="editCodeNumber !== comment.id">{{ comment.content }}</div>
+              <div class="comment-contents edit-comment-form border-bottom-tag" v-else>
+                <textarea v-model="editComment"></textarea>
+                <button type="submit" class="submit-comment-btn" @click="submitEditComment(comment.id)">수정</button>
+                <button class="edit-cancel-btn" @click="editCancel">취소</button>
+              </div>
             </div>
+            <Pagination :itemCount="commentCount" @setNowPage="setNowPage" v-if="!loading"></Pagination>
           </div>
           <div class="no-comments border-bottom-tag" v-else>
             <i class="fas fa-pen-square"></i>
@@ -118,7 +128,7 @@
 import { mapState } from 'vuex'
 import { fetchCodeInfo, deleteCode, postLikeCode, deleteLikeCode } from '@/api/code.js'
 import { fetchMyInfo } from '@/api/user.js'
-import { fetchCodeComments, fetchCodeCommentsCount, addCodeComment } from '@/api/code.js'
+import { fetchCodeComments, fetchCodeCommentsCount, addCodeComment, deleteCodeComment, updateCodeComment } from '@/api/code.js'
 import { codemirror as CodeMirror } from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/base16-dark.css'
@@ -127,6 +137,7 @@ import 'codemirror/mode/css/css.js'
 import 'codemirror/mode/xml/xml.js'
 import ApplyCode from '@/components/Code/ApplyCode.vue'
 import Modal from '@/components/common/Modal.vue'
+import Pagination from '@/components/common/Pagination.vue'
 import SpinnerLoading from '@/components/common/SpinnerLoading.vue'
 
 export default {
@@ -134,6 +145,7 @@ export default {
     CodeMirror,
     ApplyCode,
     Modal,
+    Pagination,
     SpinnerLoading
   },
   data() {
@@ -176,11 +188,16 @@ export default {
       cssShowCode: false,
       jsShowCode: false,
       comment: '',
+      editComment: '',
+      allComments: [],
       comments: [],
       commentCount: 0,
+      editCommentStatus: false,
+      editCodeNumber: 0,
       checkMobileSize: false,
       likeCode: false,
       likeCount: 0,
+      nowPage: 1,
       showDeleteCodeModal: false,
       loading: false
     }
@@ -228,20 +245,56 @@ export default {
     async getCodeComments() {
       const commentsInfo = await fetchCodeComments(this.codeId);
       const commentCount = await fetchCodeCommentsCount(this.codeId);
-      this.comments = commentsInfo.data;
+      this.allComments = commentsInfo.data;
       this.commentCount = commentCount.data;
+      this.setNowPage(1);
+    },
+    setNowPage(pageNm) {
+      this.nowPage = pageNm;
+      this.comments = this.allComments.slice(12 * (this.nowPage - 1), 12 * this.nowPage);
+      this.loading = false;
     },
     async submitComment() {
+      if (!this.comment.length) {
+        alert('댓글 내용을 1자 이상 작성해주세요.');
+        return
+      }
       const paramsData = {
         codeid: this.codeId,
         content: this.comment,
         userid: this.userInfo['access-Token'].id,
         writername : this.userInfo['access-Token'].username
       }
-      await addCodeComment(paramsData);
-      this.commentCount += 1;
+      const { data } = await addCodeComment(paramsData);
+      this.comments = data;
+      this.commentCount = data.length;
       this.comment = '';
-      setTimeout(() => this.getCodeComments(), 500);
+    },
+    async deleteComment(commentId) {
+      if (confirm('댓글을 삭제하시겠습니까?')) {
+        const { data } = await deleteCodeComment(commentId, this.codeId);
+        this.comments = data;
+        this.commentCount = data.length;
+      }
+    },
+    changeEditMode(commentId, content) {
+      this.editCommentStatus = true;
+      this.editCodeNumber = commentId;
+      this.editComment = content;
+    },
+    async submitEditComment(commentId) {
+      const { data } = await updateCodeComment({
+        codeid: this.codeId,
+        content: this.editComment,
+        id: commentId
+      })
+      this.comments = data;
+      this.editCancel();
+    },
+    editCancel() {
+      this.editComment = '';
+      this.editCodeNumber = 0;
+      this.editCommentStatus = false;
     },
     async toggleLikeCode() {
       if (!this.isLogin) {
@@ -249,15 +302,13 @@ export default {
         this.$router.push('/login');
         return
       }
-      // (1) 해당 코드 좋아요 관련 로직 작성
-      if (!this.likeCode) { // 좋아요 X => 좋아요 O
-        this.likeCount += 1
-        await postLikeCode(this.codeId)
-      } else { // 좋아요 O => 좋아요 X
-        this.likeCount -= 1
-        await deleteLikeCode(this.codeId)
+      if (!this.likeCode) {
+        this.likeCount += 1;
+        await postLikeCode(this.codeId);
+      } else {
+        this.likeCount -= 1;
+        await deleteLikeCode(this.codeId);
       }
-      // (2) 색깔 변경
       this.likeCode = !this.likeCode;
     },
     langImgUrl(lang) {
@@ -294,8 +345,10 @@ export default {
         document.querySelectorAll('.border-bottom-tag').forEach(elem => {
           elem.style.borderColor = '#333';
         })
-        document.querySelector('textarea').style.backgroundColor = '#eee';
-        document.querySelector('textarea').style.color = '#333';
+        if (this.isLogin || this.editCommentStatus) {
+          document.querySelector('textarea').style.backgroundColor = '#eee';
+          document.querySelector('textarea').style.color = '#333';
+        }
       } else {
         document.querySelectorAll('.border-tag').forEach(elem => {
           elem.style.borderColor = 'silver';
@@ -303,8 +356,10 @@ export default {
         document.querySelectorAll('.border-bottom-tag').forEach(elem => {
           elem.style.borderColor = 'silver';
         })
-        document.querySelector('textarea').style.backgroundColor = '#252830';
-        document.querySelector('textarea').style.color = 'white';
+        if (this.isLogin || this.editCommentStatus) {
+          document.querySelector('textarea').style.backgroundColor = '#252830';
+          document.querySelector('textarea').style.color = 'white';
+        }
       }
     }
   },
@@ -484,14 +539,36 @@ export default {
   padding: 10px;
 }
 
-.comment-section > form {
+.login-message {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0 20px;
+}
+
+.login-message > i {
+  font-size: 50px;
+}
+
+.login-message > i,
+.login-message > span {
+  margin: 0 5px;
+}
+
+.comment-section > form,
+.edit-comment-form {
   display: flex;
   padding-bottom: 30px;
   margin-bottom: 10px;
+}
+
+.comment-section > form {
   border-bottom: 1px solid white;
 }
 
-.comment-section > form > textarea {
+.comment-section > form > textarea,
+.edit-comment-form > textarea {
   flex-grow: 1;
   height: 40px;
   color: white;
@@ -503,14 +580,23 @@ export default {
   margin-right: 20px;
 }
 
-.submit-comment-btn {
+.submit-comment-btn,
+.edit-cancel-btn {
   font-family: 'Gothic A1';
   font-weight: 600;
   letter-spacing: -0.5px;
   color: black;
   text-align: center;
   border-radius: 8px;
+}
+
+.submit-comment-btn {
   background-color: #47cf73;
+  margin-right: 10px;
+}
+
+.edit-cancel-btn {
+  background-color: #ffdd40;
 }
 
 .comment-item {
@@ -535,7 +621,7 @@ export default {
 }
 
 .comment-btn > i {
-  padding: 0 8px;
+  padding: 0 10px;
 }
 
 .comment-btn > i:first-child {
@@ -572,7 +658,6 @@ export default {
 
 .itembox {
   background-color : #eee;
-  /* height: 50vh; */
 }
 
 .modal-header {

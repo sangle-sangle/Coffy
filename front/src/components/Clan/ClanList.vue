@@ -9,9 +9,9 @@
           ☕Coffy 사이트의 클랜 리스트를 볼 수 있습니다.
         </div>
       </div>
-      <div class="clan-main-header-right">
-        <div class="my-clan-btn" v-if="myClanId !== '0'" @click="goMyClan">내 클랜 페이지로 이동</div>
-        <div class="add-clan-btn" v-if="myClanId === '0'" @click="goAddForm"><i class="fas fa-plus"></i> 클랜 생성</div>
+      <div class="clan-main-header-right" v-if="!loading">
+        <div class="my-clan-btn" v-if="myClanId !== 0" @click="goMyClan">내 클랜 페이지로 이동</div>
+        <div class="add-clan-btn" v-else @click="goAddForm"><i class="fas fa-plus"></i> 클랜 생성</div>
       </div>
     </div>
     <div class="clan-search">
@@ -35,11 +35,11 @@
           <div class="clan-info">
             <div class="clan-name">
               <span>{{ clan.name }}</span>
-              <span v-if="clan.id === Number(myClanId)" class="my-clan-sign">My Clan</span>
             </div>
             <div class="clan-footer">
               <div class="clan-detail-btn" @click="goClanDetail(clan.id)"><i class="fas fa-info"></i> 상세보기</div>
-              <div class="clan-register-btn" @click="showClanRegister(idx)" v-if="myClanId === '0'"><i class="fas fa-plus"></i> 클랜 가입</div>
+              <div class="clan-register-btn" @click="showClanRegister(idx)" v-if="myClanId === 0"><i class="fas fa-plus"></i> 클랜 가입</div>
+              <div class="my-clan-sign" v-if="clan.id === Number(myClanId)">My Clan</div>
             </div>
           </div>
         </div>
@@ -58,6 +58,7 @@
 <script>
 import { mapState } from 'vuex'
 import { fetchAllClans } from '@/api/clan.js'
+import { fetchMyInfo } from '@/api/user.js'
 import Modal from '@/components/common/Modal.vue';
 import SpinnerLoading from '@/components/common/SpinnerLoading.vue'
 import Pagination from '@/components/common/Pagination.vue'
@@ -78,7 +79,7 @@ export default {
       registerClanId: null,
       loading: false,
       nowPage: 1,
-      myClanId: sessionStorage.getItem('myClanId')
+      myClanId: 0
     }
   },
   computed: {
@@ -90,6 +91,7 @@ export default {
   created() {
     this.loading = true;
     this.getAllClans();
+    this.getMyClanId();
   },
   mounted() {
     this.changeColor(this.mode);
@@ -99,6 +101,10 @@ export default {
       const { data } = await fetchAllClans();
       this.$store.commit('saveClanData', data);
       this.setNowPage(1);
+    },
+    async getMyClanId() {
+      const { data } = await fetchMyInfo(this.userInfo['access-Token'].id);
+      this.myClanId = data.clanid;
     },
     searchClan() {
       if (this.keyword) {
@@ -190,16 +196,18 @@ export default {
 .clan-name {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.clan-name > span.my-clan-sign {
-  font-size: 12px;
-  background-color: antiquewhite;
-  color: black;
-  padding: 4px;
-  border-radius: 10px;
+.clan-name {
+  display: inline-block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+  width: 100%;
+  overflow: hidden;
 }
 
 .search-box {
@@ -325,7 +333,8 @@ export default {
 }
 
 .clan-footer > .clan-register-btn,
-.clan-footer > .clan-detail-btn {
+.clan-footer > .clan-detail-btn,
+.clan-footer > .my-clan-sign {
   font-size: calc(0.6rem + 0.3vw);
   font-family: 'Gothic A1';
   font-weight: 600;
@@ -342,6 +351,10 @@ export default {
 
 .clan-detail-btn {
   background-color: #f7c389;
+}
+
+.my-clan-sign {
+  background-color: antiquewhite;
 }
 
 .clan-footer > .clan-detail-btn:hover,

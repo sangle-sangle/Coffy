@@ -16,13 +16,11 @@ const mutations = {
 
 const actions = {
   async addClanData({ commit }, data) {
-    let response = await addClan(data);
-    sessionStorage.setItem('myClanId', response.data.id);
+    await addClan(data);
     await commit('toggleModal');
   },
   async updateClanData({ commit }, data) {
-    let response = await updateClan(data);
-    sessionStorage.setItem('myClanId', response.data.id);
+    await updateClan(data);
     await commit('toggleModal');
   }
 }

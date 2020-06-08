@@ -63,8 +63,8 @@ function updateCodeComment(params) {
 }
 
 // 코드 댓글 삭제
-function deleteComment(commentId) {
-  return instance.delete(`commentcode/${commentId}`)
+function deleteCodeComment(commentId, codeId) {
+  return instance.delete(`commentcode/${commentId}/${codeId}`)
 }
 
 // 내가 작성한 코드 가져오기
@@ -76,7 +76,6 @@ function getMyCode() {
 function getLikedCode(){
   return instance.get('mylikes')
 }
-
 
 export {
   fetchAllCode,
@@ -91,7 +90,7 @@ export {
   fetchCodeCommentsCount,
   addCodeComment,
   updateCodeComment,
-  deleteComment,
+  deleteCodeComment,
   getMyCode,
   getLikedCode
 }

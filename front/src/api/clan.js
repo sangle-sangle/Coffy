@@ -6,27 +6,33 @@ function fetchAllClans() {
   return instance.get('clans')
 }
 
-function fetchClanInfo(clanId) { // 클랜 정보 가져오는 API
+// 클랜 정보 가져오는 API
+function fetchClanInfo(clanId) {
   return instance.get(`clan/${clanId}`)
 }
 
-function registerClan(data) { // 클랜 가입 API
+// 클랜 가입 API
+function registerClan(data) {
   return instance.post('joinclan', data)
 }
 
-function signOutClan(data) { // 클랜 탈퇴 API
-  return instance.delete('joinclan', data)
+// 클랜 탈퇴 API
+function signOutClan(data) {
+  return instance.put('joinclan', data)
 }
 
-function addClan(data) { // 클랜 생성 API
+// 클랜 생성 API
+function addClan(data) {
   return instance.post('clan', data)
 }
 
-function updateClan(data) { // 클랜 정보 수정 API
+// 클랜 정보 수정 API
+function updateClan(data) {
   return instance.put('clan', data)
 }
 
-function deleteClan(clanId) { // 클랜 삭제 API
+// 클랜 삭제 API
+function deleteClan(clanId) {
   return instance.delete(`clan/${clanId}`)
 }
 

@@ -138,7 +138,7 @@ export default {
       this.getCodeInfo(this.editCodeId);
     }
   },
-  mounted(){
+  mounted() {
     this.checkWindowWidth();
     this.theme = this.$store.state.common.mode === 'dark' ? 1: 0
     this.changeColor(this.mode);

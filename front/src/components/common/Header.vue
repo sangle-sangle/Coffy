@@ -77,10 +77,7 @@ export default {
       mode: state => state.common.mode,
       isLogin: state => state.user.isLogin,
       userInfo: state => state.user.userInfo
-    }),
-    // clanPageUrl() {
-    //   return Object.keys(this.userInfo).length && this.userInfo['access-Token'].clanid >= 1 ? `/clan/detail/${this.userInfo['access-Token'].clanid}` : '/clan'
-    // }
+    })
   },
   data() {
     return {
