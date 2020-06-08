@@ -20,6 +20,12 @@ public class AccessClan implements Serializable{
 		this.pwd = pwd;
 	}
 	
+	public AccessClan(int user_id, int clan_id) {
+		super();
+		this.user_id = user_id;
+		this.clan_id = clan_id;
+	}
+	
 	@Override
 	public String toString() {
 		return "AccessClan [user_id=" + user_id + ", clan_id=" + clan_id + ", pwd=" + pwd + "]";

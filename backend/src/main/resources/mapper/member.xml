@@ -15,6 +15,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select id, email, username, githubid, clanid, point, auth, signupdate, img from user where id=#{memberid}
 	</select>
 	
+	<select id="getClanMembers" parameterType="java.lang.Integer" resultType="com.ssafy.edu.vue.dto.Member">
+		select id, email, username, githubid, clanid, point, auth, signupdate, img
+		from user
+		where clanid=#{clanid} and delflag=0 order by id
+	</select>
+	
 	<insert id="addMember" parameterType="com.ssafy.edu.vue.dto.Member">
 		insert into
 		user(email, password, username, githubid, signupdate)
