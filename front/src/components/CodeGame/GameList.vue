@@ -6,7 +6,11 @@
           Game List
         </div>
         <div class="code-list-description">
-          ⌨️CSS 관련 지식들을 Game으로 익혀보아요.
+          <p>⌨️CSS 관련 지식들을 Game으로 익혀보아요.</p>
+          <div v-if="!$store.state.user.isLogin">
+          ❗ 게임을 진행하려면 로그인 후에 진행해 주세요
+          </div>
+          <p>❗ 카테고리의 문제를 단계별로 풀 수 있습니다</p>
         </div>
       </div>
     </div>
