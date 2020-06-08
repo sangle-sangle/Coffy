@@ -47,6 +47,11 @@ export default {
     goTop() {
       window.scrollTo(0, 0);
     }
+  },
+  watch: {
+    '$route'() {
+      this.goTop();
+    }
   }
 }
 </script>
