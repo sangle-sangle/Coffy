@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.edu.vue.dto.Code;
+import com.ssafy.edu.vue.dto.CodeComment;
+import com.ssafy.edu.vue.dto.CommentInfo;
 import com.ssafy.edu.vue.dto.LikeCode;
 import com.ssafy.edu.vue.dto.Member;
 import com.ssafy.edu.vue.help.BoolResult;
@@ -179,5 +181,72 @@ public class CodeController {
 		}
 		List<Code> codes = codeservice.getMyLikes(memberid);
 		return new ResponseEntity<List<Code>>(codes, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "code Comment 전체 보기", response = List.class)
+	@RequestMapping(value = "/commentcode/{codeid}", method = RequestMethod.GET)
+	public ResponseEntity<List<CodeComment>> getCommentPost(@PathVariable int codeid, HttpServletRequest rs) throws Exception {
+		logger.info("1-------------getCommentPost-----------------------------" + new Date());
+		int memberid = 0;
+		if(rs.getAttribute("loginMember")!=null) {
+			Member member = (Member) rs.getAttribute("loginMember");
+			memberid = member.getId();
+		}
+		CommentInfo commentinfo = new CommentInfo(codeid,memberid);
+		List<CodeComment> comments;
+		comments = codeservice.getCommentPost(commentinfo);
+		return new ResponseEntity<List<CodeComment>>(comments, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "code Comment 추가", response = List.class)
+	@RequestMapping(value = "/commentcode", method = RequestMethod.POST)
+	public ResponseEntity<List<CodeComment>> addCommentPost(@RequestBody CodeComment codecomment) throws Exception {
+		logger.info("1-------------addCommentPost-----------------------------" + new Date());
+		codeservice.addCommentPost(codecomment);
+		CommentInfo commentinfo = new CommentInfo(codecomment.getCodeid(),codecomment.getUserid());
+		List<CodeComment> comments;
+		comments = codeservice.getCommentPost(commentinfo);
+		return new ResponseEntity<List<CodeComment>>(comments, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "code Comment 수정", response = BoolResult.class)
+	@RequestMapping(value = "/commentcode", method = RequestMethod.PUT)
+	public ResponseEntity<List<CodeComment>> updateCommentPost(@RequestBody CodeComment codecomment, HttpServletRequest rs) throws Exception {
+		logger.info("1-------------updateCommentPost-----------------------------" + new Date());
+		int memberid = 0;
+		if(rs.getAttribute("loginMember")!=null) {
+			Member member = (Member) rs.getAttribute("loginMember");
+			memberid = member.getId();
+		}
+		codeservice.updateCommentPost(codecomment);
+		CommentInfo commentinfo = new CommentInfo(codecomment.getCodeid(),memberid);
+		List<CodeComment> comments;
+		comments = codeservice.getCommentPost(commentinfo);
+	return new ResponseEntity<List<CodeComment>>(comments, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "code Comment 삭제", response = BoolResult.class)
+	@RequestMapping(value = "/commentcode/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<List<CodeComment>> deleteCommentPost(@PathVariable int id, HttpServletRequest rs) throws Exception {
+		logger.info("1-------------deleteCommentPost-----------------------------" + new Date());
+		int memberid = 0;
+		if(rs.getAttribute("loginMember")!=null) {
+			Member member = (Member) rs.getAttribute("loginMember");
+			memberid = member.getId();
+		}
+		codeservice.deleteCommentPost(id);
+		int codeid = codeservice.findCodeId(id);
+		CommentInfo commentinfo = new CommentInfo(codeid,memberid);
+		List<CodeComment> comments;
+		comments = codeservice.getCommentPost(commentinfo);
+		return new ResponseEntity<List<CodeComment>>(comments, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "code 댓글 수 출력", response = BoolResult.class)
+	@RequestMapping(value = "/commentcounts/{codeid}", method = RequestMethod.GET)
+	public ResponseEntity<Integer> getCommentCounts(@PathVariable int codeid) throws Exception {
+		logger.info("1-------------getCommentCounts-----------------------------" + new Date());
+		int counts = codeservice.getCommentCounts(codeid);
+		return new ResponseEntity<Integer>(counts, HttpStatus.OK);
 	}
 }
