@@ -107,7 +107,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="getCommentPost" parameterType="com.ssafy.edu.vue.dto.CommentInfo" resultType="com.ssafy.edu.vue.dto.CodeComment">
-		select id,codeid,userid,created_at,content, select user.username from user where code.userid = user.id) writername
+		select id,codeid,userid,created_at,content, (select user.username from user where code_comment.userid = user.id) writername
 		from code_comment
 		where codeid=#{codeid}
 		order by id desc
@@ -128,10 +128,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="deleteCommentPost" parameterType="java.lang.Integer">
 		delete from code_comment where id = #{id}
 	</delete>
-	
-	<select id="findCodeId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-		select codeid from code_comment where id=#{id}
-	</select>
 	
 	<select id="getCommentCounts" parameterType="java.lang.Integer" resultType="java.lang.Integer">
 		select count(*) from code_comment

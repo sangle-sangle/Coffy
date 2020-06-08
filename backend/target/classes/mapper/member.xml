@@ -31,10 +31,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		parameterType="com.ssafy.edu.vue.dto.Member">
 		update user set
 		username=#{username},
-		githubid=#{githubid},
 		img=#{img}
 		where
-		id=#{memberid}
+		id=#{id}
 	</update>
 	
 	<delete id="deleteMember" parameterType="java.lang.Integer">

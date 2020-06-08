@@ -122,20 +122,21 @@ public class MemberController {
 		logger.info("1-------------updateMember-----------------------------" + new Date());
 		Map<String, Object> resultMap = new HashMap<>();
 		logger.info("2------"+member);
-		Member origin = memberservice.getMember(member.getId());
+		Member origin = (Member) rs.getAttribute("loginMember");
+
+		System.out.println("origin-id " + origin.getId());
+		System.out.println("origin-username " + origin.getUsername());
+
 		if(member.getUsername().equals("") || member.getUsername()==null) {
 			member.setUsername(origin.getUsername());
 		}else if(memberservice.checkUsername(member.getUsername())>0) {
-			
 			resultMap.put("state", "이미 존재하는 username 입니다.");
 			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK); 
-		}
-		if(member.getGithubid()==null || member.getGithubid().equals("") ) {
-			member.setGithubid(origin.getGithubid());
 		}
 		if(member.getImg()==null || member.getImg().equals("") ) {
 			member.setImg(origin.getImg());
 		}
+		member.setId(origin.getId());
 		memberservice.updateMember(member);
 		Member login = memberservice.getMember(member.getId());		
 		String token = jwtService.signin(login);
