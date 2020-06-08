@@ -9,7 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		(select user.username from user where
 		clan_post.writerid = user.id) writername
 		from clan_post
-		order by id desc
+		order by postid desc
 	</select>
 
 	<select id="getPost" parameterType="java.lang.Integer"
@@ -31,11 +31,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update clan_post set
 		title=#{title},
 		content=#{content}
-		where id=#{id}
+		where postid=#{id}
 	</update>
 
 	<delete id="deletePost" parameterType="java.lang.Integer">
 		delete from clan_post where
-		id=#{id}
+		postid=#{id}
 	</delete>
 </mapper>
