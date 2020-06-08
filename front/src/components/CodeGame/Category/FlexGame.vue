@@ -17,7 +17,6 @@
         </div>
           <button v-if="game.id!==5" @click="goNext(game.id)">다음 문제로</button>
           <button @click="toggleModal">닫기</button>
-
       </div>
     </Modal>
     <div>
@@ -237,7 +236,8 @@ export default {
       if (result) {
         this.result = true
           if (!(this.solved)) {
-            solvedProblem({category:1,id:this.game.id}).then(
+            this.$store.commit('gamesolve')
+            solvedProblem({category_id:1,game_id:this.game.id}).then(
               response=>{
                 console.log(response)
               })
