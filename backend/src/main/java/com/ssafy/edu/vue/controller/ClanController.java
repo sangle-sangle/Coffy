@@ -36,6 +36,8 @@ public class ClanController {
 
 	@Autowired
 	private IClanService clanservice;
+	@Autowired
+	private IMemberService memberservice;
 	
 	@ApiOperation(value = "clan 전체 보기", response = List.class)
 	@RequestMapping(value = "/clans", method = RequestMethod.GET)
@@ -55,22 +57,19 @@ public class ClanController {
 		int memberid = 0;
 		// 인자로 받은 id : 코드 id / loginMember는 JwtInterceptor.java에서 지정
 		// 로그인했는지 먼저 판단
+		accessclan.setClan_id(id);
+		Clan clan = clanservice.getClan(id);
+		result.put("clan", clan);
 		if(rs.getAttribute("loginMember")!=null ) {
 			Member member = (Member) rs.getAttribute("loginMember");
 			memberid = member.getId();
 			accessclan.setUser_id(memberid);
 		} else {
 			// 로그인 안한 상태			
-			accessclan.setClan_id(id);
-			Clan clan = clanservice.getClan(id);
-			result.put("clan", clan);
 			result.put("clan_status", 2);
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 		}
-		accessclan.setClan_id(id);
-		Clan clan = clanservice.getClan(id);
-		result.put("clan", clan);
-		
+
 		int myclan = clanservice.isAccess(accessclan);
 		result.put("myclan", myclan);
 		
@@ -97,17 +96,25 @@ public class ClanController {
 		logger.info("1----------------addClan----------------" + new Date());	
 		int memberid = 0;
 		AccessClan accessclan = new AccessClan();
+		BoolResult nr = new BoolResult();
+		nr.setName("addClan");
 		if(rs.getAttribute("loginMember")!=null ) {
 			Member member = (Member) rs.getAttribute("loginMember");
 			memberid = member.getId();
 			accessclan.setUser_id(memberid);
+			System.out.println("User_id" + accessclan.getUser_id());
+			clanservice.addClan(clan);
+			int lastClanId = clanservice.getLastClanId();
+			accessclan.setClan_id(lastClanId);
+			clanservice.joinClan(accessclan);
+			System.out.println("User_id" + accessclan.getUser_id());
+			System.out.println("Clan_id" + accessclan.getClan_id());
+			nr.setState("succ");
 		}
-		accessclan.setClan_id(clan.getId());
-		clanservice.addClan(clan);
-		clanservice.joinClan(accessclan);
-		BoolResult nr = new BoolResult();
-		nr.setName("addClan");
-		nr.setState("succ");
+		else {
+			logger.info("1----------로그인 안함----------");
+			nr.setName("fail");
+		}
 		return new ResponseEntity<BoolResult>(nr, HttpStatus.OK);
 	}
 	
@@ -127,6 +134,8 @@ public class ClanController {
 	public ResponseEntity<BoolResult> deleteClan(@PathVariable int id) throws Exception {
 		logger.info("1-------------deleteClan-----------------" + new Date());
 		clanservice.deleteClan(id);
+		memberservice.deleteClanMember(id);
+		
 		BoolResult nr = new BoolResult();
 		nr.setName("deleteClan");
 		nr.setState("succ");
@@ -138,13 +147,23 @@ public class ClanController {
 	public ResponseEntity<BoolResult> joinClan(@RequestBody AccessClan accessclan) throws Exception {
 		// accessclan에 담은 password가 clanservice에 있는 password와 같은지 판별
 		// locked: 1이던 0이던 같은지만 판별하면 됨
+		System.out.println("joinClan 함수 안");
 		BoolResult nr = new BoolResult();
 		nr.setName("joinClan");
-		if (accessclan.getPwd().equals(clanservice.collectPwd(accessclan))) {
+		Clan clan = clanservice.getClan(accessclan.getClan_id());
+		if (clan.getLocked() == 1) {
+			if (accessclan.getPwd().equals(clanservice.collectPwd(accessclan))) {
+				System.out.println("if if");
+				clanservice.joinClan(accessclan);
+				nr.setState("succ");
+			}else {
+				System.out.println("if else");
+				nr.setState("fail");
+			}
+		} else {
+			System.out.println("else");
 			clanservice.joinClan(accessclan);
 			nr.setState("succ");
-		}else {
-			nr.setState("fail");
 		}
 		return new ResponseEntity<BoolResult>(nr, HttpStatus.OK);
 	}

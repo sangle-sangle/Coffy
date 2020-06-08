@@ -27,4 +27,6 @@ public interface IClanService {
 
 	String collectPwd(AccessClan accessclan);
 
+	int getLastClanId();
+
 }

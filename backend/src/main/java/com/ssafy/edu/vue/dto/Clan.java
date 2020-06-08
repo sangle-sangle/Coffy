@@ -37,8 +37,9 @@ public class Clan {
 		this.clanpoint = clanpoint;
 	}
 	
-	public Clan(String name, String description, int leaderId, int locked, String password, String clanmark, String clanmarkdeletehash, String created_at, int clanpoint) {
+	public Clan(int id, String name, String description, int leaderId, int locked, String password, String clanmark, String clanmarkdeletehash, String created_at, int clanpoint) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.leaderId = leaderId;
@@ -48,6 +49,17 @@ public class Clan {
 		this.clanmarkdeletehash = clanmarkdeletehash;
 		this.created_at = created_at;
 		this.clanpoint = clanpoint;
+	}
+	
+	public Clan(int id, String name, String description, int locked, String password, String clanmark, String clanmarkdeletehash) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.locked = locked;
+		this.password = password;
+		this.clanmark = clanmark;
+		this.clanmarkdeletehash = clanmarkdeletehash;
 	}
 
 	public Clan(int id, String name) {
