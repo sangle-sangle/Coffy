@@ -58,7 +58,7 @@
         </div>
       </div>
       <div id="applyform" class="rowapply">
-        <ApplyCode class='itembox' :idtag="`frame${editCodeId}`" :code="afterData" :colLayout="colLayout" />
+        <ApplyCode class='itembox' :idTag="`frame${editCodeId}`" :code="afterData" :colLayout="colLayout" />
       </div>
     </div>
   </div>
@@ -165,7 +165,7 @@ export default {
   methods : {
     async getCodeInfo(id) {
       const codeInfo = await fetchCodeInfo(id);
-      this.codeDetail = codeInfo.data;
+      this.codeDetail = codeInfo.data.code;
       this.title = this.codeDetail.title;
       this.description = this.codeDetail.description;
       this.codeData.htmlText = this.codeDetail.html;

@@ -23,7 +23,7 @@
               <div class="filter-search-bar">
                 <input type="text" class="filter-search-input" placeholder="Search keyword" v-model="keyword">
               </div>
-              <button class="filter-search-button">검색</button>
+              <button class="filter-search-button"><i class="fas fa-search"></i></button>
             </div>
           </div>
           <div class="filter-right">
@@ -79,7 +79,7 @@ export default {
   data() {
 		return {
 			currentTab: 0, // 현재 탭 위치
-      tabs: ['좋아요', '스크랩'], // 탭 아이템 내용
+      tabs: ['찜한 템플릿', '내가 만든 템플릿'], // 탭 아이템 내용
       keyword: '',
       filterButton: false,
       filterMenu: false,
@@ -225,7 +225,7 @@ export default {
 
 .filter-search-button {
   height: 35px;
-  width: 60px;
+  width: 50px;
   border: transparent;
   padding: 0px 10px;
   line-height: 25px;
@@ -267,7 +267,7 @@ export default {
   background-color: rgb(37, 40, 48);
   height: 35px;
   margin-right: 15px;
-  width: calc(9rem + 2vw + 30px);
+  width: calc(9rem + 2vw + 10px);
 }
 
 .dropdown-menu{
@@ -307,4 +307,15 @@ export default {
 }
 
 .dropdown-contents li:hover {background-color: #ddd}
+
+@media (max-width: 750px) {
+  .filter-items-wrapper {
+    display: block;
+  }
+
+  .filter-right {
+    display: flex;
+    width: 100%;
+  }
+}
 </style>

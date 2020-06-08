@@ -69,4 +69,16 @@ public class CodeServiceImpl implements ICodeService {
 	public int isLike(LikeCode likecode) {
 		return codedao.isLike(likecode);
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Code> getMyCodes(int memberid) {
+		return codedao.getMyCodes(memberid);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Code> getMyLikes(int memberid) {
+		return codedao.getMyLikes(memberid);
+	}
 }

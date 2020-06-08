@@ -1,4 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: com.ssafy.edu.SangleApplicationTests
 -------------------------------------------------------------------------------
+<<<<<<< HEAD
 Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 19.366 s - in com.ssafy.edu.SangleApplicationTests
+=======
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.273 s - in com.ssafy.edu.SangleApplicationTests
+>>>>>>> 013201db83d323eddb299c07e88cdc28cc0f05a2

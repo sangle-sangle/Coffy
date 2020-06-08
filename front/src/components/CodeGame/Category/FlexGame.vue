@@ -1,5 +1,12 @@
 <template>
-  <div>
+  <div v-if="!this.$store.state.user.isLogin">
+    <Unauth text="로그인"/>
+  </div>
+  <!-- <div v-else-if="this.$store.state.user.isLogin">
+    <Unauth text="이전 문제를 푼"/>
+  </div> -->
+  <div v-else>
+  <!-- <div> -->
     <Modal v-if="result">
       <div class="modal-wrapper">
         <div class="button-wrapper">
@@ -9,7 +16,9 @@
           <i class="collecticon fab fa-angellist"></i><br>
           참잘했어요
         </div>
-          <button v-if="game.id!==2" @click="goNext(game.id)">다음 문제로</button>
+          <button v-if="game.id!==5" @click="goNext(game.id)">다음 문제로</button>
+          <button @click="toggleModal">닫기</button>
+
       </div>
     </Modal>
     <div>
@@ -50,7 +59,6 @@
     <div v-if="game.id===1">
     <Modal id="tip1" v-if="tips===1">
       <div class="modal-wrapper">
-        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
         <div>
           <div class="tiptext">
             <strong>Flex 를 한번 배워봅시다 !</strong><br><br>
@@ -64,7 +72,6 @@
     </Modal>
     <Modal id="tip2" v-if="tips===2">
       <div class="modal-wrapper">
-        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
         <div>
           <div class="tiptext">
             Container의 Style을 조작할 수 있는 CSS 화면입니다.<br>
@@ -78,12 +85,11 @@
     </Modal>
     <Modal id="tip3" v-if="tips===3">
       <div class="modal-wrapper">
-        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
         <div>
           <div class="tiptext">
             CSS중에서 Flex를 이용하여 색이 비슷한 박스에 맞춰서 넣어줘봅시다 <br>
             힌트를 드리자면
-              {{game.hint}}
+            {{game.hint}}
           </div>
           <button @click="movetip(2)">이전</button>
           <button @click="movetip(4)">다음</button>
@@ -92,7 +98,6 @@
     </Modal>
     <Modal id="tip4" v-if="tips===4">
       <div class="modal-wrapper">
-        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
         <div>
           <div class="tiptext">
               다음 단계부턴 설명이 없이 진행되니 스스로 혼자 성장해 봅시다 유후훗 구글을 잘 이용해보세요 ~ 후훗
@@ -105,7 +110,6 @@
   </div>
     <Modal id="tip7" v-if="tips===7">
       <div class="modal-wrapper">
-        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
         <div>
           <div class="tiptext">
             CSS중에서 Flex를 이용하여 색이 비슷한 박스에 맞춰서 넣어줘봅시다 <br>
@@ -120,12 +124,14 @@
 </template>
 
 <script>
+import Unauth from '@/components/common/Unauth.vue'
 import Modal from '@/components/common/Modal.vue';
 import { getGame, solvedProblem } from '@/api/game'
 
 export default {
   components: {
-    Modal
+    Modal,
+    Unauth
   },
   data() {
     return {
@@ -147,9 +153,10 @@ export default {
     },
     getGamedata() {
       getGame(1,this.$route.params.id).then(response => {
-        this.game = response.data
-        this.game.base = JSON.parse(response.data.base.split(`'`).join(`"`))
-        this.game.problem = JSON.parse(response.data.problem.split(`'`).join(`"`))
+        this.game = response.data.game
+        this.solved  = response.data.count
+        this.game.base = JSON.parse(response.data.game.base.split(`'`).join(`"`))
+        this.game.problem = JSON.parse(response.data.game.problem.split(`'`).join(`"`))
       }).then(()=>{
         this.baseSetting()
         this.problemSetting()

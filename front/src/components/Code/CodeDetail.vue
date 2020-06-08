@@ -15,8 +15,7 @@
         </div>
         <div class="mini-info">
           <div class="code-date-info"><i class="fas fa-calendar-day"></i> {{ codeDetail.created_at }}</div>
-          <div class="like-info" @click="toggleLikeCode" :style="{ 'color': likeCode ? '#f9462a' : '#fff' }"><i class="fas fa-heart"></i> 10</div>
-          <div class="scrap-info"><i class="fas fa-bookmark"></i> 5</div>
+          <div class="like-info" @click="toggleLikeCode" :style="{ 'color': likeCode ? '#f9462a' : '#fff' }"><i class="fas fa-heart"></i> {{ likeCount }}</div>
         </div>
       </div>
       <div class="code-section">
@@ -61,7 +60,7 @@
         </div>
         <div class="result-tag border-tag">Result</div>
         <div class="result-section border-tag">
-          <ApplyCode class='itembox' :idtag="`frame${codeId}`" :code="codeData" />
+          <ApplyCode class='itembox' :idTag="`frame${codeId}`" :code="codeData" />
         </div>
         <div class="description-tag border-tag">Description</div>
         <div class="description border-tag">{{ codeDetail.description }}</div>
@@ -187,6 +186,7 @@ export default {
       ],
       checkMobileSize: false,
       likeCode: false,
+      likeCount: 0,
       showDeleteCodeModal: false,
       loading: false
     }
@@ -202,11 +202,10 @@ export default {
     }
   },
   created() {
-    this.loading = false;
+    this.loading = true;
     this.getCodeInfo();
   },
   mounted() {
-    this.changeColor(this.mode);
     this.theme = this.mode === 'dark' ? 1 : 0;
     this.checkMobileSize = window.innerWidth <= 600;
     window.addEventListener('resize', () => this.checkMobileSize = window.innerWidth <= 600);
@@ -214,11 +213,13 @@ export default {
   methods: {
     async getCodeInfo() {
       const codeInfo = await fetchCodeInfo(this.codeId);
-      this.codeDetail = codeInfo.data;
+      this.codeDetail = codeInfo.data.code;
+      this.likeCode = codeInfo.data.flag;
       this.codeDetail['created_at'] = this.codeDetail['created_at'].slice(0, 10);
       this.codeData.htmlText = this.codeDetail.html;
       this.codeData.cssText = this.codeDetail.css;
       this.codeData.jsText = this.codeDetail.javascript;
+      this.likeCount = this.codeDetail.likes;
       const writerData = await fetchMyInfo(this.codeDetail.writerid);
       if (writerData.data.img === null) {
         this.writerImage = 'https://user-images.githubusercontent.com/52685250/73902320-c72d6c00-48d8-11ea-82b4-eb9bfebfe9fb.png';
@@ -227,20 +228,24 @@ export default {
       }
       this.writerName = writerData.data.username;
       this.loading = false;
+      setTimeout(() => this.changeColor(this.mode), 500)
     },
     async toggleLikeCode() {
-      // (1) 해당 코드 좋아요 관련 로직 작성
-      let paramsData = {
-        codeid: this.codeId,
-        userid: this.userInfo['access-Token'].id
+      if (!this.isLogin) {
+        alert('이 코드에 좋아요를 주고 싶으시면 로그인을 먼저 해주세요.');
+        this.$router.push('/login');
+        return
       }
+      // (1) 해당 코드 좋아요 관련 로직 작성
       if (!this.likeCode) { // 좋아요 X => 좋아요 O
-        await postLikeCode(paramsData)
+        this.likeCount += 1
+        await postLikeCode(this.codeId)
       } else { // 좋아요 O => 좋아요 X
-        await deleteLikeCode(paramsData)
+        this.likeCount -= 1
+        await deleteLikeCode(this.codeId)
       }
       // (2) 색깔 변경
-      setTimeout(() => this.likeCode = !this.likeCode, 0);
+      this.likeCode = !this.likeCode;
     },
     langImgUrl(lang) {
       return require(`../../assets/images/mainpage/${lang.toLowerCase()}.png`)
@@ -292,7 +297,9 @@ export default {
   },
   watch: {
     mode() {
-      this.changeColor(this.mode);
+      if (!this.loading) {
+        this.changeColor(this.mode);
+      }
     },
     theme() {
       if (this.theme) {

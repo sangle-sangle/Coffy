@@ -1,5 +1,6 @@
 import { loginUser } from '@/api/user.js'
 import jwtDecode from 'jwt-decode'
+import { solvedCount } from '@/api/game'
 
 const state = {
   adminAuth: 0,
@@ -7,7 +8,8 @@ const state = {
   isLogin: sessionStorage.getItem('token') === null ? false : true,
   isLoginError: false,
   userInfo : sessionStorage.getItem('token') === null ? {} : jwtDecode(sessionStorage.getItem('token')),
-  isPasswordConfirmed: false
+  isPasswordConfirmed: false,
+  solved : sessionStorage.getItem('solved').split(',') || new Array(10).fill(0)
 };
 
 const mutations = {
@@ -33,6 +35,10 @@ const mutations = {
   },
   enteredAccount(state){
     state.isPasswordConfirmed = false
+  },
+  gamesolve(state, data){
+    state.solved = data
+    sessionStorage.setItem('solved', data)
   }
 }
 
@@ -41,6 +47,16 @@ const actions = {
     const result = await loginUser(userData)
     if (result.headers['access-token']) {
       commit('setToken', result.headers['access-token'])
+      solvedCount().then(response=>{
+        let solved = new Array(10).fill(0)
+        console.log(solved)
+        for (let i in response.data){
+          console.log(response.data[i])
+          solved[response.data[i].category_id-1]=response.data[i].count
+        }
+        commit('gamesolve',solved)
+
+      })
     } else {
       commit('loginError')
     }

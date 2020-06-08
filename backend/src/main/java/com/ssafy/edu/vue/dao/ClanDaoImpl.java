@@ -38,7 +38,7 @@ public class ClanDaoImpl {
 	}
 	
 	public void joinClan(AccessClan accessclan) {
-		sqlSession.insert(ns+"joinClan", accessclan);
+		sqlSession.update(ns+"joinClan", accessclan);
 	}
 	
 	public void quitClan(AccessClan accessclan) {
