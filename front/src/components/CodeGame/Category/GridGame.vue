@@ -30,7 +30,7 @@
         </div>
         <div>
           <span v-if="game.id===1" class="game-hint" @click="movetip(1)">설명 다시보기</span>
-          <span v-else class="game-hint" @click="movetip(3)">힌트보러가기</span>
+          <span v-else class="game-hint" @click="movetip(7)">힌트보러가기</span>
         </div>
       </div>
       <div class="answer-board">
@@ -150,47 +150,7 @@ export default {
       beforesolved : true,
       tips : 1,
       solved : false,
-      game: {
-        id: 1,
-        category: 3,
-        item_cnt : 0,
-        title: 'grid 시스템의 이해',
-        text: "",
-        base: {'display':'grid','grid-template-columns': '1fr 2fr 1fr','grid-gap': '10px'},
-        problem: {'display':'grid','grid-template-columns': '','grid-gap': ''},
-        description: "columns 사이의 값을 1:2:1 비율로 맞추고 grid 사이의 값은 10px로 맞춰주세요",
-        hint: "grid-template-columns의 값으로는 자동으로 분배해주는 auto와, 비율에 맞게 px이나 fr 단위등을 사용 할 수 있어요",
-
-        // id : 2,
-        // category : 3,
-        // title : 'column에 repeat 을 이용하여 나타내 봅시다',
-        // item_cnt : 1,
-        // text : '',
-        // base: {'display':'grid','grid-template-columns': 'repeat(5,auto)','grid-gap': '10px'},
-        // problem: {'display':'grid','grid-template-columns': '','grid-gap': '10px'},
-        // description: "repeat을 사용해서 5등분의 그리드가 적용된 컨테이너를 만들어 봅시다",
-        // hint: "repeat(num, value) 함수는 value 값을 만큼 반복하여 사용하게 해줍니다. 정확한 등분으로 나누려면 auto값을 이용하는게 좋아보이네요",
-
-        // id : 3,
-        // category : 3,
-        // title : 'grid의 column과 row를 조절하여 위치와 크기를 바꿔봅시다',
-        // item_cnt : 1,
-        // text : ' .item1',
-        // base : {'grid-column' : '2 / 4', 'grid-row-start': 1,'grid-row-end': '3'},
-        // problem : {'':'2 / 4','grid-row-start' : 1,'grid-row-end': ''},
-        // description: "grid container 안의 item1 요소의 column과 row를 조절해 봅시다",
-        // hint: "grid-row-start 와 grid-row-end 를 grid-row 로 한번에 표시할 수 있습니다. end의 지점은 해당 칸의 전까지 들어가게 됩니다",
-
-        // id : 4,
-        // category : 3,
-        // title : 'grid의 column과 row를 조절하여 위치와 크기를 바꿔봅시다',
-        // item_cnt : 0,
-        // text : '',
-        // base : {'display':'grid', 'grid-template-columns': 'repeat(auto-fit, minmax(33%,auto)', 'width': '800px'},
-        // problem :  {'display':'grid', 'grid-template-columns': '', 'width': '800px'},
-        // description: "grid container 안의 item1 요소의 column과 row를 조절해 봅시다",
-        // hint: "grid-row-start 와 grid-row-end 를 grid-row 로 한번에 표시할 수 있습니다. end의 지점은 해당 칸의 전까지 들어가게 됩니다",
-      },
+      game: {},
       basecolor: ['basered', 'basegreen', 'baseblue'],
       color: ['red', 'green', 'blue'],
       answer: [],
@@ -211,7 +171,6 @@ export default {
         this.solved  = response.data.count
         this.game.base = JSON.parse(response.data.game.base.split(`'`).join(`"`))
         this.game.problem = JSON.parse(response.data.game.problem.split(`'`).join(`"`))
-          console.log(this.game)
       }).then(()=>{
         this.baseSetting()
         this.problemSetting()
@@ -255,6 +214,9 @@ export default {
       let answerboard = document.querySelector('.answer-board');
       let itembox = document.querySelector('.itembox');
       let modal = document.querySelector('#slot-modal');
+      console.log(itembox)
+      console.log(modal)
+      console.log(answerboard)
       if (this.tips === 1){
         answerboard.style['z-index'] = 0
         itembox.style['position'] = 'sticky'

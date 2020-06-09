@@ -51,7 +51,7 @@ export default {
   },
   data() {
     return {
-      changeMode: 'dark'
+      changeMode: 'dark',
     }
   },
   computed: {
@@ -91,6 +91,12 @@ export default {
   height: 100vh;
 }
 
+.menu-items > li {
+  transition : all 0.5s;
+}
+.menu-items > li:hover {
+  font-size : 115%;
+}
 .sidebar-wrapper > div,
 .sidebar-wrapper > ul {
   margin-bottom: 10px;
