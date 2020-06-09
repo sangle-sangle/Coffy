@@ -28,7 +28,7 @@ import com.ssafy.edu.vue.service.IMemberService;
 
 import io.swagger.annotations.ApiOperation;
 
-@CrossOrigin(origins = { "*" }, maxAge = 6000)
+@CrossOrigin(origins = { "*" }, maxAge = 6000, exposedHeaders = "access-token", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api") // api 요청 주소, 이후에  @RequestMapping(value = "/")로 추가된다
 public class ClanController {
