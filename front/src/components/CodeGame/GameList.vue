@@ -5,7 +5,7 @@
         <div class="game-list-title">
           Game List
         </div>
-        <div class="code-list-description">
+        <div class="game-list-description">
           <p>⌨️CSS 관련 지식들을 Game으로 익혀보아요.</p>
           <div v-if="!$store.state.user.isLogin">
           ❗ 게임을 진행하려면 로그인 후에 진행해 주세요
@@ -16,7 +16,6 @@
     </div>
     <div class="game-set" v-for="(category,index) in categorys" :key="category.id">
       <div class="game-category">{{ `${indexIcons[index]} ${category.title}` }}</div>
-      <div class="description">📌{{ category.description }}</div>
       <div class="game-button-set">
         <div :class="{solved: gameNum<=$store.state.user.solved[index] }"  class="game-button" v-for="gameNum in category.game_cnt" :key="gameNum" @click="goGamePage(category.title, gameNum)">
           GAME {{ gameNum }}
@@ -34,8 +33,7 @@ export default {
     return {
       solved : [],
       categorys : [],
-      indexIcons: ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'],
-      categories: ['flex', 'text', 'grid', 'transition', 'animation', 'selector'],
+      indexIcons: ['1️⃣', '2️⃣', '3️⃣', '4️⃣']
     }
   },
   mounted() {
@@ -43,8 +41,14 @@ export default {
   },
   methods: {
     async fetchCategory(){
-      let data = await getCategorys()
-      this.categorys = data.data
+      let { data } = await getCategorys()
+      let categoryData = []
+      for (let i = 0; i < 6; ++i) {
+        if (i !== 3 && i !== 5) {
+          categoryData.push(data[i]);
+        }
+      }
+      this.categorys = categoryData;
     },
     goGamePage(category, gameNum) {
       this.$router.push(`game/${category}/${gameNum}`)
@@ -72,7 +76,7 @@ export default {
   border-bottom: 1px solid silver;
 }
 
-.game-list-description {
+.game-list-description > p {
   font-size: calc(0.7rem + 0.3vw);
 }
 
@@ -81,18 +85,18 @@ export default {
 }
 
 .game-category {
-  font-size: 24px;
+  font-size: calc(1.4rem + 0.3vw);
   font-weight: 600;
   font-family: 'Gothic A1';
   margin-bottom: 8px;
 }
 
 .solved{
-  background: linear-gradient(90deg,#9ff797,#a8ff8e 90%)!important;
+  background: linear-gradient(90deg,#57c6fa,#57c6fb 90%)!important;
 }
 .game-button-set {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 15px;
 }
 
@@ -105,7 +109,7 @@ export default {
   border-radius: 8px;
   padding: 18px 24px;
   width: 90%;
-  margin: 20px auto 0;
+  margin: 5px auto;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
@@ -124,7 +128,7 @@ export default {
 @media (max-width: 600px) {
   .game-button-set {
     font-size: 17px;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     gap: 12px;
   }
 }

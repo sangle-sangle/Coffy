@@ -376,7 +376,7 @@ export default {
 }
 
 .code-btn.change-layout {
-  background-color: #47cf73;
+  background-color: #03a9f4;
   color: black;
   margin-right: 10px;
 }
@@ -431,7 +431,7 @@ export default {
 }
 
 .title > .submit-btn {
-  background-color: #ffdd40;
+  background-color: #8003f4;
   color: black;
 }
 

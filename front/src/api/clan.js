@@ -36,6 +36,26 @@ function deleteClan(clanId) {
   return instance.delete(`clan/${clanId}`)
 }
 
+// 각 클랜별 게시판 리스트 불러오기 API
+function fetchClanPosts(clanId) {
+  return instance.get(`posts/${clanId}`)
+}
+
+// 각 클랜별 게시판 내용 추가 API
+function addClanPost(data) {
+  return instance.post('post', data)
+} 
+
+// 각 클랜별 게시판 내용 수정 API
+function updateClanPost(data) {
+  return instance.post('post', data)
+} 
+
+// 각 클랜별 게시판 내용 삭제 API
+function deleteClanPost(postId) {
+  return instance.delete(`post/${postId}`)
+}
+
 export {
   fetchAllClans,
   fetchClanInfo,
@@ -43,5 +63,9 @@ export {
   signOutClan,
   addClan,
   updateClan,
-  deleteClan
+  deleteClan,
+  fetchClanPosts,
+  addClanPost,
+  updateClanPost,
+  deleteClanPost
 }

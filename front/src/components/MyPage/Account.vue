@@ -194,10 +194,7 @@ export default {
           }
           // 프로필 이미지를 등록한 경우 imgur api와 연동된 url 주소도 같이 보내기
           changeInfoData['img'] = this.imgUrl || this.noProfileImgUrl
-          console.log(changeInfoData)
           const checkExistData = await updateMyInfo(changeInfoData);
-            console.log(checkExistData)
-          // 수정 필요
           if (!checkExistData.data.signup) {
             alert(checkExistData.data.state);
             return
@@ -217,9 +214,7 @@ export default {
           let passwordData = {
             password: this.password,
           };
-
           const checkExistData = await changePassword(passwordData);
-          console.log(checkExistData)
           // 수정 필요
           if (!checkExistData.data.signup) {
             alert(checkExistData.data.message);
@@ -516,7 +511,7 @@ select {
 }
 
 .file-input label {
-  background: #47cf73;
+  background-color: #03a9f4;
   padding: 8px;
   margin-bottom: 0;
   margin-right: 6px;
@@ -526,7 +521,7 @@ select {
 
 .file-input .file-reset {
   display: inline-block;
-  background-color: #ffdd40;
+  background-color: #03a9f4;
   padding: 8px;
   border-radius: 8px;
   color: black;
@@ -549,7 +544,7 @@ select {
   width: 100%;
   margin: 2rem auto;
   text-align: center;
-  background-color: #47cf73;
+  background-color: #8003f4;
   font-size: 17px;
   padding: 8px;
 }

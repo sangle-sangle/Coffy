@@ -175,7 +175,7 @@ export default {
   text-align: center;
   padding: 10px;
   border-radius: 8px;
-  background-color: #47cf73;
+  background-color: #03a9f4;
 }
 
 .clan-main-title {
@@ -242,7 +242,7 @@ export default {
   text-align: center;
   padding: 10px;
   border-radius: 8px;
-  background-color: #47cf73;
+  background-color: #03a9f4;
   margin-left:8px;
 }
 
@@ -284,11 +284,11 @@ export default {
 }
 
 .clan-private.private {
-  background-color: rgb(185, 114, 8);
+  background-color: #8003f4;
 }
 
 .clan-private.open {
-  background-color: rgb(27, 105, 196);
+  background-color: #03a9f4;
 }
 
 .clan-name {
@@ -346,15 +346,15 @@ export default {
 }
 
 .clan-register-btn {
-  background-color: #ffdd40;
+  background-color: #03a9f4;
 }
 
 .clan-detail-btn {
-  background-color: #f7c389;
+  background-color: #f09ced;
 }
 
 .my-clan-sign {
-  background-color: antiquewhite;
+  background-color: #03a9f4;
 }
 
 .clan-footer > .clan-detail-btn:hover,
