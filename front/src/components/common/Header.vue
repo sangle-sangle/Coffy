@@ -23,6 +23,11 @@
       </div>
     </div>
     <div class="mobile-menu" v-show="showMobileMenus">
+      <hr class="divider top-divider" v-if="isLogin">
+      <div class="login-user" v-if="isLogin">
+        Welcome,<br>{{ userInfo['access-Token'].username }}
+      </div>
+      <hr class="divider top-divider">
       <div @click="toggleColorMode">
         <ToggleSwitch :mode="changeMode"></ToggleSwitch>
       </div>
@@ -255,5 +260,15 @@ export default {
     padding: 15px;
     background-color: #2c303a;
   }
+}
+
+.login-user {
+  text-align: center;
+  padding-bottom: 8px;
+  line-height: 1.4;
+}
+
+.divider {
+  margin: 14px 0;
 }
 </style>

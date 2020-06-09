@@ -3,6 +3,10 @@
     <div class="service-name">
       <router-link to="/">☕Coffy</router-link>
     </div>
+    <hr class="divider" v-if="isLogin">
+    <div class="login-user" v-if="isLogin">
+      Welcome,<br>{{ userInfo['access-Token'].username }}
+    </div>
     <hr class="divider">
     <div @click="toggleColorMode">
       <ToggleSwitch :mode="changeMode"></ToggleSwitch>
@@ -151,5 +155,11 @@ export default {
 .menu-items > li {
   font-family: 'Gothic A1';
   padding: 8px 0;
+}
+
+.login-user {
+  text-align: center;
+  padding-bottom: 8px;
+  line-height: 1.4;
 }
 </style>
