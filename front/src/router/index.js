@@ -68,6 +68,13 @@ export default new Router({
       ]
     },
     {
+      path : '/search',
+      component : loadView('CodePage'),
+      children : [
+        { path : ':q' , name : 'Search', component : loadComponent('common','Search')}
+      ]
+    },
+    {
       path: '*',
       name: 'NotFound',
       component: loadView('NotFoundPage'),
