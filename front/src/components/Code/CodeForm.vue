@@ -27,7 +27,7 @@
       <div id="inputbox" :class="!mobileSize ? 'flex' : ''">
         <div id="htmlcol" :class="!mobileSize ? 'col border' : 'border'">
           <div class="coltitle"> 
-            <span><i class="fab fa-html5" style="color: orange;"></i> HTML</span>
+            <span><i class="fab fa-html5" style="color: orange;"></i> HTML <span class="code-count">({{htmlLength}}/5000)</span></span>
           <div class="copycon" @click="clickCopy(codeData.htmlText)">
             <i class="far fa-copy"></i>
             copy
@@ -42,7 +42,7 @@
         </div>
         <div id="csscol" :class="!mobileSize ? 'col border' : 'border'">
           <div class="coltitle"> 
-            <span><i class="fab fa-css3-alt" style="color: skyblue;"></i> CSS</span>
+            <span><i class="fab fa-css3-alt" style="color: skyblue;"></i> CSS <span class="code-count">({{cssLength}}/7000)</span></span>
           <div class="copycon" @click="clickCopy(codeData.cssText)">
             <i class="far fa-copy"></i>
             copy
@@ -57,7 +57,7 @@
         </div>
         <div :hidden="expandCheck[0] && expandCheck[1]" id="jscol" :class="!mobileSize ? 'col border' : 'border'">
           <div class="coltitle"> 
-            <span><i class="fab fa-js" style="color: gold;"></i> JS</span>
+            <span><i class="fab fa-js" style="color: gold;"></i> JS <span class="code-count">({{jsLength}}/7000)</span></span>
           <div class="copycon" @click="clickCopy(codeData.jsText)">
             <i class="far fa-copy"></i>
             copy
@@ -127,6 +127,9 @@ export default {
         cssText : '',
         jsText : ''    
       },
+      htmlLength: 0,
+      cssLength: 0,
+      jsLength: 0,
       beforeData: {},
       afterData : {},
       expandCheck : [false,false,false],
@@ -161,6 +164,15 @@ export default {
     }, { passive: true });
   },
   watch:{
+    '$route'() {
+      this.title = ''
+      this.description = ''
+      this.codeData = {
+        htmlText: '',
+        cssText: '',
+        jsText: ''
+      }
+    },
     theme() {
       if (this.theme) {
         this.htmlOptions.theme="base16-dark"
@@ -178,7 +190,25 @@ export default {
     codeData:{
       deep: true,
       immediate: true,
-      handler: 'apply'
+      handler() {
+        this.apply();
+        let html = this.codeData.htmlText;
+        let css = this.codeData.cssText;
+        let js = this.codeData.jsText;
+        this.htmlLength = html.length;
+        this.cssLength = css.length;
+        this.jsLength = js.length;
+        if (this.htmlLength >= 5001) {
+          alert('HTML은 최대 5000자 까지 입력 가능합니다.');
+          this.codeData.htmlText = html.slice(0, 5000);
+        } else if (this.cssLength >= 7001) {
+          alert('CSS는 최대 7000자 까지 입력 가능합니다.');
+          this.codeData.cssText = css.slice(0, 5000);
+        } else if (this.jsLength >= 7001) {
+          alert('Javascript는 최대 7000자 까지 입력 가능합니다.');
+          this.codeData.jsText = js.slice(0, 5000);
+        }
+      }
     },
     title() {
       if (this.title.length > 30) {
@@ -559,5 +589,9 @@ export default {
   .colapply {
     width: 100%;
   }
+}
+
+.code-count {
+  font-size: calc(0.6rem + 0.3vw);
 }
 </style>
