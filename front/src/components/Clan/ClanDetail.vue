@@ -161,7 +161,7 @@ export default {
 <style scoped>
 .clan-detail-title {
   display: inline-block;
-  font-size: calc(2rem + 0.5vw);
+  font-size: calc(1.2rem + .5vw);
   font-family: 'Noto Sans KR';
   font-weight: 600;
   padding-bottom: 5px;
