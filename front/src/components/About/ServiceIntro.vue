@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="service-intro" id="service-intro">✔️Coffy에서 즐길 수 있는 컨텐츠들을 소개합니다.</div>
+    <div class="service-intro" id="service-intro">Coffy에서 즐길 수 있는 컨텐츠들을 소개합니다.</div>
     <div class="container">
       <div class="card">
         <div class="imgBx" data-text="Live Preview">
@@ -66,7 +66,7 @@ export default {
 
 <style scoped>
 .service-intro {
-  font-size: calc(0.9rem + 0.3vw);
+  font-size: calc(0.7rem + 0.3vw);
   font-weight: 600;
   font-family: 'Gothic A1';
   margin-bottom: 10px;
@@ -75,9 +75,9 @@ export default {
 .container {
   position: relative;
   display: flex;
-  justify-content: space-between;
+  justify-content:space-evenly;
   flex-wrap: wrap;
-  margin-bottom: 150px;
+  margin-bottom: 100px;
 }
 
 .container .card {
@@ -86,7 +86,7 @@ export default {
   background: #fff;
   display: flex;
   width: 45%;
-  margin: 45px 0;
+  margin: 30px 0;
 }
 
 .container .card .imgBx {

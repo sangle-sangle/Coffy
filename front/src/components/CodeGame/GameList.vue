@@ -6,17 +6,17 @@
           Game List
         </div>
         <div class="code-list-description">
-          <p>⌨️CSS 관련 지식들을 Game으로 익혀보아요.</p>
+          <p>CSS 관련 지식들을 Game으로 익혀보아요.</p>
           <div v-if="!$store.state.user.isLogin">
-          ❗ 게임을 진행하려면 로그인 후에 진행해 주세요
+           게임을 진행하려면 로그인 후에 진행해 주세요
           </div>
-          <p>❗ 카테고리의 문제를 단계별로 풀 수 있습니다</p>
+          <p> 카테고리의 문제를 단계별로 풀 수 있습니다</p>
         </div>
       </div>
     </div>
     <div class="game-set" v-for="(category,index) in categorys" :key="category.id">
       <div class="game-category">{{ `${indexIcons[index]} ${category.title}` }}</div>
-      <div class="description">📌{{ category.description }}</div>
+      <div class="game-description">{{ category.description }}</div>
       <div class="game-button-set">
         <div :class="{solved: gameNum<=$store.state.user.solved[index] }"  class="game-button" v-for="gameNum in category.game_cnt" :key="gameNum" @click="goGamePage(category.title, gameNum)">
           GAME {{ gameNum }}
@@ -64,7 +64,7 @@ export default {
 
 .game-list-title {
   display: inline-block;
-  font-size: calc(2rem + 0.5vw);
+  font-size: calc(1.2rem + .5vw);
   font-family: 'Noto Sans KR';
   font-weight: 600;
   padding-bottom: 5px;
@@ -72,8 +72,9 @@ export default {
   border-bottom: 1px solid silver;
 }
 
+.game-description
 .game-list-description {
-  font-size: calc(0.7rem + 0.3vw);
+  font-size: calc(0.6rem + 0.3vw);
 }
 
 .game-set {
@@ -81,7 +82,7 @@ export default {
 }
 
 .game-category {
-  font-size: 24px;
+  font-size: calc(1rem + .5vw);
   font-weight: 600;
   font-family: 'Gothic A1';
   margin-bottom: 8px;

@@ -389,7 +389,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  font-size: calc(2rem + 1vw);
+  font-size: calc(1.2rem + .5vw);
   font-family: 'Noto Sans KR';
   font-weight: 600;
 }
