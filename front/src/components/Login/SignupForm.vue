@@ -371,7 +371,7 @@ select {
 }
 
 .file-input label {
-  background: #47cf73;
+  background-color: #03a9f4;
   padding: 8px;
   margin-bottom: 0;
   margin-right: 6px;
@@ -381,7 +381,7 @@ select {
 
 .file-input .file-reset {
   display: inline-block;
-  background-color: #ffdd40;
+  background-color: #03a9f4;
   padding: 8px;
   border-radius: 8px;
   color: black;
@@ -404,7 +404,7 @@ select {
   width: 100%;
   margin: 2rem auto;
   text-align: center;
-  background-color: #47cf73;
+  background-color: #03a9f4;
   font-size: 17px;
   padding: 8px;
 }

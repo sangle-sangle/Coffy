@@ -170,12 +170,12 @@ export default {
 }
 
 .add-code-btn {
-  background-color: #47cf73;
+  background-color: #03a9f4;
   margin-right: 8px;
 }
 
 .go-game-btn {
-  background-color: #5793e2;
+  background-color: #8003f4;
 }
 
 .add-code-btn:hover,
@@ -271,8 +271,8 @@ export default {
   font-size: calc(0.7rem + 0.3vw);
   font-weight: 600;
   font-family: 'Gothic A1';
-  background-color: #f7c389;
-  color: black;
+  background-color: #03a9f4;
+  color: white;
   padding: 4px 6px;
   border-radius: 6px;
 }

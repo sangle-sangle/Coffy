@@ -34,8 +34,7 @@ export default {
     return {
       solved : [],
       categorys : [],
-      indexIcons: ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'],
-      categories: ['flex', 'text', 'grid', 'transition', 'animation', 'selector'],
+      indexIcons: ['1️⃣', '2️⃣', '3️⃣', '4️⃣']
     }
   },
   mounted() {
@@ -43,8 +42,14 @@ export default {
   },
   methods: {
     async fetchCategory(){
-      let data = await getCategorys()
-      this.categorys = data.data
+      let { data } = await getCategorys()
+      let categoryData = []
+      for (let i = 0; i < 6; ++i) {
+        if (i !== 3 && i !== 5) {
+          categoryData.push(data[i]);
+        }
+      }
+      this.categorys = categoryData;
     },
     goGamePage(category, gameNum) {
       this.$router.push(`game/${category}/${gameNum}`)
@@ -89,11 +94,11 @@ export default {
 }
 
 .solved{
-  background: linear-gradient(90deg,#9ff797,#a8ff8e 90%)!important;
+  background: linear-gradient(90deg,#57c6fa,#57c6fb 90%)!important;
 }
 .game-button-set {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 15px;
 }
 
@@ -106,7 +111,7 @@ export default {
   border-radius: 8px;
   padding: 18px 24px;
   width: 90%;
-  margin: 20px auto 0;
+  margin: 5px auto;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
@@ -125,7 +130,7 @@ export default {
 @media (max-width: 600px) {
   .game-button-set {
     font-size: 17px;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     gap: 12px;
   }
 }

@@ -26,15 +26,15 @@ export default new Router({
         { path: '', name: 'CodeList', component: loadComponent('Code', 'CodeList') },
         { path: 'form', name: 'CodeForm', component: loadComponent('Code', 'CodeForm') },
         { path: 'detail/:id', name: 'CodeDetail', component: loadComponent('Code', 'CodeDetail'), props: true },
-        { path: 'edit/:id', name: 'CodeEdit', component: loadComponent('Code', 'CodeForm'), props: true },
+        { path: 'edit/:id', name: 'CodeEdit', component: loadComponent('Code', 'CodeForm'), props: true, beforeEnter: checkLoginUser, },
       ]
     },
     {
       path: '/game',
       component: loadView('GamePage'),
+      beforeEnter: checkRegisteredClan,
       children: [
         { path: '', name: 'GameList', component: loadComponent('CodeGame', 'GameList') },
-        // { path: '', name: 'CodeGame', component: loadComponent('CodeGame', 'GameMain') },
         { path: 'flex/:id', name: 'FlexGame', component: loadComponent('CodeGame', 'Category/FlexGame'), props : true},
         { path: 'text/:id', name : 'TextGame', component: loadComponent('CodeGame', 'Category/TextGame'), props: true},
         { path: 'grid/:id', name : 'GridGame', component: loadComponent('CodeGame', 'Category/GridGame'), props: true},
