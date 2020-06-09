@@ -190,11 +190,11 @@ export default {
 }
 
 .signup-btn {
-  background-color: rgb(119, 209, 194);
+  background-color: #03a9f4;
 }
 
 .login-btn {
-  background-color: rgb(247, 247, 217);
+  background-color: #8003f4;
 }
 
 .service-icon,

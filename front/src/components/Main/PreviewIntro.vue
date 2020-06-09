@@ -11,7 +11,7 @@
         <img src="../../assets/images/mainpage/preview_js.jpg" alt="code-img-3" data-aos="fade-down" data-aos-duration="1000" data-aos-once="true" data-aos-delay="2100">
         <img src="../../assets/images/mainpage/preview.jpg" alt="preview-img">
       </div>
-      <div class="preview-img" data-aos="flip-left" data-aos-duration="1000" data-aos-once="true" data-aos-delay="2800">
+      <div class="preview-img" data-aos="fade-right" data-aos-duration="1000" data-aos-once="true" data-aos-delay="2800">
         <img src="../../assets/images/mainpage/preview.jpg" alt="preview-img">
       </div>
     </div>
