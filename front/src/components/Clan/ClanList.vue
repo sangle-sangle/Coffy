@@ -180,7 +180,7 @@ export default {
 
 .clan-main-title {
   display: inline-block;
-  font-size: calc( 2rem + 0.5vw );
+  font-size: calc( 1.2rem + 0.5vw );
   font-family: 'Noto Sans KR';
   font-weight: 600;
   padding-bottom: 5px;
@@ -189,7 +189,7 @@ export default {
 }
 
 .clan-main-description {
-  font-size: calc(0.7rem + 0.3vw);
+  font-size: calc(0.65rem + 0.3vw);
 }
 
 .clan-search,

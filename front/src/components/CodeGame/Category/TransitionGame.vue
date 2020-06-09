@@ -10,26 +10,25 @@
       <div class="modal-wrapper">
         <div class="button-wrapper">
         </div>
-        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
         <div>
           <i v-if="result" class="collecticon fab fa-angellist"></i>
           참잘했어요
         </div>
         <button v-if="game.id!==2" @click="goNext(game.id)">다음 문제로</button>
         <button @click="toggleModal">닫기</button>
-        
       </div>
     </Modal>
     <div>
-      <div>
-        <div>
+      <div class="game-page-header">
+        <div class="game-title-wrapper">
           <span class="game-title">{{game.title}}</span>
-          <i v-if="solved" class="fas fa-check"></i>
+          <i v-if="solved" class="fas fa-check solve">Solved!</i>
+          <i v-else class="fas fa-check unsolve">Unsolved!</i>
         </div>
-        <div>
+        <div class="game-description-wrapper">
           <span class="game-description">{{game.description}}</span>
         </div>
-        <div>
+        <div class="game-hint-wrapper">
           <span v-if="game.id===1" class="game-hint" @click="movetip(1)">설명 다시보기</span>
           <span v-else class="game-hint" @click="movetip(7)">힌트보러가기</span>        </div>
       </div>
@@ -44,7 +43,6 @@
     </div>
     <div>
     </div>
-    
     <button class="runbutton" @click="run">transition</button>
     <div class="itembox">
       <div v-text="game.text" id="base-ground">
@@ -55,7 +53,6 @@
   <div v-if="game.id===1">
     <Modal id="tip1" v-if="tips===1">
       <div class="modal-wrapper">
-        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
         <div>
           <div class="tiptext">
             <strong>Transition 을 한번 배워봅시다 !</strong><br><br>
@@ -73,7 +70,6 @@
     </Modal>
     <Modal id="tip2" v-if="tips===2">
       <div class="modal-wrapper">
-        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
         <div>
           <div class="tiptext">
             요소들의 Style을 조작할 수 있는 CSS 화면입니다.<br>
@@ -88,7 +84,6 @@
     </Modal>
     <Modal id="tip3" v-if="tips===3">
       <div class="modal-wrapper">
-        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
         <div>
           <div class="tiptext">
             위의 div는 transition 이 적용된 div이고 <br>
@@ -104,7 +99,6 @@
     </Modal>
     <Modal id="tip4" v-if="tips===4">
       <div class="modal-wrapper">
-        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
         <div>
           <div class="tiptext">
               다음 단계부턴 설명이 없이 진행되니 스스로 혼자 성장해 봅시다<br> 유후훗 구글을 잘 이용해보세요 ~ 후훗
@@ -117,7 +111,6 @@
   </div>
     <Modal id="tip7" v-if="tips===7">
       <div class="modal-wrapper">
-        <!-- <img src="../../assets/images/codegame/03.jpg" alt="game-01"> -->
         <div>
           <div class="tiptext">
             위의 div는 transition 이 적용된 div이고 <br>
@@ -290,71 +283,117 @@ export default {
 </script>
 
 <style scoped>
-  .answer-board {
-    padding: 1rem;
-    width: 30%;
-    background-color: #eee;
-    margin-bottom: 2rem;
-    color: #333;
-  }
+.answer-board {
+  padding: 1rem;
+  width: 30%;
+  background-color: #eee;
+  margin-bottom: 2rem;
+  margin: 20px auto;
+  color: #333;
+}
 
-  .css {
-    display: flex;
-    margin: 0.5rem;
-  }
+.css {
+  display: flex;
+  margin: 0.5rem;
+}
 
-  .itembox {
-    width: 700px;
-    height: 500px;
-    background-color: #eee;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
+.itembox {
+  width: 700px;
+  height: 500px;
+  background-color: #eee;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 
-  #base-ground {
-    margin : 0 auto;
-    height : 100px;
-  }
+#base-ground {
+  margin : 0 auto;
+  height : 100px;
+}
 
-  #user-ground {
-    margin : 0 auto;
-    height : 100px;
-  }
+#user-ground {
+  margin : 0 auto;
+  height : 100px;
+}
 
-  .game-title {
-    font-size: 2rem;
-  }
+.game-title {
+  font-size: 2rem;
+}
 
-  .game-description {
-    font-size: 1.5rem;
-  }
+.game-description {
+  font-size: 1.5rem;
+}
 
-  .game-hint {
-    font-size: 1rem;
-  }
+.game-hint {
+  font-size: 1rem;
+}
 
+.collecticon {
+  font-size: 100px;
+}
 
-  .collecticon {
-    font-size: 100px;
-  }
+.park {
+  width: 100px;
+  height: 100px;
+}
+.runbutton {
+  font-size : 2rem;
+}
 
-  .park {
-    width: 100px;
-    height: 100px;
-  }
-  .runbutton {
-    font-size : 2rem;
-  }
+.modal-wrapper .button-wrapper {
+  text-align: right;
+  padding-bottom: 8px;
+}
 
-  .modal-wrapper .button-wrapper {
-    text-align: right;
-    padding-bottom: 8px;
-  }
+.modal-wrapper img {
+  width: 300px;
+  height: 300px;
+  vertical-align: top;
+}
 
-  .modal-wrapper img {
-    width: 300px;
-    height: 300px;
-    vertical-align: top;
-  }
+.game-page-header {
+  text-align: center;
+}
+
+.game-title-wrapper {
+  font-family: 'Gothic A1';
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-title-wrapper .fa-check {
+  border-radius: 10px;
+  margin-left: 10px;
+  padding: 5px;
+}
+
+.game-title-wrapper .solve {
+  background-color: #57c6fa;
+}
+
+.game-title-wrapper .unsolve {
+  background-color: #8003f4;
+}
+
+.game-description-wrapper,
+.game-hint-wrapper {
+  margin: 5px 0;
+}
+
+.game-description {
+  font-size: 19px;
+}
+
+.game-hint {
+  background-color: #e91ee3;
+  padding: 3px;
+  border-radius: 5px;
+  font-weight: 600;
+}
+
+.game-hint:hover {
+  cursor: pointer;
+}
 </style>

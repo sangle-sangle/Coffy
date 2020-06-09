@@ -94,7 +94,7 @@
                 <button class="edit-cancel-btn" @click="editCancel">취소</button>
               </div>
             </div>
-            <Pagination :itemCount="commentCount" :splitCount="6" @setNowPage="setNowPage" v-if="!loading"></Pagination>
+            <Pagination :itemCount="commentCount" @setNowPage="setNowPage" v-if="!loading"></Pagination>
           </div>
           <div class="no-comments border-bottom-tag" v-else>
             <i class="fas fa-pen-square"></i>

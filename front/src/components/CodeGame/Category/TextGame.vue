@@ -6,7 +6,6 @@
     <Unauth text="이전 문제를 푼"/>
   </div>
   <div v-else>
-  <!-- <div> -->
     <Modal v-if="result">
       <div class="modal-wrapper">
         <div class="button-wrapper">
@@ -20,15 +19,16 @@
       </div>
     </Modal>
     <div>
-      <div>
-        <div>
+      <div class="game-page-header">
+        <div class="game-title-wrapper">
           <span class="game-title">{{game.title}}</span>
-          <i style="margin-left:1rem" v-if="solved" class="fas fa-check"></i>
+          <i v-if="solved" class="fas fa-check solve">Solved!</i>
+          <i v-else class="fas fa-check unsolve">Unsolved!</i>
         </div>
-        <div>
+        <div class="game-description-wrapper">
           <span class="game-description">{{game.description}}</span>
         </div>
-        <div>
+        <div class="game-hint-wrapper">
           <span v-if="game.id===1" class="game-hint" @click="movetip(1)">설명 다시보기</span>
           <span v-else class="game-hint" @click="movetip(7)">힌트보러가기</span>
         </div>
@@ -37,7 +37,6 @@
         <div class="css" v-for="(key,value,index) in game.problem" :key="value">
           <div v-if="value"><span> {{value}} : </span></div>
           <div v-else><input v-model="answer[index]" type="text"> : </div>
-
           <div v-if="key"> {{key}}</div>
           <div v-else><input v-model="answer[index]" type="text"></div>
         </div>
@@ -159,7 +158,7 @@ export default {
       }).then(()=>{
         this.baseSetting()
         this.problemSetting()
-        this.beforesolved = this.game.id-1 <= this.$store.state.user.solved[0]
+        this.beforesolved = this.game.id-1 <= this.$store.state.user.solved[1]
       })
     },
     baseSetting() {
@@ -248,109 +247,158 @@ export default {
 </script>
 
 <style scoped>
-  .answer-board {
-    padding: 1rem;
-    width: 30%;
-    background-color: #eee;
-    margin-bottom: 2rem;
-    color: #333;
-  }
+.answer-board {
+  padding: 1rem;
+  width: 30%;
+  background-color: #eee;
+  margin-bottom: 2rem;
+  margin: 20px auto;
+  color: #333;
+}
 
-  .css {
-    display: flex;
-    margin: 0.5rem;
-  }
+.css {
+  display: flex;
+  margin: 0.5rem;
+}
 
-  .itembox {
-    background-color: #eee;
-  }
+.itembox {
+  background-color: #eee;
+  display: block;
+  margin: 0 auto;
+}
 
-  #base-ground {
-    word-wrap: normal;
-    color: black;
-    font-size: 2rem;
-    margin: 0 auto;
-    width : 60%;
-    padding: 12px;
-  }
+#base-ground {
+  word-wrap: normal;
+  color: black;
+  font-size: 2rem;
+  margin: 0 auto;
+  width : 60%;
+  padding: 12px;
+}
 
-  #user-ground {
-    word-wrap: normal;
-    color: black;
-    font-size: 2rem;
-    margin: 0 auto;
-    margin-top : 2rem;
-    width : 60%;
-    padding: 12px;
-  }
+#user-ground {
+  word-wrap: normal;
+  color: black;
+  font-size: 2rem;
+  margin: 0 auto;
+  margin-top : 2rem;
+  width : 60%;
+  padding: 12px;
+}
 
-  .game-title {
-    font-size: 2rem;
-  }
+.game-title {
+  font-size: 2rem;
+}
 
-  .game-description {
-    font-size: 1.5rem;
-  }
+.game-description {
+  font-size: 1.5rem;
+}
 
-  .game-hint {
-    font-size: 1rem;
-  }
+.game-hint {
+  font-size: 1rem;
+}
 
 
-  .collecticon {
-    font-size: 100px;
-  }
+.collecticon {
+  font-size: 100px;
+}
 
-  .park {
-    width: 100px;
-    height: 100px;
-  }
+.park {
+  width: 100px;
+  height: 100px;
+}
 
-  .carbox {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100px;
-    height: 100px;
-  }
+.carbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 100px;
+}
 
-  .car {
-    width: 50px;
-    height: 50px;
-  }
+.car {
+  width: 50px;
+  height: 50px;
+}
 
-  .basered {
-    background-color: rgb(252, 115, 115)
-  }
+.basered {
+  background-color: rgb(252, 115, 115)
+}
 
-  .basegreen {
-    background-color: rgb(147, 252, 115)
-  }
+.basegreen {
+  background-color: rgb(147, 252, 115)
+}
 
-  .baseblue {
-    background-color: rgb(132, 130, 248)
-  }
+.baseblue {
+  background-color: rgb(132, 130, 248)
+}
 
-  .car.red {
-    background-color: red;
-  }
+.car.red {
+  background-color: red;
+}
 
-  .car.green {
-    background-color: green;
-  }
+.car.green {
+  background-color: green;
+}
 
-  .car.blue {
-    background-color: blue;
-  }
+.car.blue {
+  background-color: blue;
+}
 
-  .modal-wrapper .button-wrapper {
-    text-align: right;
-    padding-bottom: 8px;
-  }
+.modal-wrapper .button-wrapper {
+  text-align: right;
+  padding-bottom: 8px;
+}
 
-  .modal-wrapper img {
-    width: 300px;
-    height: 300px;
-    vertical-align: top;
-  }
+.modal-wrapper img {
+  width: 300px;
+  height: 300px;
+  vertical-align: top;
+}
+
+.game-page-header {
+  text-align: center;
+}
+
+.game-title-wrapper {
+  font-family: 'Gothic A1';
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-title-wrapper .fa-check {
+  border-radius: 10px;
+  margin-left: 10px;
+  padding: 5px;
+}
+
+.game-title-wrapper .solve {
+  background-color: #57c6fa;
+}
+
+.game-title-wrapper .unsolve {
+  background-color: #8003f4;
+}
+
+.game-description-wrapper,
+.game-hint-wrapper {
+  margin: 5px 0;
+}
+
+.game-description {
+  font-size: 19px;
+}
+
+.game-hint {
+  background-color: #e91ee3;
+  padding: 3px;
+  border-radius: 5px;
+  font-weight: 600;
+}
+
+.game-hint:hover {
+  cursor: pointer;
+}
 </style>

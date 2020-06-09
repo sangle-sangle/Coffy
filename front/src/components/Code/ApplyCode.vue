@@ -73,7 +73,7 @@
       },
       adjustPreviewHeight() {
         this.windowWidth = window.innerWidth
-        if (['Main', 'DashBoard'].includes(this.$route.name)) {
+        if (['Main', 'DashBoard', 'Search'].includes(this.$route.name)) {
           document.querySelector('.wrapper').style.height = '100%'
         } else if (this.$route.name !== 'CodeList' && !this.colLayout) {
           document.querySelector('.wrapper').style.height = '450px';

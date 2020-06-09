@@ -103,7 +103,7 @@
                 </div>
               </div>
             </div>
-            <Pagination :itemCount="allClanPosts.length" :splitCount="6" @setNowPage="setNowPage" v-if="!loading"></Pagination>
+            <Pagination :itemCount="allClanPosts.length" @setNowPage="setNowPage" v-if="!loading"></Pagination>
           </div>
         </div>
       </div>

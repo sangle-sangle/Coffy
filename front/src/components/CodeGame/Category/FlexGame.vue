@@ -37,7 +37,6 @@
         <div class="css" v-for="(key,value,index) in game.problem" :key="value">
           <div v-if="value"><span> {{value}} : </span></div>
           <div v-else><input v-model="answer[index]" type="text"> : </div>
-
           <div v-if="key"> {{key}}</div>
           <div v-else><input v-model="answer[index]" type="text"></div>
         </div>
@@ -256,6 +255,7 @@ export default {
   background-color: #eee;
   margin-bottom: 2rem;
   margin: 20px auto;
+  color: black;
 }
 
 .css {
@@ -386,5 +386,20 @@ export default {
 .game-description-wrapper,
 .game-hint-wrapper {
   margin: 5px 0;
+}
+
+.game-description {
+  font-size: 19px;
+}
+
+.game-hint {
+  background-color: #e91ee3;
+  padding: 3px;
+  border-radius: 5px;
+  font-weight: 600;
+}
+
+.game-hint:hover {
+  cursor: pointer;
 }
 </style>
