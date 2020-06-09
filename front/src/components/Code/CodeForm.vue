@@ -28,8 +28,11 @@
         <div id="htmlcol" :class="!mobileSize ? 'col border' : 'border'">
           <div class="coltitle"> 
             <span><i class="fab fa-html5" style="color: orange;"></i> HTML</span>
+          <div class="copycon" @click="clickCopy(codeData.htmlText)">
+            <i class="far fa-copy"></i>
+            copy
           </div>
-          <button class="copycon" @click="clickCopy(codeData.htmlText)">copy</button>
+          </div>
           <i class="fas fa-expand expandicon" @click="expand($event,0)" v-if="!mobileSize"></i>
           <CodeMirror 
             :value="codeData.htmlText"
@@ -40,8 +43,11 @@
         <div id="csscol" :class="!mobileSize ? 'col border' : 'border'">
           <div class="coltitle"> 
             <span><i class="fab fa-css3-alt" style="color: skyblue;"></i> CSS</span>
+          <div class="copycon" @click="clickCopy(codeData.cssText)">
+            <i class="far fa-copy"></i>
+            copy
           </div>
-          <button class="copycon" @click="clickCopy(codeData.cssText)">copy</button>
+          </div>
           <i class="fas fa-expand expandicon" @click="expand($event,1)" v-if="!mobileSize"></i>
           <CodeMirror 
             :value="codeData.cssText"
@@ -52,8 +58,11 @@
         <div :hidden="expandCheck[0] && expandCheck[1]" id="jscol" :class="!mobileSize ? 'col border' : 'border'">
           <div class="coltitle"> 
             <span><i class="fab fa-js" style="color: gold;"></i> JS</span>
+          <div class="copycon" @click="clickCopy(codeData.jsText)">
+            <i class="far fa-copy"></i>
+            copy
           </div>
-          <button class="copycon" @click="clickCopy(codeData.jsText)">copy</button>
+          </div>
           <i class="fas fa-expand expandicon" @click="expand($event, 2)" v-if="!mobileSize"></i>
           <CodeMirror 
             :value="codeData.jsText"
@@ -350,7 +359,7 @@ export default {
 
 .code-form-header > .code-form-title {
   display: inline-block;
-  font-size: calc(2rem + 1vw);
+  font-size: calc(1.2rem + .5vw);
   font-family: 'Noto Sans KR';
   font-weight: 600;
   padding-bottom: 5px;
@@ -374,9 +383,19 @@ export default {
   padding: 10px;
   border-radius: 8px;
 }
+.copycon {
+  margin : 2px 2px 0px 0px;
+  font-size : 1rem;
+  display:inline-block;
+  float : right;
+}
+
+.copycon:hover {
+  cursor: pointer;
+}
 
 .code-btn.change-layout {
-  background-color: #47cf73;
+  background-color: #03a9f4;
   color: black;
   margin-right: 10px;
 }
@@ -431,7 +450,7 @@ export default {
 }
 
 .title > .submit-btn {
-  background-color: #ffdd40;
+  background-color: #8003f4;
   color: black;
 }
 
@@ -463,6 +482,11 @@ export default {
   float: right;
   margin-right:2px;
 }
+
+.expandicon:hover {
+  cursor:pointer;
+}
+
 .colinput {
   width : 40%;
   min-width: 340px;

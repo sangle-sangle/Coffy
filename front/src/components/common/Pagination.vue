@@ -22,6 +22,10 @@ export default {
     itemCount: {
       type: Number,
       default: 1
+    },
+    splitCount: {
+      type: Number,
+      default: 12
     }
   },
   data() {
@@ -36,7 +40,7 @@ export default {
   },
   methods: {
     calcPage() {
-      this.allPage = parseInt((this.itemCount - 1) / 12) + 1;
+      this.allPage = parseInt((this.itemCount - 1) / this.splitCount) + 1;
       let maxLimitIdx = this.allPage >= 4 ? 4 : this.allPage;
       for (let i = 1; i <= maxLimitIdx; ++i) {
         this.pageIndexes.push(i)

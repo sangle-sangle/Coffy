@@ -84,7 +84,7 @@
                     <i class="fas fa-edit" @click="changeEditMode(comment.id, comment.content)"></i>
                     <i class="fas fa-trash-alt" @click="deleteComment(comment.id)"></i>
                   </div>
-                  <div class="comment-date">{{ comment.created_at }}</div>
+                  <div class="comment-date">{{ comment.created_at.slice(0, 10) }}</div>
                 </div>
               </div>
               <div class="comment-contents" v-if="editCodeNumber !== comment.id">{{ comment.content }}</div>
@@ -94,7 +94,7 @@
                 <button class="edit-cancel-btn" @click="editCancel">취소</button>
               </div>
             </div>
-            <Pagination :itemCount="commentCount" @setNowPage="setNowPage" v-if="!loading"></Pagination>
+            <Pagination :itemCount="commentCount" :splitCount="6" @setNowPage="setNowPage" v-if="!loading"></Pagination>
           </div>
           <div class="no-comments border-bottom-tag" v-else>
             <i class="fas fa-pen-square"></i>
@@ -389,7 +389,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  font-size: calc(2rem + 1vw);
+  font-size: calc(1.2rem + .5vw);
   font-family: 'Noto Sans KR';
   font-weight: 600;
 }
@@ -419,12 +419,12 @@ export default {
 
 .code-title > .btn-group > .edit-btn {
   color: black;
-  background-color: #ffdd40;
+  background-color: #03a9f4;
 }
 
 .code-title > .btn-group > .delete-btn {
   color: white;
-  background-color: #ff4500;
+  background-color: #8003f4;
 }
 
 .code-short-info {
@@ -591,12 +591,12 @@ export default {
 }
 
 .submit-comment-btn {
-  background-color: #47cf73;
+  background-color: #03a9f4;
   margin-right: 10px;
 }
 
 .edit-cancel-btn {
-  background-color: #ffdd40;
+  background-color: #8003f4;
 }
 
 .comment-item {

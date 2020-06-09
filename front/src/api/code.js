@@ -12,6 +12,10 @@ function fetchCodeInfo(codeid) {
   return instance.get(`code/${codeid}`)
 }
 
+// 코드 키워드 검색 
+function fetchSearchCode(q) {
+  return instance.get(`codes/${q}`)
+}
 // 코드 등록
 function addCode(data) {
   return instance.post('code', data)
@@ -80,6 +84,7 @@ function getLikedCode(){
 export {
   fetchAllCode,
   fetchCodeInfo,
+  fetchSearchCode,
   addCode,
   updateCode,
   deleteCode,

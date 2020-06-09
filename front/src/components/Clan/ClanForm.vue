@@ -404,7 +404,7 @@ textarea {
 }
 
 .file-input label {
-  background: #47cf73;
+  background-color: #03a9f4;
   padding: 8px;
   margin-bottom: 0;
   margin-right: 6px;
@@ -414,7 +414,7 @@ textarea {
 
 .file-input .file-reset {
   display: inline-block;
-  background-color: #ffdd40;
+  background-color: #03a9f4;
   padding: 8px;
   border-radius: 8px;
   color: black;
@@ -439,7 +439,7 @@ textarea {
   font-weight: 600;
   color: black;
   text-align: center;
-  background-color: #ffdd40;
+  background-color: #03a9f4;
   padding: 6px;
 }
 
@@ -466,7 +466,7 @@ textarea {
   font-size: 17px;
   font-weight: 600;
   font-family: 'Gothic A1';
-  background: linear-gradient(-180deg,#34d058,#28a745 90%);
+  background-color: #03a9f4;
   text-align: center;
   border-radius: 6px;
   padding: 12px;

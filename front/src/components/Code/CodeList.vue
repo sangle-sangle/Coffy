@@ -6,7 +6,7 @@
           Code List
         </div>
         <div class="code-list-description">
-          ☕Coffy 사이트의 유저들이 만든 템플릿을 볼 수 있습니다.
+          Coffy 사이트의 유저들이 만든 템플릿을 볼 수 있습니다.
         </div>
       </div>
       <div class="code-list-header-right">
@@ -141,7 +141,7 @@ export default {
 
 .code-list-title {
   display: inline-block;
-  font-size: calc(2rem + 0.5vw);
+  font-size: calc(1.2rem + .5vw);
   font-family: 'Noto Sans KR';
   font-weight: 600;
   padding-bottom: 5px;
@@ -150,7 +150,7 @@ export default {
 }
 
 .code-list-description {
-  font-size: calc(0.7rem + 0.3vw);
+  font-size: calc(0.65rem + 0.3vw);
 }
 
 .code-list-header-right > div {
@@ -170,12 +170,12 @@ export default {
 }
 
 .add-code-btn {
-  background-color: #47cf73;
+  background-color: #03a9f4;
   margin-right: 8px;
 }
 
 .go-game-btn {
-  background-color: #5793e2;
+  background-color: #8003f4;
 }
 
 .add-code-btn:hover,
@@ -198,7 +198,7 @@ export default {
 
 .code-card .code-title {
   display: -webkit-box;
-  font-size: calc(1.3rem + 0.3vw);
+  font-size: calc(.9rem + 0.3vw);
   font-weight: 600;
   font-family: 'Gothic A1';
   padding-bottom: 4px;
@@ -245,6 +245,7 @@ export default {
 }
 
 .writer-info > span {
+  margin-left: 8px;
   font-size: calc(0.7rem + 0.3vw);
 }
 
@@ -270,8 +271,8 @@ export default {
   font-size: calc(0.7rem + 0.3vw);
   font-weight: 600;
   font-family: 'Gothic A1';
-  background-color: #f7c389;
-  color: black;
+  background-color: #03a9f4;
+  color: white;
   padding: 4px 6px;
   border-radius: 6px;
 }

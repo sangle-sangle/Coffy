@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     goIntroPage(idVal) {
-      this.$router.push(`/about#${idVal}`);
+      this.$router.push(`/about#${idVal}`).catch(()=>{})
       if (idVal === 'service-intro') {
         window.scrollTo(0, 0);
       }

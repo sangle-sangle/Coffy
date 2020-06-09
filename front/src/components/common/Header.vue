@@ -109,7 +109,7 @@ export default {
     },
     searchTemplate() {
       if (this.keyword) {
-        alert(`추후 ${this.keyword} 키워드를 포함하는 템플릿 보여주는 검색 결과 페이지 구현 예정`);
+        this.$router.push(`/search/${this.keyword}`)
       } else {
         alert('키워드를 입력해주세요.');
       }
@@ -190,11 +190,11 @@ export default {
 }
 
 .signup-btn {
-  background-color: rgb(119, 209, 194);
+  background-color: #03a9f4;
 }
 
 .login-btn {
-  background-color: rgb(247, 247, 217);
+  background-color: #8003f4;
 }
 
 .service-icon,

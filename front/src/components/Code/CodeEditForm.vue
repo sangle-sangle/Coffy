@@ -351,7 +351,7 @@ export default {
 
 .code-form-header > .code-form-title {
   display: inline-block;
-  font-size: calc(2rem + 1vw);
+  font-size: calc(1.2rem + .5vw);
   font-family: 'Noto Sans KR';
   font-weight: 600;
   padding-bottom: 5px;
@@ -377,7 +377,7 @@ export default {
 }
 
 .code-btn.change-layout {
-  background-color: #47cf73;
+  background-color: #03a9f4;
   color: black;
   margin-right: 10px;
 }
@@ -432,7 +432,7 @@ export default {
 }
 
 .title > .submit-btn {
-  background-color: #ffdd40;
+  background-color: #8003f4;
   color: black;
 }
 

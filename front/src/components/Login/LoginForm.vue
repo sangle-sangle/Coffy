@@ -4,7 +4,7 @@
       <div class="login-title">
         Login
       </div>
-      <div class="login-form">
+      <form class="login-form" @submit.prevent="submitForm">
         <div class="email-form">
           <label for="email"></label>
           <input id="email" v-model="userName" type="text" placeholder="ID">
@@ -16,20 +16,10 @@
           <label for="password"></label>
           <input id="password" v-model="password" type="password" placeholder="Password">
         </div>
-        <div class="btn-group">
-          <button type="submit" class="log-btn" @click="submitForm">로그인</button>
-          <button class="find-pw-btn" @click="goFindAccount">비밀번호 찾기</button>
+        <div class="btn-wrapper">
+          <button type="submit" class="log-btn">로그인</button>
         </div>
-      </div>
-      <div class="social-login-box">
-        <div class="social-message">Github 계정만 있어도 이용 가능합니다.</div>
-        <div class="social-btn-group">
-          <button class="github" @click="socialLogin">
-            <i class="fab fa-github"></i>
-            <p>Github 로그인</p>
-          </button>
-        </div>
-      </div>
+      </form>
     </div>
   </div>
 </template>
@@ -153,46 +143,14 @@ input {
   margin-bottom: 20px;
 }
 
-.btn-group {
-  margin: 10px 0;
-  text-align: center;
+.btn-wrapper {
+  margin: 30px 0;
 }
 
-.btn-group > button {
+.log-btn {
+  width: 100%;
   font-size: 15px;
-  padding: 0 5px;
-  margin: 0 5px;
-}
-
-.social-login-box {
-  margin: 40px 0 20px;
-  text-align: center;
-}
-
-.social-login-box > .social-message {
-  margin-bottom: 10px
-}
-
-.social-btn-group > button {
-  display: inline-flex;
-  align-items: center;
-  padding: 6px;
-  border: 0.5px solid silver;
-  border-radius: 10px;
-  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.6);
-}
-
-.social-btn-group > button > i {
-  font-size: 30px;
-  margin-right: 8px;
-}
-
-.social-btn-group > button:not(:first-child) {
-  margin-left: 10px;
-}
-
-.social-btn-group > button > img {
-  height: 45px;
-  margin-right: 6px;
+  background-color: #8003f4;
+  padding: 8px 0;
 }
 </style>

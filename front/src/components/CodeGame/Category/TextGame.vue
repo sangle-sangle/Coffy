@@ -30,7 +30,7 @@
         </div>
         <div>
           <span v-if="game.id===1" class="game-hint" @click="movetip(1)">설명 다시보기</span>
-          <span v-else class="game-hint" @click="movetip(3)">힌트보러가기</span>
+          <span v-else class="game-hint" @click="movetip(7)">힌트보러가기</span>
         </div>
       </div>
       <div class="answer-board">
@@ -154,7 +154,6 @@ export default {
       getGame(2,this.$route.params.id).then(response => {
         this.game = response.data.game
         this.solved  = response.data.count
-        console.log(response.data.count)
         this.game.base = JSON.parse(response.data.game.base.split(`'`).join(`"`))
         this.game.problem = JSON.parse(response.data.game.problem.split(`'`).join(`"`))
       }).then(()=>{

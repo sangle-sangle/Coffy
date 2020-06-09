@@ -218,7 +218,7 @@ export default {
   padding: 10px 20px;
   margin-top: 10px;
   border-radius: 8px;
-  background-color: #47cf73;
+  background-color: #03a9f4;
 }
 
 .more-btn:hover {
